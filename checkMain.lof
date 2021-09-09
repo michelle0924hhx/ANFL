@@ -1,23 +1,17 @@
 \addvspace {10.0pt}
 \addvspace {10.0pt}
-\contentsline {figure}{\numberline {2.1}{\ignorespaces 打篮球问题的决策树\relax }}{20}{figure.caption.6}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces GBDT原理图\relax }}{21}{figure.caption.7}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces 随机森林原理图\relax }}{22}{figure.caption.8}%
-\addvspace {10.0pt}
-\contentsline {figure}{\numberline {3.1}{\ignorespaces 验证框架图\relax }}{26}{figure.caption.9}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces 分类树\relax }}{29}{figure.caption.10}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces 回归树\relax }}{30}{figure.caption.11}%
 \addvspace {10.0pt}
 \addvspace {10.0pt}
-\contentsline {figure}{\numberline {5.1}{\ignorespaces 随机森林回归模型验证结果\relax }}{46}{figure.caption.12}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces 对抗性样本图\relax }}{46}{figure.caption.13}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces GBDT回归模型验证结果\relax }}{48}{figure.caption.14}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces GBDT验证反例\relax }}{48}{figure.caption.15}%
-\contentsline {figure}{\numberline {5.5}{\ignorespaces 随机森林分类模型鲁棒特征集合\relax }}{49}{figure.caption.16}%
-\contentsline {figure}{\numberline {5.6}{\ignorespaces GBDT分类模型鲁棒特征集合\relax }}{50}{figure.caption.17}%
-\contentsline {figure}{\numberline {5.7}{\ignorespaces 随机森林分类的局部鲁棒性特征重要度\relax }}{51}{figure.caption.18}%
-\contentsline {figure}{\numberline {5.8}{\ignorespaces MNIST 中不同类别鲁棒性的验证结果\relax }}{52}{figure.caption.19}%
-\contentsline {figure}{\numberline {5.9}{\ignorespaces FASHION-MNIST 中不同类别鲁棒性的验证结果\relax }}{52}{figure.caption.20}%
-\contentsline {figure}{\numberline {5.10}{\ignorespaces 单样本验证时间图\relax }}{55}{figure.caption.22}%
+\addvspace {10.0pt}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces 随机森林回归模型验证结果\relax }}{39}{figure.caption.9}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces 对抗性样本图\relax }}{39}{figure.caption.10}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces GBDT回归模型验证结果\relax }}{41}{figure.caption.11}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces GBDT验证反例\relax }}{41}{figure.caption.12}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces 随机森林分类模型鲁棒特征集合\relax }}{42}{figure.caption.13}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces GBDT分类模型鲁棒特征集合\relax }}{43}{figure.caption.14}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces 随机森林分类的局部鲁棒性特征重要度\relax }}{44}{figure.caption.15}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces MNIST 中不同类别鲁棒性的验证结果\relax }}{45}{figure.caption.16}%
+\contentsline {figure}{\numberline {5.9}{\ignorespaces FASHION-MNIST 中不同类别鲁棒性的验证结果\relax }}{45}{figure.caption.17}%
+\contentsline {figure}{\numberline {5.10}{\ignorespaces 单样本验证时间图\relax }}{48}{figure.caption.19}%
 \addvspace {10.0pt}
 \contentsfinish 
