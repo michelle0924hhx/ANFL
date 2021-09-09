@@ -1,0 +1,16 @@
+\newpage
+\vspace{-1cm}
+\chapter*{\zihao{-2}\heiti{ABSTRACT}}
+%\vspace{-0.5cm}
+
+In recent years, machine learning has been increasingly applied in various fields, such as autonomous driving, face recognition, personal credit assessment and so on, due to its excellent performance. However, the machine learning model is generally a black box, because of its invisibility and ineluctability, people have great concerns about its security. Therefore, more and more researchers are involved in the research of methods and tools for security verification of machine learning models.
+Like the neural network model, the tree model is also vulnerable to the attack of the antagonistic sample. The "fragility" of the tree model makes it potentially dangerous and, in some cases, potentially disastrous in some applications where security is high. Therefore, we study the robustness verification of tree models. The main work and contributions of this paper are as follows:
+\begin{enumerate}
+	\item We propose a tree model robustness verification framework based on SMT technology, which can effectively verify the robustness of two important components of tree models: random forest and GBDT, and support the verification of larger tree models. The core idea of this framework is to transform the robustness verification problem of tree model into the constraint solving problem of SMT formula.
+	\item On the basis of verification, we further study the problem of interpretability of tree model robustness, and propose the concepts of robust feature set and local robustness feature importance to describe the internal relationship between model robustness and sample characteristics, so as to provide a new idea for resisting sample attack.
+	\item We evaluated the feasibility and effectiveness of the framework based on three benchmark test sets, and discussed the relationship between model training hyperparameters and its robustness in the experiment, thus providing an important reference for improving the robustness of the model in the training stage.
+\end{enumerate}
+%\hspace{-0.5cm}
+{\sihao{\textbf{Keywords:}}} \textit{Robustness verification, Interpretability, Random forest, GBDT, SMT}
+
+

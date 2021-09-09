@@ -1,0 +1,143 @@
+\chapter{联邦学习的安全聚合模型}
+\label{ch4}
+在本章节中我们提出了一个在联邦学习中的安全聚合框架，通过安全shuffling实现分布式差分隐私，本地数据使用本地差分隐私进行加密，然后所有人传到一个安全shuffler，shuffler打乱次序，再发给服务器（不包含任何标识信息）。shuffler可以作为一个可信第三方，独立于服务器并专门用于shuffle。我们将会在本章节详细的描述该框架中各个模块的设计和实现过程。
+
+
+
+
+随着机器学习应用领域的不断拓展，与机器学习模型的验证一样，模型的可解释性也变得愈发的重要。从用户的角度出发，机器学习模型不仅需要向用户反馈正确的预测结果，还需要向用户解释预测的原因。这样可以增加用户对模型的信任，让用户可以更放心的使用该模型；从开发人员的角度来说，可解释性对模型训练具有重要的意义。例如，根据解释信息可以帮助开发者确定更优的模型训练参数。在预测结果出现误差的时候，也可以了解导致误差产生的模型内部的原因，从而帮助开发人员改进机器学习模型的缺陷。总的来说，模型的可解释性已经成为机器模型应用的必备条件。
+
+目前已经有很多研究着眼于机器学习模型的可解释性问题。\cite{bride2018towards}的作者提出了一种基于自动推理的方法，可以从机器学习模型中提取有价值的信息，使用户可以了解树模型决策背后的原因。一些研究者\cite{chu2018exact,zilke2016deepred}则试图用更简单的模型来近似复杂模型来提供更好的解释。局部解释的方法\cite{lundberg2017unified,ribeiro2018anchors}了解的是模型的输出如何在局部的输入扰动上的分布变化的问题，它可以根据结果输出值推断出输入参数的重要性。此外，还有一些研究提出了基于实例的解释方法\cite{kim2016examples,wachter2017counterfactual}，即通过选择数据集的特定实例来解释机器学习模型的行为或解释底层的数据分布。相比于其他类型的机器学习模型来说，树模型以决策树的基础，对于一个输入样本来说，我们可以获得预测的决策路径，根据决策路径可以获取一些决策信息，因此树模型通常被认为是一种易于解释模型。但很少有人研究树模型鲁棒性的可解释性问题。
+
+在本小节中，我们主要关注的是模型的样本特征与模型鲁棒性之间的关系。首先，我们提出了鲁棒特征集合（Robust Feature Set， RFS）的概念，鲁棒特征集合可用于解释单个样本的鲁棒性。在鲁棒特征集合的基础上，我们进一步提出了一种计算局部鲁棒特征重要度（Local Robustness Feature Importance，LRFI）的算法，局部鲁棒特征重要度可用于解释树模型的样本特征与预测类别的鲁棒性的关系。
+
+\section{鲁棒特征集合}
+目前对于树模型的鲁棒性验证的研究中，在鲁棒性验证失败情况下，验证器通常将返回对抗性样本，但是当验证成功的情况，通常都不会未给出任何解释。针对这种情况，我们想进一步去探索为什么有些样本在特征被扰动的情况下，仍然能被识别正确？换句话说，我们是否可以确定哪些特征会真正的影响该样本的鲁棒性？不同的样本特征对模型的鲁棒性的影响大小是否也是不同的？
+
+类似于Z3的SMT求解器在判断SMT公式不满足的情况下，会产生该公式集合的最小不满足核（Minimal Unsatisfiable Core, MUC），MUC是原始公式集合的子集。我们首先给出MUC的定义。
+
+\begin{define}[最小不满足核]\label{最小不满足核}
+
+如果$F$是一个CNF公式，$F_C$代表$F$的公式集合。如果$S \subseteq F_C$同时符合以下条件，则$S$是$F$的最小不满足核:
+
+\begin{enumerate}
+\item $F$是不可满足的。
+\item $S$是不可满足的。
+\item 不存在任何$S''\subseteq S$是不可满足的。
+\end{enumerate}
+\end{define}
+
+\begin{define}[鲁棒特征集合]\label{鲁棒特征集合}
+给定一个树模型的分类模型$C$, 样本$x=<a_1,a_2,...,a_d>$，最大扰动距离为$\epsilon$，$\Phi$是模型的鲁棒性公式，$\Phi_C$表示$\Phi$中的公式集合， $\Delta(x, x', \epsilon)\subset \Phi$是特征扰动约束公式并且$\Delta$表示$\Delta(x, x', \epsilon)$中的公式集合， 则鲁棒特征集合定义如下：
+\begin{enumerate}
+\item $\Phi$是不可满足的，$S\subseteq \Phi_C$是$\Phi$的最小不满足核。
+\item RFS = \{$a_i | \;a_i$是出现在公式集合$\Delta_s$中的特征， $\Delta_s \subseteq \Delta$是$S$的子集\}
+\end{enumerate}
+\end{define}
+
+\begin{theorem}\label{鲁棒特征集合定理}
+给定一个树模型$C$, 样本$x=<a_1,a_2,...,a_d>$，最大扰动距离为$\epsilon$。保持存在于鲁棒特征集合中的特征的值不变的情况下，任意扰动其他特征的值，都不会改变该模型$C$对$x$的预测结果。
+\end{theorem}
+
+\begin{proof}
+根据公式 \ref{eq:8}, 我们知道 $out$是由 $C(x')$ 和 $\Delta(x,x',\epsilon)$ 所决定的。 在不失一般性的前提下，我们可以将公式 $\Phi$ 转换成 $\Phi':=C(x')\land \Delta(x,x',\epsilon)\Rightarrow (out \ne C(x))$的形式表示。 而公式$C(x')$的构建依赖于模型$C$的结构, 所以当模型$C$给定的情况下, 公式$C(x')$也是确定的。 在这种情况下，公式$\Phi$的可满足性就仅仅与$\Delta(x,x',\epsilon)$相关。所以在此定理的证明中，我们不需要考虑$C(x')$的可满足性。
+
+我们用$\Phi_c$表示$\Phi'$的公式集合。则$\Phi_c$可以被定义为: $\Phi_c =R_C \cup \Delta \Rightarrow \{o\}$。$R_C$表示$C(x')$的公式集合, $\Delta$表示$\Delta(x, x', \epsilon)$的公式集合，其中的$\Delta=\{\delta_i|0\le i\le d, \delta_i=|a_i-a_i'|\le \epsilon\}$，$o= (out\ne C(x))$。假设$\Phi_c$是不可满足的，并且$S \subseteq \Phi_c$表示最小不满足核。首先，我们可以得出$\Phi_c\backslash\{o\}$是可满足的。 因为至少有一个真赋值$x'= x$使其满足. 所以 $o$ 必然存在于$S$中，可表示为$o\in S$。  我们用$R_s \subseteq R_C$和$\Delta_s \subseteq \Delta$表示存在于$S$中的公式子集，则我们可以到的$S = R_s\cup\Delta_s\cup \{o\}$ 并且有$\Phi_c \backslash S = (\Delta \backslash \Delta_s) \cup (R\backslash R_s)$. 
+
+根据定义 \ref{最小不满足核} 和 定义\ref{鲁棒特征集合}， 我们知道鲁棒特征集合中的特征是出现在$\Delta_s$中的特征。并且每个特征$a_s \in RFS$ 都对应着$\Delta_s$中的一个子句。 类似的，每个特征$a_o\in X^d\backslash RFS$ 也对应着$\Delta\backslash \Delta_s$中的一个子句。
+公式(\ref{eq:5}) 表示样本$x$中特征的扰动约束公式, 如果$\delta \in \Delta$为True, 则特征$a$的扰动距离必然不可能超过$\epsilon$。反之, 如果 $\delta$ 为 False, 则扰动距离必然超过了$\epsilon$。所以该子句的真假其实代表的是该特征的扰动距离。根据最小不满足核的性质, 我们可以得到每个特征$a_o\in X^d\backslash RFS$对应的子句都不会影响$\Phi$的可满足性。因为$S = R_s\cup\Delta_s\cup \{o\}$是不可满足的, 我们可以得出每个$\delta_s \in \Delta_s$都是可满足的, 也就是说, 其中的每个特征的扰动距离都没有超过$\epsilon$。在此证明中我们只考虑每个特征的值保持不变的情况，所以每个特征对应的子句$\delta_s=|a_s-a_s'|=0$都为True. 因为$\Phi_c =R_C \cup \Delta \Rightarrow \{o\}$ 是不可满足的, 所以$\Phi_c'=R_C\cup\Delta\Rightarrow\lnot o$是有效的，即$\lnot o=(out=C(x))$,也就是说该模型对$x$的预测结果保持不变。即证。
+\end{proof}
+
+根据第三章的树模型的鲁棒性验证框架的介绍，我们可知当验证样本$x$的鲁棒性的时候，SMT编码模块会将其编码成对应的SMT公式$\Phi$，之后利用SMT求解器判断$\Phi$的可满足性。如果求解器返回的结果为UNSAT，则说明$\Phi$是不可满足的。同时，求解器会返回$\Phi$的最小不满足核。根据定义\ref{鲁棒特征集合}，我们可以得到样本$x$在树模型$C$上的鲁棒特征集合。需要注意的是，获取鲁棒性特征集合的前提条件是模型基于样本$x$是满足鲁棒性的。
+
+根据定理\ref{鲁棒特征集合定理}，我们可以得出以下结论：在保持存在于鲁棒特征集合中的特征的值不变的情况下，任意改变其他特征的值，都不会影响树模型对样本x的预测结果。换句话说，在最大扰动距离为$\epsilon$的情况下，相较于其他特征来说，鲁棒特征集合中的特征对鲁棒性有着更大的影响。
+
+\section{局部鲁棒特征重要度}
+在上一小节中，我们提出了鲁棒特征集合的概念。为了进一步了解样本特征与模型预测类别鲁棒性的关系，我们提出了局部鲁棒特征重要度（Local Robustness Feature Importance，LRFI）来描述这种关系。
+
+\begin{algorithm}[!htb]
+	\caption{局部鲁棒特征重要度算法}
+	\label{LRFI algorithm}
+	\begin{algorithmic}[1]
+		\footnotesize
+		\STATE \textbf{Input:} 树模型 $C$， 测试样本集合 $N=\{x_i | 0 \le i \le |N|, C(x_i)=y \}$, 最大扰动距离 $\epsilon$, 特征集合 $X^d=\{a_i | 0 \le i \le d\}$.
+		\STATE \textbf{Output:} 预测类别为$y$的局部鲁棒特征重要性$LRFI$
+		\STATE \textbf{过程:} 函数LocalRobustFeatureImportance(C, N, $\epsilon$, $X^d$)
+        
+    \STATE $//$ 初始化集合 $S$ 和 $V$ 为空集   
+    \STATE $S\leftarrow \emptyset$ %\tcp*{S is a set }
+    \STATE $V\leftarrow \emptyset$ %\tcp*{V is a set}
+     \FOR{$x\in N$}
+       \STATE $\Phi_x \leftarrow R(x') \land \Delta(x,x',\epsilon) \land (out=y)$ \;
+       \STATE $UNSAT \leftarrow SMT_{solver}(\Phi_x)$ \;
+       \STATE $RFS_x \leftarrow$ 根据定义\ref{鲁棒特征集合}得到 $x$ 的鲁棒特征集合\;
+       \STATE 将 $RFS_{x}$ 加入到集合 $S$ 中 \;   
+    \ENDFOR   
+    \FOR{$a \in X^d$}
+        \STATE $//$ $n_a$表示特征$a$在集合 $S$中的出现次数 
+        \STATE $n_a  \leftarrow 0$  %\tcp*{$n_a$ is the number of feature $a$ occurrence in S }
+        \FOR{$RFS_x \in S$}
+            \IF{$ a \in RFS_x$} 
+               \STATE $n_a  \leftarrow n_a + 1$  \;
+            \ENDIF
+        \ENDFOR
+        \STATE 将 $(a, n_a)$ 加入到集合 $V$ 中 \;  
+    \ENDFOR
+     \STATE $//$ 计算特征出现的最多次数与最少次数值
+    %\tcp{obtain the minimum/maximum number of feature occurrences} 
+    \STATE $min_n = MIN(V)$ \;
+    \STATE $max_n = MAX(V)$ \;
+    \FOR{$(a, n_a) \in V$}
+        \STATE $n_a' \leftarrow (n_a-min_n)/(max_n-min_n)$ \;
+        \STATE 将 $(a, n_a')$ 加入到 $LRFI$中\;  
+   \ENDFOR
+   \RETURN $LRFI$ 
+	\end{algorithmic}
+\end{algorithm}
+
+在算法\ref{LRFI algorithm}中，输入为一个树模型 $C$，$N$表示的是标记类别为$y$的测试样本集合其大小为$|N|$，最大扰动距离 $\epsilon$和特征集合$X^d$，其输出为类别$y$的局部鲁邦特征重要度LRFI。在第5行和第6行，初始化中间变量$S$和$V$为空集。集合$S$用来保存所有测试样本的鲁棒特征集合，$V$用来保存所有特征在鲁棒特征集合中出现的次数。 在第7行至第12行，首先构建$N$中每个样本$x$的单样本鲁棒性公式$\Phi_x$，之后利用SMT求解器对$\Phi_x$进行可满足性判断。如果求解器返回结果为UNSAT，则根据定义\ref{鲁棒特征集合}计算出样本$x$的鲁棒特征集合存入到$RFS_x$中，最后将$RFS_x$存入到集合$S$中。在第13行至第22行，计算每个特征在集合$S$中的出现次数。若特征$a$存在于样本的$x$的$RFS_x$中，则其出现次数$n_a$加1，所以$n_a$的取值范围为$0\le n_a \le |N|$，并将（$a,n_a$）存入集合$V$中。 在第23行至第29行，对$V$中的值进行数据归一化处理。在此算法中，我们利用的min-max标准化（Min-max normalization）操作。最后，将经过标准化处理后的值作为类别$y$的局部鲁棒特征重要度返回。直观的来说，某个特征对鲁棒性的重要度是以该特征在测试样本集合的鲁棒特征集合中出现的频率来确定的，该特征出现的频率越高，说明对鲁棒性的影响就越大，其重要度值也就越高，反之，影响就越小，重要度值就越低。
+\section{本章小结}
+
+本章节主要讨论了树模型鲁棒性与样本特征的关系，我们提出了鲁棒特征集合和局部鲁棒特征重要度的概念，并且给出了相应的形式化定义和证明。我们将在下一章节的实验中，进一步证明我们结论。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
