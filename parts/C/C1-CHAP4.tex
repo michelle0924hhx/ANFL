@@ -1,114 +1,153 @@
 \chapter{联邦学习的安全聚合模型}
 \label{ch4}
-在本章节中我们提出了一个在联邦学习中的安全聚合框架，通过安全shuffling实现分布式差分隐私，本地数据使用本地差分隐私进行加密，然后所有人传到一个安全shuffler，shuffler打乱次序，再发给服务器（不包含任何标识信息）。shuffler可以作为一个可信第三方，独立于服务器并专门用于shuffle。我们将会在本章节详细的描述该框架中各个模块的设计和实现过程。
 
+上一章节中我们提出的方案是针对本地差分隐私，在我们的威胁模型中，对手可能是一个用户或者第三方，并且对手还可能是除其他用户和第三方外的中心服务器，这是一个相当强的威胁模型假设，因为除了用户本身，所有对象都是不可信的，用户在上传信息时需要经过满足差分隐私的噪声扰动。然而，强大的隐私也带来了模型可用性的问题，特别是当用户的数据量特别小时，聚合所有用户的参数会带来大量的噪声，从而降低了模型的精度。
 
+在本章节中我们提出了一个在联邦学习中的安全shuffle模型，通过安全shuffling实现分布式差分隐私，本地数据使用本地差分隐私进行加密，然后所有人传到一个安全shuffler，shuffler打乱次序，再发给服务器（不包含任何标识信息）。shuffler可以作为一个可信第三方，独立于服务器并专门用于shuffle。shuffle模型的精度增益来自于隐私放大效应（Erlingsson等人，2019年），这表明本地随机器的洗牌（即匿名）输出在差分隐私的中心视图中比没有洗牌器的输出提供更强的（放大的）隐私。因此，在洗牌模型中需要更少的本地噪音，以获得对不信任的分析器的相同水平的隐私。我们将会在本章节详细的描述该框架中各个模块的设计和实现过程。
 
+然而，目前还不清楚如何在联合学习中采用shuffle模型。虽然有一些前人对这项工作进行了研究，如位/实数求和（Balle等人2019b）和直方图（Balcer和Cheu2019），但现有的协议对于多维聚集FL可能是不可行的。这是因为局部噪声带来的误差会随着维度系数的增加而加剧（Duchi, Jordan,andWainwright2013）。此外，由于参与一次迭代的客户端数量通常为几千人，会导致聚合升级为一个高维任务。
 
-随着机器学习应用领域的不断拓展，与机器学习模型的验证一样，模型的可解释性也变得愈发的重要。从用户的角度出发，机器学习模型不仅需要向用户反馈正确的预测结果，还需要向用户解释预测的原因。这样可以增加用户对模型的信任，让用户可以更放心的使用该模型；从开发人员的角度来说，可解释性对模型训练具有重要的意义。例如，根据解释信息可以帮助开发者确定更优的模型训练参数。在预测结果出现误差的时候，也可以了解导致误差产生的模型内部的原因，从而帮助开发人员改进机器学习模型的缺陷。总的来说，模型的可解释性已经成为机器模型应用的必备条件。
+\section{问题定义}
+\subsection{攻击模型}
+本的能力，但是该方法在添加噪声时并没有考虑到神经网络对图像中不同区域的敏感性是不同的。针对这一问题，提出了梯度指导噪声添加的对抗训练算法。该算法在训练网络时，根据图像中不同区域的敏感性向其添加自适应的噪声，在敏感性较大的区域上添加较大的噪声，抑制网络对图像变化的敏感程度，在敏感性较小的区域上添加较小的噪声，提高其分类精度。
+提出一种基于数据差分隐私保护的随机梯度下降算法。引入范数剪切与附加高斯噪声操作，对传统梯度更新策略进行改进。为衡量每次迭代过程中对数据隐私性的破坏，提出隐私损失累积函数在迭代过程中对数据隐私性的侵犯程度进行度量。
 
-目前已经有很多研究着眼于机器学习模型的可解释性问题。\cite{bride2018towards}的作者提出了一种基于自动推理的方法，可以从机器学习模型中提取有价值的信息，使用户可以了解树模型决策背后的原因。一些研究者\cite{chu2018exact,zilke2016deepred}则试图用更简单的模型来近似复杂模型来提供更好的解释。局部解释的方法\cite{lundberg2017unified,ribeiro2018anchors}了解的是模型的输出如何在局部的输入扰动上的分布变化的问题，它可以根据结果输出值推断出输入参数的重要性。此外，还有一些研究提出了基于实例的解释方法\cite{kim2016examples,wachter2017counterfactual}，即通过选择数据集的特定实例来解释机器学习模型的行为或解释底层的数据分布。相比于其他类型的机器学习模型来说，树模型以决策树的基础，对于一个输入样本来说，我们可以获得预测的决策路径，根据决策路径可以获取一些决策信息，因此树模型通常被认为是一种易于解释模型。但很少有人研究树模型鲁棒性的可解释性问题。
+我们认为云服务器是一个 "诚实但好奇 "的实体。也就是说，服务器将遵循与所有用户的协议。然而，通过利用完全访问用户梯度的便利，它也试图在训练过程中获得额外的信息。出于这个原因，我们的提出的自适应加噪机制目的是保护发送到服务器的本地梯度不被推断出任何关于用户的额外信息，并且维持原有模型的精度。
 
-在本小节中，我们主要关注的是模型的样本特征与模型鲁棒性之间的关系。首先，我们提出了鲁棒特征集合（Robust Feature Set， RFS）的概念，鲁棒特征集合可用于解释单个样本的鲁棒性。在鲁棒特征集合的基础上，我们进一步提出了一种计算局部鲁棒特征重要度（Local Robustness Feature Importance，LRFI）的算法，局部鲁棒特征重要度可用于解释树模型的样本特征与预测类别的鲁棒性的关系。
+\section{模型概况}
+\subsection{Shuffle 模型}
+洗牌模型的协议由三个部分组成：$\mathcal{P}=\mathcal{A} \circ \mathcal{S} \circ \mathcal{R}^{n}$，$\mathcal{A}$表示分析器，$\mathcal{S}$表示Suffler，$\mathcal{R}^{n}$表示n个用户的数据集。如图1所示。每个用户持有一维数据$x \in \mathbb{X}$，我们将n个用户的数据表示为数据集$X=\left(x_{1}, \cdots, x_{n}\right) \in \mathbb{X}^{n}$，每个用户运行一个随机器$\mathcal{R}: \mathbb{X} \rightarrow \mathbb{Y}^{m}$，将本地数据扰乱成满足$epsilon_{l}$-DP的信息。我们重点讨论$m=1$的单消息协议。 Shuffler执行$\mathcal{S}: \mathbb{Y}^{*} \rightarrow \mathbb{Y}^{*}$，用均匀随机的扰动 $pi$对收到的消息进行处理。分析器函数$\mathcal{A}: \mathbb{Y}^{*} \rightarrow \mathbb{Z}$ 将shuffle后的消息作为输入，并输出分析结果。
 
-\section{鲁棒特征集合}
-目前对于树模型的鲁棒性验证的研究中，在鲁棒性验证失败情况下，验证器通常将返回对抗性样本，但是当验证成功的情况，通常都不会未给出任何解释。针对这种情况，我们想进一步去探索为什么有些样本在特征被扰动的情况下，仍然能被识别正确？换句话说，我们是否可以确定哪些特征会真正的影响该样本的鲁棒性？不同的样本特征对模型的鲁棒性的影响大小是否也是不同的？
+\begin{figure}[!hbt]
+\centering
+  \includegraphics[scale=0.4]{fig2/C4/shuffle模型}%联邦学习的系统架构
+  \label{fig:shuffle模型} 
+\end{figure}
 
-类似于Z3的SMT求解器在判断SMT公式不满足的情况下，会产生该公式集合的最小不满足核（Minimal Unsatisfiable Core, MUC），MUC是原始公式集合的子集。我们首先给出MUC的定义。
+\textbf{客户端参与方}：
+假设有n个客户端参与房，每个参与房拥有一个$d$-维的局部更新向量$x_{i}$,参照第三章的本地差分操作进行扰动，得到模型的输出$y_{i}$。
 
-\begin{define}[最小不满足核]\label{最小不满足核}
+\textbf{Shuffler}：
+Shuffler是安全聚合的中心服务器，从各个客户端收到的模型输出参数进行混洗，然后发送给分析器。
 
-如果$F$是一个CNF公式，$F_C$代表$F$的公式集合。如果$S \subseteq F_C$同时符合以下条件，则$S$是$F$的最小不满足核:
+\textbf{中央服务器$\mathcal{A}$}
+中心服务器$\mathcal{A}$从Shuffler拿到安全聚合后的参数并对均方差进行估计，并更新全局模型。
 
-\begin{enumerate}
-\item $F$是不可满足的。
-\item $S$是不可满足的。
-\item 不存在任何$S''\subseteq S$是不可满足的。
-\end{enumerate}
-\end{define}
+Shuffle模型中的隐私目标是确保$\mathcal{M}=\mathcal{S} \circ \mathcal{R}^{n}$ 满足 $\left(\epsilon_{c}, \delta_{c}\right)-\mathrm{DP}$，因为$\mathcal{A}$是由一个不受信任的分析器执行，他没有义务保护用户的隐私。协议$\mathcal{P}$实现了与$mathcal{M}$相同的隐私水平。因此，我们重点分析$\mathcal{M}(X)$和$\mathcal{M}\left(X^{\prime}\right)$的不可区分性。Erlingsson等人2019年证明，$\mathcal{M}$的隐私可以被 "放大"。换句话说，当每个用户应用$\mathcal{R}$中的局部隐私预算$epsilon_{l}$时，$\mathcal{M}$可以实现$\left(\epsilon_{c}, \delta_{c}\right)-\mathrm{DP}$-DP的更强隐私性，当$\epsilon_{c}<\epsilon_{l}$时。与本地模型相比，洗牌模型需要更少的噪声来达到相同的隐私水平。
 
-\begin{define}[鲁棒特征集合]\label{鲁棒特征集合}
-给定一个树模型的分类模型$C$, 样本$x=<a_1,a_2,...,a_d>$，最大扰动距离为$\epsilon$，$\Phi$是模型的鲁棒性公式，$\Phi_C$表示$\Phi$中的公式集合， $\Delta(x, x', \epsilon)\subset \Phi$是特征扰动约束公式并且$\Delta$表示$\Delta(x, x', \epsilon)$中的公式集合， 则鲁棒特征集合定义如下：
-\begin{enumerate}
-\item $\Phi$是不可满足的，$S\subseteq \Phi_C$是$\Phi$的最小不满足核。
-\item RFS = \{$a_i | \;a_i$是出现在公式集合$\Delta_s$中的特征， $\Delta_s \subseteq \Delta$是$S$的子集\}
-\end{enumerate}
-\end{define}
-
-\begin{theorem}\label{鲁棒特征集合定理}
-给定一个树模型$C$, 样本$x=<a_1,a_2,...,a_d>$，最大扰动距离为$\epsilon$。保持存在于鲁棒特征集合中的特征的值不变的情况下，任意扰动其他特征的值，都不会改变该模型$C$对$x$的预测结果。
-\end{theorem}
-
-\begin{proof}
-根据公式 \ref{eq:8}, 我们知道 $out$是由 $C(x')$ 和 $\Delta(x,x',\epsilon)$ 所决定的。 在不失一般性的前提下，我们可以将公式 $\Phi$ 转换成 $\Phi':=C(x')\land \Delta(x,x',\epsilon)\Rightarrow (out \ne C(x))$的形式表示。 而公式$C(x')$的构建依赖于模型$C$的结构, 所以当模型$C$给定的情况下, 公式$C(x')$也是确定的。 在这种情况下，公式$\Phi$的可满足性就仅仅与$\Delta(x,x',\epsilon)$相关。所以在此定理的证明中，我们不需要考虑$C(x')$的可满足性。
-
-我们用$\Phi_c$表示$\Phi'$的公式集合。则$\Phi_c$可以被定义为: $\Phi_c =R_C \cup \Delta \Rightarrow \{o\}$。$R_C$表示$C(x')$的公式集合, $\Delta$表示$\Delta(x, x', \epsilon)$的公式集合，其中的$\Delta=\{\delta_i|0\le i\le d, \delta_i=|a_i-a_i'|\le \epsilon\}$，$o= (out\ne C(x))$。假设$\Phi_c$是不可满足的，并且$S \subseteq \Phi_c$表示最小不满足核。首先，我们可以得出$\Phi_c\backslash\{o\}$是可满足的。 因为至少有一个真赋值$x'= x$使其满足. 所以 $o$ 必然存在于$S$中，可表示为$o\in S$。  我们用$R_s \subseteq R_C$和$\Delta_s \subseteq \Delta$表示存在于$S$中的公式子集，则我们可以到的$S = R_s\cup\Delta_s\cup \{o\}$ 并且有$\Phi_c \backslash S = (\Delta \backslash \Delta_s) \cup (R\backslash R_s)$. 
-
-根据定义 \ref{最小不满足核} 和 定义\ref{鲁棒特征集合}， 我们知道鲁棒特征集合中的特征是出现在$\Delta_s$中的特征。并且每个特征$a_s \in RFS$ 都对应着$\Delta_s$中的一个子句。 类似的，每个特征$a_o\in X^d\backslash RFS$ 也对应着$\Delta\backslash \Delta_s$中的一个子句。
-公式(\ref{eq:5}) 表示样本$x$中特征的扰动约束公式, 如果$\delta \in \Delta$为True, 则特征$a$的扰动距离必然不可能超过$\epsilon$。反之, 如果 $\delta$ 为 False, 则扰动距离必然超过了$\epsilon$。所以该子句的真假其实代表的是该特征的扰动距离。根据最小不满足核的性质, 我们可以得到每个特征$a_o\in X^d\backslash RFS$对应的子句都不会影响$\Phi$的可满足性。因为$S = R_s\cup\Delta_s\cup \{o\}$是不可满足的, 我们可以得出每个$\delta_s \in \Delta_s$都是可满足的, 也就是说, 其中的每个特征的扰动距离都没有超过$\epsilon$。在此证明中我们只考虑每个特征的值保持不变的情况，所以每个特征对应的子句$\delta_s=|a_s-a_s'|=0$都为True. 因为$\Phi_c =R_C \cup \Delta \Rightarrow \{o\}$ 是不可满足的, 所以$\Phi_c'=R_C\cup\Delta\Rightarrow\lnot o$是有效的，即$\lnot o=(out=C(x))$,也就是说该模型对$x$的预测结果保持不变。即证。
-\end{proof}
-
-根据第三章的树模型的鲁棒性验证框架的介绍，我们可知当验证样本$x$的鲁棒性的时候，SMT编码模块会将其编码成对应的SMT公式$\Phi$，之后利用SMT求解器判断$\Phi$的可满足性。如果求解器返回的结果为UNSAT，则说明$\Phi$是不可满足的。同时，求解器会返回$\Phi$的最小不满足核。根据定义\ref{鲁棒特征集合}，我们可以得到样本$x$在树模型$C$上的鲁棒特征集合。需要注意的是，获取鲁棒性特征集合的前提条件是模型基于样本$x$是满足鲁棒性的。
-
-根据定理\ref{鲁棒特征集合定理}，我们可以得出以下结论：在保持存在于鲁棒特征集合中的特征的值不变的情况下，任意改变其他特征的值，都不会影响树模型对样本x的预测结果。换句话说，在最大扰动距离为$\epsilon$的情况下，相较于其他特征来说，鲁棒特征集合中的特征对鲁棒性有着更大的影响。
-
-\section{局部鲁棒特征重要度}
-在上一小节中，我们提出了鲁棒特征集合的概念。为了进一步了解样本特征与模型预测类别鲁棒性的关系，我们提出了局部鲁棒特征重要度（Local Robustness Feature Importance，LRFI）来描述这种关系。
+使用算法1中的局部随机器$\mathcal{R}_{\gamma, b}$ ，其中$\gamma=\frac{b}{e^{\epsilon} l+b-1}$表示从空白分布中输出一个元素的概率，输入值$x$被编码到一个离散域$[b]$，然后进行随机化。在$\mathcal{S}$运行了一次置换后，$\mathcal{A}$汇总洗牌结果 $\hat{z} \leftarrow \frac{1}{b} \sum_{i=i}^{n} y_{i}$ 并用以下方法进行去偏差:
+\begin{equation}\label{eq:shuffle去偏差}
+z \leftarrow(\hat{z}-n \gamma / 2) /(1-\gamma)
+\end{equation}
 
 \begin{algorithm}[!htb]
-	\caption{局部鲁棒特征重要度算法}
-	\label{LRFI algorithm}
-	\begin{algorithmic}[1]
-		\footnotesize
-		\STATE \textbf{Input:} 树模型 $C$， 测试样本集合 $N=\{x_i | 0 \le i \le |N|, C(x_i)=y \}$, 最大扰动距离 $\epsilon$, 特征集合 $X^d=\{a_i | 0 \le i \le d\}$.
-		\STATE \textbf{Output:} 预测类别为$y$的局部鲁棒特征重要性$LRFI$
-		\STATE \textbf{过程:} 函数LocalRobustFeatureImportance(C, N, $\epsilon$, $X^d$)
-        
-    \STATE $//$ 初始化集合 $S$ 和 $V$ 为空集   
-    \STATE $S\leftarrow \emptyset$ %\tcp*{S is a set }
-    \STATE $V\leftarrow \emptyset$ %\tcp*{V is a set}
-     \FOR{$x\in N$}
-       \STATE $\Phi_x \leftarrow R(x') \land \Delta(x,x',\epsilon) \land (out=y)$ \;
-       \STATE $UNSAT \leftarrow SMT_{solver}(\Phi_x)$ \;
-       \STATE $RFS_x \leftarrow$ 根据定义\ref{鲁棒特征集合}得到 $x$ 的鲁棒特征集合\;
-       \STATE 将 $RFS_{x}$ 加入到集合 $S$ 中 \;   
-    \ENDFOR   
-    \FOR{$a \in X^d$}
-        \STATE $//$ $n_a$表示特征$a$在集合 $S$中的出现次数 
-        \STATE $n_a  \leftarrow 0$  %\tcp*{$n_a$ is the number of feature $a$ occurrence in S }
-        \FOR{$RFS_x \in S$}
-            \IF{$ a \in RFS_x$} 
-               \STATE $n_a  \leftarrow n_a + 1$  \;
-            \ENDIF
-        \ENDFOR
-        \STATE 将 $(a, n_a)$ 加入到集合 $V$ 中 \;  
-    \ENDFOR
-     \STATE $//$ 计算特征出现的最多次数与最少次数值
-    %\tcp{obtain the minimum/maximum number of feature occurrences} 
-    \STATE $min_n = MIN(V)$ \;
-    \STATE $max_n = MAX(V)$ \;
-    \FOR{$(a, n_a) \in V$}
-        \STATE $n_a' \leftarrow (n_a-min_n)/(max_n-min_n)$ \;
-        \STATE 将 $(a, n_a')$ 加入到 $LRFI$中\;  
-   \ENDFOR
-   \RETURN $LRFI$ 
-	\end{algorithmic}
+  \caption{$\mathcal{R}_{\gamma, b}:[0,1] \rightarrow[b]$}
+  \label{shuffle algorithm}
+  \begin{algorithmic}[1]
+    \footnotesize
+    \STATE \textbf{Input:} scalar $x \in[0,1]$
+    \STATE \textbf{Output:} perturbed value $y \in[b]$
+      \STATE $\bar{x} \leftarrow\lfloor x b\rfloor+\operatorname{Ber}(x b-\lfloor x b\rfloor)$
+      \STATE Sample $r \leftarrow \operatorname{Ber}(\gamma)$
+      \STATE $y=\left\{\begin{array}{ll}\bar{x} & \text { if } r=0 \\ \operatorname{Unif}(\{1, \cdots, b\}) & \text { else. }\end{array}\right.$
+    \STATE end
+  \end{algorithmic}
 \end{algorithm}
 
-在算法\ref{LRFI algorithm}中，输入为一个树模型 $C$，$N$表示的是标记类别为$y$的测试样本集合其大小为$|N|$，最大扰动距离 $\epsilon$和特征集合$X^d$，其输出为类别$y$的局部鲁邦特征重要度LRFI。在第5行和第6行，初始化中间变量$S$和$V$为空集。集合$S$用来保存所有测试样本的鲁棒特征集合，$V$用来保存所有特征在鲁棒特征集合中出现的次数。 在第7行至第12行，首先构建$N$中每个样本$x$的单样本鲁棒性公式$\Phi_x$，之后利用SMT求解器对$\Phi_x$进行可满足性判断。如果求解器返回结果为UNSAT，则根据定义\ref{鲁棒特征集合}计算出样本$x$的鲁棒特征集合存入到$RFS_x$中，最后将$RFS_x$存入到集合$S$中。在第13行至第22行，计算每个特征在集合$S$中的出现次数。若特征$a$存在于样本的$x$的$RFS_x$中，则其出现次数$n_a$加1，所以$n_a$的取值范围为$0\le n_a \le |N|$，并将（$a,n_a$）存入集合$V$中。 在第23行至第29行，对$V$中的值进行数据归一化处理。在此算法中，我们利用的min-max标准化（Min-max normalization）操作。最后，将经过标准化处理后的值作为类别$y$的局部鲁棒特征重要度返回。直观的来说，某个特征对鲁棒性的重要度是以该特征在测试样本集合的鲁棒特征集合中出现的频率来确定的，该特征出现的频率越高，说明对鲁棒性的影响就越大，其重要度值也就越高，反之，影响就越小，重要度值就越低。
-\section{本章小结}
+\subsection{隐私边界}
+我们把观察者表示为$\mathcal{O}$，它可以是任何可以观察全局模型参数的好奇者。在分布式差分隐私的联邦学习模型中中，隐私边界与$\mathcal{O}$和$\mathcal{A}$相关。而在本地差分隐私的联邦学习模型中，隐私边界在每个个体用户和其他成员之间。通过引入Shuffler $\mathcal{S}$，避免了像DP-FL那样将全部信任放在任何一方，同时能够实现比LDP-FL更好的模型效用。
 
-本章节主要讨论了树模型鲁棒性与样本特征的关系，我们提出了鲁棒特征集合和局部鲁棒特征重要度的概念，并且给出了相应的形式化定义和证明。我们将在下一章节的实验中，进一步证明我们结论。
+我们设计了一个细粒度的隐私分离方案，并与表格中的DP-FL和LDP-FL进行比较。具体来说，我们将每个本地更新的信息分为：索引、相应的值和用户身份（即图2中的ID）。应该注意的是，当索引被选择并以取决于值的方式发送到shuffler $\mathcal{S}$时，它们可能是敏感的。因此，我们的隐私目标是以数据无关的方式选择索引，梯度的真实值对$\mathcal{S}$来说是不可见的。但$\mathcal{S}$应该知道用户的隐性身份，以便分发全局模型参数和接收本地上传的信息。对于观察者$\mathcal{O}$来说，$\left(\epsilon_{c}, \delta_{c}\right)-\mathrm{DP}$通过后处理属性而成立（Dwork, Roth等人，2014），Shuffler处理后的信息不会暴露用户身份，并且满足针对A的$\left(\epsilon_{c}, \delta_{c}\right)-\mathrm{DP}$。在LDP-FL中，每个用户都需要一个$\left(\epsilon_{c}, \delta_{c}\right)-\mathrm{LDP}$ $\mathcal{R}$来实现这一目标。
+
+\section{方案设计}
+联邦学习的安全shuffle有三个构建过程：编码$\epsilon_{c}$，Shuffler $mathcal{S}$和中央服务器 $mathcal{Z}$。在第8行，$mathcal{C}$是矢量的剪切阈值。我们用$\epsilon_{l}$表示每个本地向量的本地隐私预算。$p k_{a}$和$s k_{a}$分别代表中央服务器产生的公钥和秘钥。下面的不同协议是通过实现第10行的Randomize $(\cdot)$和第15行的Shuffle $(\cdot)$函数，以不同的策略设计的。需要注意的是，算法1中的$\mathcal{R}_{\gamma, b}$可以作为基本随机器应用于Randomize $(\cdot)$中，这与行(18)的方程(1)的估计相吻合。也可以应用通用的随机器（例如拉普拉斯机制），这并不影响我们后面的推论。
+
+\subsection{安全性假设}
+我们假设洗牌者和分析者没有勾结（否则，模型会简化为LDP-FL）。我们还假设加密原语是安全的，并且对手在计算上很难从密码文本中获得任何信息。
+
+\subsection{Shuffle协议}
+\begin{algorithm}[!htb]
+  \caption{$\mathcal{R}_{\gamma, b}:[0,1] \rightarrow[b]$}
+  \label{Shuffle框架}
+  \begin{algorithmic}[1]
+    \footnotesize
+    \STATE \textbf{Input:} $\mathcal{A}, \mathcal{S}, \mathcal{E}, n, T, \epsilon_{l}, p k_{a}, s k_{a}$
+    \STATE \textbf{Output:} $\theta^{T}$
+      \STATE 中央服务器 $mathcal{Z}$中央服务器公开公钥$p k_{a}$
+        \FOR{$t=1, \cdots, T$}
+          \STATE $x_{i} \leftarrow$ LocalUpdate $\left(\theta^{t-1}\right)$
+          \STATE 每个本地用户通过编码器$\epsilon_{c}$编码
+          \STATE $\bar{x}_{i} \leftarrow \operatorname{Clip}\left(x_{i},-C, C\right)$
+          \STATE $\tilde{x}_{i} \leftarrow\left(\bar{x}_{i}+C\right) /(2 C)$
+          \STATE $\left\langle i d x_{i}, y_{i}\right\rangle \leftarrow$ Randomize $\left(\tilde{x}_{i}, \epsilon_{l}\right)$
+          \STATE $c_{i} \leftarrow \operatorname{Enc}_{p k_{a}}\left(y_{i}\right)$
+          \STATE 本地用户将$m_{i}=\left\langle i d x_{i}, c_{i}\right\rangle$发送给Shuffler
+        \ENDFOR
+      \STATE Shuffle
+      \STATE Shuffle将混洗后的信息Shuffle $\left(m_{i \in[n]}\right)$发送给中央服务器
+      \STATE 中央服务器
+      \STATE 解密消息 $y_{\pi(i) \in[n]} \leftarrow \operatorname{Dec}_{s k_{a}}\left(c_{\pi(i) \in[n]}\right)$
+      \STATE 计算均方差 $\bar{z} \leftarrow \frac{1}{n} \sum_{i \in[n]}\left\langle i d x_{i}, y_{i}\right\rangle$
+      \STATE 求均值 $z \leftarrow C \cdot(2 \bar{z}-1)$
+      \STATE 更新全局模型 $\theta^{t} \leftarrow \theta^{t-1}+z$
+  \end{algorithmic}
+\end{algorithm}
+
+我们首先提出Shuffle协议：P = A ◦S ◦Rn，用于Shuffle框架下的d维聚合。简而言之，我们扩展了一维协议，对每个维度进行其随机化和聚集。根据差分隐私的组成属性，R应该满足$\epsilon_{l d^{-}}$LDP，其中$\epsilon_{l d}=\epsilon_{l} / d$。我们在\ref{Shuffle框架}中声明一个Randomize $(\cdot)$，当$i d x_{i} \leftarrow\{1, \cdots, d\}$，并且$y_{i} \leftarrow$ $\left\{\mathcal{R}_{\epsilon_{l d}}\left(x_{i, 1}\right), \cdots, \mathcal{R}_{\epsilon_{l d}}\left(x_{i, d}\right)\right\} .$。函数Shuffle $(\cdot)$简单地生成一个排列组合π，并输出m$m_{\pi(i) \in[n]}$。
+然后我们针对中央服务器的DP后的信息进行核算。对$\mathcal{R}_{\gamma, b}$ 或其他通用$\mathcal{R}$的数值评估采取$\epsilon_{l d}$应用到Lemma 1，可以得出一个放大的中央隐私$\left(\epsilon_{c d}, \delta_{c d}\right)$。有了Lemma 3中的构成，我们可以很容易地推导出定理1中的向量级构成。推论2提炼了从$\epsilon_{l}$ 到 $\epsilon_{c}$的放大作用。
+
+因此，相对于求和操作，缩放后的更新的灵敏度由S限制。GM现在将噪声（缩放至灵敏度S）添加到所有缩放后的更新之和。 将GM的输出除以mt可以得出所有客户更新的真实平均值的近似值，同时可以防止泄露有关个人的重要信息。
+
+通过将此近似值添加到当前的中央模型wt中，可以分配新的中央模型wt + 1：
+\begin{equation}
+w_{t+1}=w_{t}+\frac{1}{m_{t}}(\underbrace{\overbrace{\sum_{k=0}^{m_{t}} \Delta w^{k} / \max \left(1, \frac{\left\|\Delta w^{k}\right\|_{2}}{S}\right)}^{\text {Sum of updates clipped at } S}}_{\text {Gaussian mechanism approximating sum of updates }})^{\text {Noise scaled to } S}
+\end{equation}
 
 
+当将1 / mt 分解为高斯机制时，我们注意到平均值的失真由噪声方差S2σ2/ m决定。但是，这种失真不应超过某个限制。否则，来自二次采样平均值的太多信息会被添加的噪声破坏，并且不会有任何学习进度。 GM和随机子采样都是随机机制。 （实际上，[1]正是在dp-SGD中使用了这种平均逼近。但是，它用于梯度平均，在每次迭代时都隐藏单个数据点的梯度）。因此，σ和m还定义了随机机制提供平均近似值时所引起的隐私损失。
 
+为了跟踪这种隐私损失，我们利用了Abadi等人提出的时刻会计。 [1]。与标准组成定理（[4]中的3.14）相比，这种会计方法对发生的隐私损失提供了更严格的限制。策展人每次分配新模型时，会计都会根据ǫ，σ和m评估δ。一旦δ达到某个阈值，即客户贡献被透露的可能性变得过高，培训应停止。 δ阈值的选择取决于客户K的总数。要确定不保留许多人的隐私，而要以泄露一些人的全部信息为代价，我们必须确保δ≪ K1。
 
+选择S：削减贡献时，需要权衡取舍。一方面，应选择较小的S，以使噪声方差保持较小。另一方面，一个人想保持尽可能多的原始贡献。按照[1]提出的程序，在每个通信回合中，我们计算所有未裁剪贡献的中位数范数，并将其用作裁剪界限$S=$ median $\{\triangle w k\} k \in Z t$。我们不使用随机机制来计算中位数，严格来说，这是对隐私的侵犯。但是，通过中位数的信息泄漏很小（未来的工作将包含这种隐私措施）。
 
+选择σ和m：对于固定的S，比率r=σ2/m控制失真和隐私损失。因此，σ越高，m越小，隐私损失就越大。隐私权会计师告诉我们，对于固定的r =σ2/m，即，对于相同的失真水平，对于σ和m都较小的隐私权损失较小。因此，失真率r的上限和子采样客户数m的下限将导致σ的选择。但是，很难估计m的下限。也就是说，因为联合设置中的数据是非IID，并且来自客户端的贡献可能非常不同。因此，我们将客户之间的差异Vc定义为客户更新之间相似度的量度。
 
+\subsection{隐私性证明}
+因为稀疏向量技术在隐私预算方面的潜在节省，本文选择将应用稀疏向量技术的差分隐私与应用选择梯度上传的分布式联邦学习协议相结合，达到更好的隐私保护效果。在应用稀疏向量技术时，我们对算法中有关输出向量阈值的选择与分布式联邦学习协议中的选择梯度上传阈值优化为同一步骤。为了保证经过这一修改后的算法仍然满足差分隐私，将在这一节对论文使用的方案是否满足差分隐私进行进一步的数学推
+导证明。 
+证明：基于安全shuffle的联邦学习随机梯度上传满足差分隐私。
+\begin{proof}
+考虑任意输出向量$a \in\{T, 1\}^{\ell}$,$a_{i}$表示 $a$ 的第 $\mathrm{i}$ 个组成部分。 $I_{T}=\left\{i: a_{i}=\mathrm{T}\right\}$ 表示查询的结果高于阈值的个数, $I_{\perp}=\left\{i: a_{i}=\mathbf{1}\right\}$, 表示查询的结果低于阈值的个数, 参数的敏感度不超过 $\Delta$; 隐私参数稀疏最大值 $c$, 差分隐私保护隐私预算 $\epsilon$。
 
-
-
-
+可以得到梯度的 $\operatorname{Pr}[A(W)=a$ ]概率:
+\begin{equation}
+\begin{array}{l}
+\operatorname{Pr}[A(W)=a]=\int_{-\infty}^{+\infty} \operatorname{Pr}[\rho=z] \prod_{i \in I_{T}} \operatorname{Pr}\left[q_{i}(W)+v_{i} \geq \boldsymbol{T}_{i}+z\right. \\
+\prod_{i \in I_{\perp}} \operatorname{Pr}\left[q_{i}(W)+v_{i}<\boldsymbol{T}_{i}+z\right] d z
+\end{array}
+\end{equation}
+对于梯度 $W$ 和保护后的梯度 $W^{\prime}$, 可以得到:
+\begin{equation}
+\begin{aligned}
+\frac{\operatorname{Pr}[A(W)=a]}{\operatorname{Pr}\left[A\left(W^{\prime}\right)=a\right]} &=\frac{\int_{-\infty}^{+\infty} \operatorname{Pr}[\rho=z] \prod_{i \in l_{\top}} \operatorname{Pr}\left[q_{i}(W)+v_{i} \geq \boldsymbol{T}_{i}+z\right] d z}{\int_{-\infty}^{+\infty} \operatorname{Pr}[\rho=z] \Pi_{i \in I_{T}} \operatorname{Pr}\left[q_{i}\left(W^{\prime}\right)+v_{i} \geq \boldsymbol{T}_{i}+z\right] d z} \\
+& \times \frac{\int_{-\infty}^{+\infty} \operatorname{Pr}[\rho=z] \prod_{i \in I_{\perp}} \operatorname{Pr}\left[q_{i}(W)+v_{i}<\boldsymbol{T}_{i}+z\right] d z}{\prod_{i \in I_{\perp}} \operatorname{Pr}\left[q_{i}\left(W^{\prime}\right)+v_{i}<\boldsymbol{T}_{i}+z\right] d z}
+\end{aligned}
+\end{equation}
+设
+\begin{equation}
+\begin{array}{l}
+f_{i}(W, z)=\operatorname{Pr}\left[q_{i}(W) v_{i}<\boldsymbol{T}_{i}+z\right] \\
+g_{i}(W, z)=\operatorname{Pr}\left[q_{i}(W) v_{i} \geq \boldsymbol{T}_{i}+z\right]
+\end{array}
+\end{equation}
+可以得到
+\begin{equation}
+\begin{array}{c}
+\frac{\operatorname{Pr}[A(W)=a]}{\operatorname{Pr}\left[A\left(W^{\prime}\right)=a\right]} \\
+=\frac{\left.\int_{-\infty}^{+\infty} \operatorname{Pr}[\rho=z] \prod_{i \in I_{T}} g_{i}(W, z) \prod_{i \in I_{\perp}} f_{i}(W, z)\right] d z}{\left.\int_{-\infty}^{+\infty} \operatorname{Pr}[\rho=z] \prod_{i \in l_{\top}} g_{i}\left(W^{\prime}, z\right) \prod_{i \in I_{\perp}} f_{i}\left(W^{\prime}, z\right)\right] d z}
+\end{array}
+\end{equation}
+\end{proof}
 
 
 

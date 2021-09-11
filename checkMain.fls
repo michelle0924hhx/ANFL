@@ -1441,6 +1441,8 @@ INPUT ./parts/C/C1-CHAP4.tex
 INPUT parts/C/C1-CHAP4.tex
 INPUT ./parts/C/C1-CHAP4.tex
 INPUT parts/C/C1-CHAP4.tex
+INPUT ./fig2/C4/shuffle模型.png
+INPUT fig2/C4/shuffle模型.png
 INPUT ./parts/C/C1-CHAP5.tex
 INPUT parts/C/C1-CHAP5.tex
 INPUT ./parts/C/C1-CHAP5.tex

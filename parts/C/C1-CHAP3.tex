@@ -1,8 +1,14 @@
 \chapter{联邦学习的自适应加噪机制}
 \label{ch3}
+对于数据驱动的深度学习模型而言，模型参数学习数据特征的同时也记录下了敏感信息。在规定的差分隐私预算下，如何减少模型的可用性损失是关键。受传统的数据查询思想的影响，将差分隐私部署于深度学习模型中，首先可能会尝试通过仅处理由训练过程产生的最终参数（例如最终判别置信度等）来保护训练数据的私密性。这种方法将训练过程本身过程视为黑盒，但是深度学习的输出结果是一种高度抽象化的判别，细微的扰动就可能造成较大的差别。和数据隐私紧密相关的是训练过程中的梯度参数，因此针对梯度下降过程进行扰动，或将成为一种有效的保护方式。 基于梯度加噪的差分隐私保护方法作为主流的差分隐私应用于深度学习模型的方法之一，方案目标为满足差分隐私条件下实现最优的模型可用性。本章节主要从以下三个方面展开研究：首先，在模型中的不同层次采用不同的梯度裁剪阈值。梯度裁剪阈值作为一个重要的参数，既影响了有效的梯度学习过程，又作为数据敏感度成为噪声添加的参数之一，区别化的梯度裁剪手段将更大限度上保留了模型的可用性。其次，分析了梯度裁剪带来的敏感度变化，结合 MA 机制进行隐私预算的跟踪，使得整体隐私损失计量更加精确化，为模型训练预留更多的空间。最后，为了从实验上证实该方法的有效性，结合成员推理攻击进行验证，进一步证实了梯度自适应加噪模型在理论约束和实际表现中具有双重隐私可靠性。 
 
+
+\section{问题定义}
+\subsection{攻击模型}
 最近研究表明深度神经网络容易受到对抗样本的攻击。为了解决这个问题，一些工作通过向图像中添加高斯噪声来训练网络，从而提高网络防御对抗样本的能力，但是该方法在添加噪声时并没有考虑到神经网络对图像中不同区域的敏感性是不同的。针对这一问题，提出了梯度指导噪声添加的对抗训练算法。该算法在训练网络时，根据图像中不同区域的敏感性向其添加自适应的噪声，在敏感性较大的区域上添加较大的噪声，抑制网络对图像变化的敏感程度，在敏感性较小的区域上添加较小的噪声，提高其分类精度。
 提出一种基于数据差分隐私保护的随机梯度下降算法。引入范数剪切与附加高斯噪声操作，对传统梯度更新策略进行改进。为衡量每次迭代过程中对数据隐私性的破坏，提出隐私损失累积函数在迭代过程中对数据隐私性的侵犯程度进行度量。
+
+我们认为云服务器是一个 "诚实但好奇 "的实体。也就是说，服务器将遵循与所有用户的协议。然而，通过利用完全访问用户梯度的便利，它也试图在训练过程中获得额外的信息。出于这个原因，我们的提出的自适应加噪机制目的是保护发送到服务器的本地梯度不被推断出任何关于用户的额外信息，并且维持原有模型的精度。
 
 \section{模型概况}
 
@@ -56,18 +62,16 @@ $\Delta \boldsymbol{w}_{s}^{i}$ 表示经过选择后上传的参数。在上传
 联邦学习通过协调深度学习任务, 建立统一的深度学习模型结构后, 参数服务器会初始化全局参数 $w^{gloabal}$。之后处理系统内参与者的上传和下载请求, 存储参与者的局部参数, 并计算更新全局参数 $w^{g l o b a l}$。当参与者上传参数时，参数服务器会将上传的 $\Delta\boldsymbol{w}_{s}^{i}$的值添加至相应的全局参数中,并为每个全局权重参数更新元数据和计数器stat。具体更新规则如下:
 
 对于所有的 $j \in S$ :
-$$
+\begin{equation}\label{eq:全局参数更新1}
 w^{\text {global }}:=w^{\text {global }}+\Delta \boldsymbol{w}_{j}^{i}
-$$
+\end{equation}
+
+
 为了增加更新的参数的权重, 服务器可以周期性地将计数器乘以衰减因子 $\beta$, 即:
-$$
+\begin{equation}\label{eq:全局参数更新2}
 \text { stat }:=\beta \cdot \text { stat }
-$$
+\end{equation}
 当参与者从服务器获取具有最大统计值参数的最新值时, 将在下载期间使用这些统计信息。每个参与者都可以通过设置 $\theta_{d}$决定下载这些参数的某一部分。
-
-
-\subsection{威胁模型}
-我们认为云服务器是一个 "诚实但好奇 "的实体。也就是说，服务器将遵循与所有用户的协议。然而，通过利用完全访问用户梯度的便利，它也试图在训练过程中获得额外的信息。出于这个原因，我们的提出的自适应加噪机制目的是保护发送到服务器的本地梯度不被推断出任何关于用户的额外信息，并且维持原有模型的精度。
 
 
 \subsection{联邦学习中的差分隐私}
@@ -92,40 +96,45 @@ $$
 \section{方案设计}
 \subsection{自适应噪声添加}
 在第二章中介绍了关于神经网络的结构，
-$$
+\begin{equation}\label{eq:神经网络参数传递}
 y=a(\mathbf{x} * \omega+b)
-$$是学习模型中每个隐藏神经元的转化过程。
+\end{equation}
+
+公式\ref{eq:神经网络参数传递}是学习模型中每个隐藏神经元的转化过程。
 其中$\mathbf{x}$代表输入向量，$y$是输出，$b$和$\omega$分别代表偏置项和权重矩阵。$a()$是一个激活函数，用于结合线性变换和非线性变换。$z(\omega)=mathbf{x}。* \omega+b$ 是线性变换部分。
 
 由于神经网络的结构，上一层的输出是下一层的输入，由此我们可以得出，原始数据只被第一隐层的线性变换所利用。直观地说，为了得到一个具有隐私保护的学习模型，我们可以在第一层隐藏层的数据中注入噪声。正如Phan等人[15]提到的，对于线性变换有一种传统的方法，即向原始数据注入具有相同隐私预算的噪声，但是这容易导致隐私预算增加，并且使原始数据失真过多。因此，本文提出一种自适应噪声添加算法，针对每个梯度计算其贡献值，根据贡献值进行梯度裁剪并添加噪声。
 
-首先，引入了两个调整因素。其中，$f$代表一个阈值，用于决定属性对模型结果输出的贡献是高还是低，其值由用户定义，即贡献超过阈值$f$的属性类对输出的贡献更大。然后，我们向所有这些属性注入自适应拉普拉斯噪声。当贡献率低于阈值$f$时，对这些属性进行概率选择。也就是说，我们选择概率为$1-p$的原始数据，并对一些概率为$p$的属性注入自适应拉普拉斯噪声。该公式如下。
-$$
+首先，引入了两个调整因素。其中，$f$代表一个阈值，用于决定属性对模型结果输出的贡献是高还是低，其值由用户定义，即贡献超过阈值$f$的属性类对输出的贡献更大。然后，我们向所有这些属性注入自适应拉普拉斯噪声。当贡献率低于阈值$f$时，对这些属性进行概率选择。也就是说，我们选择概率为$1-p$的原始数据，并对一些概率为$p$的属性注入自适应拉普拉斯噪声。该公式如下：
+\begin{equation}\label{eq:神经网络加噪}
 \tilde{x}_{i, j}=\left\{\begin{array}{ll}
 \ddot{x}_{i, j} & \beta \geq f \\
 \bar{x}_{i, j} & \beta<f
 \end{array}\right.
-$$
+\end{equation}
 
 其中$Beta$代表贡献率：$\beta=\frac{\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|}$，当$\beta<f$时，我们有：
-
-$$\tilde{x}_{i, j}=\left\{\begin{array}{ll}\ddot{x}_{i, j} & \beta \geq f \\ \bar{x}_{i, j} & \beta<f\end{array}\right.$$
+\begin{equation}\label{eq:神经网络加噪2}
+\bar{x}_{i, j}=\left\{\begin{array}{l}
+\ddot{x}_{i, j} \text { with probability } p \\
+x_{i, j} \text { with probability } 1-p
+\end{array}\right.
+\end{equation}
 
 
 $f$和$p$是超参数，用户可以根据自己的情况来调整。
 
-每个属性类的隐私预算比率$epsilon_{j}$由。也就是说，隐私预算$epsilon_{l}$是根据贡献率:$\epsilon_{j}=\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \epsilon_{l}$按比例分配给每个属性类。自适应噪声按以下方式注入属性中:
-
-$x_{i, j}^{\prime}=x_{i, j}+\frac{1}{\left|D_{i}^{t}\right|} \operatorname{Lap}\left(\frac{G S_{l}}{\epsilon_{j}}\right)$
+每个属性类的隐私预算比率$epsilon_{j}$由。也就是说，隐私预算$epsilon_{l}$是根据贡献率:$\epsilon_{j}=\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \epsilon_{l}$。按比例分配给每个属性类。自适应噪声按以下方式注入属性中:
+\begin{equation}\label{eq:神经网络加噪3}
+x_{i, j}^{\prime}=x_{i, j}+\frac{1}{\left|D_{i}^{t}\right|} \operatorname{Lap}\left(\frac{G S_{l}}{\epsilon_{j}}\right)
+\end{equation}
 
 在不丧失一般性的情况下，调整因子$f$和$p$的值与系统的准确性和隐私水平有关。即$f$越小，$p$越大。越高的秘密水平，准确性越低，反之亦然。
 
 我们用层间相关性传播（LRP）算法将输出分解到每一层。关于LRP算法的更多细节，我们将在以下部分进行介绍。每个用户都在本地对原始数据进行训练前馈操作，这可以获得一个新的数据操作，从而获得本地模型的输出。根据相邻层之间的线性关系，在$k-t h$ 层的神经元的贡献$C_{a_{i}}^{l_{k}}\left(x_{i}\right)$等于连接到神经元$a_{i}$的相邻层的贡献之和：
-
-$$
+\begin{equation}\label{eq:神经网络加噪4}
 C_{a_{i}}^{l_{k}}\left(x_{i}\right)=\sum_{a_{j} \in l_{k+1}} C_{a_{i} \leftarrow a_{j}}^{l_{k} \leftarrow l_{k+1}}\left(x_{i}\right)
-$$
-
+\end{equation}
 
 例如，如图2所示，我们有：
 $$
@@ -183,39 +192,39 @@ c\left(o ; M, a u x, d, d^{\prime}\right) \triangleq \log \frac{\operatorname{Pr
 $$
 
 对于所提差分隐私 SGD 算法而言,神经网络各层 权重系数的参数值与每次迭代过程中的差分隐私机制 有着紧密的关联,从而对于给定的映射机制 $M$,在第 $\lambda$ 次迭代过程的隐私损失定义为:
-
-$$
+\begin{equation}\label{eq:隐私损失定义}
 \begin{array}{r}
 \alpha_{\mathcal{M}}\left(\lambda ; a u x, d, d^{\prime}\right) \triangleq \log \mathbb{E}_{o \sim M(a u x, d)}[\exp (\lambda c(o) ; M \\
 \left.\left.\left.d, d^{\prime}\right)\right)\right]
 \end{array}
-$$
+\end{equation}
 
 进一步地,映射机制 $M$ 的损失边界值定义为：
-
-$$\alpha_{\mathcal{M}}(\lambda) \triangleq \max _{a u x, d, d^{\prime}} \alpha_{M}\left(\lambda ; a u x, d, d^{\prime}\right)$$
+\begin{equation}\label{eq:损失边界值定义}
+\alpha_{\mathcal{M}}(\lambda) \triangleq \max _{a u x, d, d^{\prime}} \alpha_{M}\left(\lambda ; a u x, d, d^{\prime}\right)
+\end{equation}
 
 其满足以下特性：
 
 \begin{itemize}
 \item 组合特性：给定一个机制 $M$, 由一组子机制顺序 $\left\{M_{1}, M_{2}, \cdots, M_{k}\right\}$ 组成,并满足$M_{i}: \prod_{j=1}^{i-1} R_{j} \times D \rightarrow R_{i}$，从而总隐私损失边界满足：
-$$
+\begin{equation}\label{eq:损失边界值定义2}
 \alpha_{M}(\lambda) \leqslant \sum_{i=1}^{k} \alpha_{M_{i}}(\lambda)
-$$
+\end{equation}
 
 \item 差分隐私边界：$\forall \varepsilon>0$, 映射机制 $M$ 是 $(\varepsilon, \delta)$ 差分隐私的,当且仅当：
-$$
+\begin{equation}\label{eq:损失边界值定义2}
 \delta=\min _{\lambda} \exp \left(\alpha_{M}(\lambda)-\lambda \varepsilon\right)
-$$
+\end{equation}
 \end{itemize}
 
 上述2条性质确定了深度神经网络算法每次迭代的隐私损失以及所能够达到侵犯数据隐私容忍度的最大迭代次数。特别地,在附加高斯噪声的情况下,不妨令 $\mu_{0}$,$\mu_{1}$ 分别为 $N\left(0, \sigma^{2}\right)$ 和 $N\left(0, \sigma^{2}\right)$ 的概率密度函数,而 $\mu$ 为两个高斯密度函数的混合概率密度函数,即 $\mu=(1-q) \mu_{0}+q \mu_{1} \circ$ 依据式 $(5)-$ 式 $(7)$ 可推导得 $\alpha$ $(\lambda)=\log \max \left(E_{1}, E_{2}\right)$, 其中:
-
-$$
+\begin{equation}\label{eq:隐私容忍1}
 E_{1}=\mathbb{E}_{z \sim \mu_{0}}\left[\left(\frac{\mu_{0}(z)}{\mu(z)}\right)^{\lambda}\right]
-$$
+\end{equation}
 
-$$
-E_{2}=\mathbb{E}_{z \sim \mu}\left[\left(\frac{\mu(z)}{\mu_{0}(z)}\right)^{\lambda}\right]
-$$
+\begin{equation}\label{eq:隐私容忍2}
+E_{1}=\mathbb{E}_{z \sim \mu_{0}}\left[\left(\frac{\mu_{0}(z)}{\mu(z)}\right)^{\lambda}\right]
+\end{equation}
+
 

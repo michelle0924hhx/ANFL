@@ -96,13 +96,13 @@ $L S_{f}(D)=\max _{D^{\prime}}\left\|f(D)-f\left(D^{\prime}\right)\right\|_{1}$
 
 在差分隐私部署过程中常常不仅仅在一处添加噪声, 也不仅仅针对数据集进隐私预算的分配有序列组合性[41]和并行组合性 ${ }^{[42]}$ 两种组合特性:
 
-\begin{define}[序列组合]\label{序列组合}
+\begin{theorem}[序列组合]\label{序列组合}
 给定 $\mathbf{n}$ 个陏机算法 $M_{i}(1 \leq i \leq n)$ 满足 $\varepsilon_{i}-DP$, 那么针对一个数据库 $D$ 而言, 在 $\mathrm{D}$ 上的算法序列组合可以提供 $\varepsilon-\mathrm{DP}$, 其中 $\sum_{i=1}^{n} \varepsilon_{i}=\varepsilon$ 。
-\end{define}
+\end{theorem}
 
-\begin{define}[并行组合]\label{并行组合}
+\begin{theorem}[并行组合]\label{并行组合}
 对于数据库 $\mathrm{D}$, 当其被划分成 $\mathrm{n}$ 个不相交的子集 $\left\{\mathrm{D}_{1}, \mathrm{D}_{2}, \ldots, \mathrm{D}_{n}\right\}$, 在每个子集上应用算法 $\mathrm{M}_{i}$, 每个算法提供 $\varepsilon_{i}-\mathrm{DP}$ ， 则在序列 $\left\{\mathrm{D}_{1}, \mathrm{D}_{2}, \ldots, \mathrm{D}_{n}\right\}$ 上整体满足 $\left(\max \left\{\varepsilon_{1}, \ldots, \varepsilon_{n}\right\}\right)-\mathrm{DP}$
-\end{define}
+\end{theorem}
 
 
 \subsection{实现机制}
@@ -147,5 +147,4 @@ $$
 式中: $\theta$ 为待训练的神经网络权重系数; $x$ 表示目标值; $y$ 表示预测值输出,下标 $i$ 表示样本标签。深度神经网 络算法训练的目的就是使得损失函数 $L$ 最小。而对于 复杂的神经网络而言,最小化损失函数 $L$ 通常采用随机 梯度下降( stochastic gradient descent, SGD)算法来完成。 即每次迭代过程中随机进行批量抽取训练样本 (记为 $B)$, 并计算损失函数 $L$ 的偏导数 $g_{B}=\frac{1}{|B|} \sum_{x \in B} \nabla_{\theta} L(\theta,$, $x$ )，然后沿着负梯度方向 $-g_{B}$ 朝向局部最小值进行更 新权重系数 $\theta_{\circ}$
 
 \section{本章小结}
-
-
+本章对论文需要使用的一些基础理论知识进行了讨论。主要介绍了联邦学习系统的学习协议以及差分隐私的基本概念、定义和定理，分布式联邦学习系统是本论文主要使用的系统架构，所提的攻击模型和隐私对策都是基于该分布式联邦学习系统。本章同时也介绍了差分隐私及其变体的概念、实现机制。最后介绍了联邦学习中各个神经网络的基本结构和

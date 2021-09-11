@@ -22,32 +22,39 @@
 \contentsline {section}{\numberline {2.3}神经网络}{19}{section.2.3}%
 \contentsline {section}{\numberline {2.4}本章小结}{20}{section.2.4}%
 \contentsline {chapter}{\numberline {第三章\hspace {.3em}}联邦学习的自适应加噪机制}{21}{chapter.3}%
-\contentsline {section}{\numberline {3.1}模型概况}{21}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}系统架构}{21}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}本地训练}{22}{subsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.1.3}全局参数更新}{24}{subsection.3.1.3}%
-\contentsline {subsection}{\numberline {3.1.4}威胁模型}{24}{subsection.3.1.4}%
-\contentsline {subsection}{\numberline {3.1.5}联邦学习中的差分隐私}{24}{subsection.3.1.5}%
-\contentsline {section}{\numberline {3.2}方案设计}{25}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}自适应噪声添加}{25}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}隐私性证明}{27}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}隐私预算分析}{28}{subsection.3.2.3}%
-\contentsline {chapter}{\numberline {第四章\hspace {.3em}}联邦学习的安全聚合模型}{31}{chapter.4}%
-\contentsline {section}{\numberline {4.1}鲁棒特征集合}{32}{section.4.1}%
-\contentsline {section}{\numberline {4.2}局部鲁棒特征重要度}{34}{section.4.2}%
-\contentsline {section}{\numberline {4.3}本章小结}{36}{section.4.3}%
-\contentsline {chapter}{\numberline {第五章\hspace {.3em}}实验与评估}{37}{chapter.5}%
-\contentsline {section}{\numberline {5.1}基准数据集介绍}{37}{section.5.1}%
-\contentsline {section}{\numberline {5.2}实验环境与配置}{38}{section.5.2}%
-\contentsline {section}{\numberline {5.3}实验结果与分析}{38}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}随机森林模型的鲁棒性验证与分析}{38}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}GBDT模型鲁棒性的验证与分析}{40}{subsection.5.3.2}%
-\contentsline {subsection}{\numberline {5.3.3}树模型鲁棒性可解释性的实验与分析}{42}{subsection.5.3.3}%
-\contentsline {subsection}{\numberline {5.3.4}不同类别鲁棒性的验证与分析}{44}{subsection.5.3.4}%
-\contentsline {subsection}{\numberline {5.3.5}树鲁棒性超参数与鲁棒性关系的验证与分析}{46}{subsection.5.3.5}%
-\contentsline {subsection}{\numberline {5.3.6}验证时间的结果与分析}{47}{subsection.5.3.6}%
-\contentsline {section}{\numberline {5.4}本章小结}{48}{section.5.4}%
-\contentsline {chapter}{\numberline {第六章\hspace {.3em}}总结与展望}{50}{chapter.6}%
-\contentsline {section}{\numberline {6.1}总结}{50}{section.6.1}%
-\contentsline {section}{\numberline {6.2}展望}{51}{section.6.2}%
+\contentsline {section}{\numberline {3.1}问题定义}{22}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}攻击模型}{22}{subsection.3.1.1}%
+\contentsline {section}{\numberline {3.2}模型概况}{22}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}系统架构}{22}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}本地训练}{23}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}全局参数更新}{25}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}联邦学习中的差分隐私}{25}{subsection.3.2.4}%
+\contentsline {section}{\numberline {3.3}方案设计}{26}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}自适应噪声添加}{26}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}隐私性证明}{28}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}隐私预算分析}{29}{subsection.3.3.3}%
+\contentsline {chapter}{\numberline {第四章\hspace {.3em}}联邦学习的安全聚合模型}{32}{chapter.4}%
+\contentsline {section}{\numberline {4.1}问题定义}{33}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}攻击模型}{33}{subsection.4.1.1}%
+\contentsline {section}{\numberline {4.2}模型概况}{33}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Shuffle 模型}{33}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}隐私边界}{35}{subsection.4.2.2}%
+\contentsline {section}{\numberline {4.3}方案设计}{35}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}安全性假设}{36}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Shuffle协议}{36}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}隐私性证明}{38}{subsection.4.3.3}%
+\contentsline {chapter}{\numberline {第五章\hspace {.3em}}实验与评估}{40}{chapter.5}%
+\contentsline {section}{\numberline {5.1}基准数据集介绍}{40}{section.5.1}%
+\contentsline {section}{\numberline {5.2}实验环境与配置}{41}{section.5.2}%
+\contentsline {section}{\numberline {5.3}实验结果与分析}{41}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}随机森林模型的鲁棒性验证与分析}{41}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}GBDT模型鲁棒性的验证与分析}{43}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}树模型鲁棒性可解释性的实验与分析}{45}{subsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.3.4}不同类别鲁棒性的验证与分析}{47}{subsection.5.3.4}%
+\contentsline {subsection}{\numberline {5.3.5}树鲁棒性超参数与鲁棒性关系的验证与分析}{49}{subsection.5.3.5}%
+\contentsline {subsection}{\numberline {5.3.6}验证时间的结果与分析}{50}{subsection.5.3.6}%
+\contentsline {section}{\numberline {5.4}本章小结}{51}{section.5.4}%
+\contentsline {chapter}{\numberline {第六章\hspace {.3em}}总结与展望}{53}{chapter.6}%
+\contentsline {section}{\numberline {6.1}总结}{53}{section.6.1}%
+\contentsline {section}{\numberline {6.2}展望}{54}{section.6.2}%
 \contentsfinish 
