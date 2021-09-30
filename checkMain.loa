@@ -1,3 +1,4 @@
-\contentsline {algorithm}{\numberline {1}{\ignorespaces 联邦学习客户端本地训练算法\relax }}{27}{algorithm.1}%
-\contentsline {algorithm}{\numberline {2}{\ignorespaces 安全混洗算法\relax }}{40}{algorithm.2}%
-\contentsline {algorithm}{\numberline {3}{\ignorespaces Shuffle框架\relax }}{41}{algorithm.3}%
+\contentsline {algorithm}{\numberline {1}{\ignorespaces 基于自适应差分隐私的随机梯度下降算法\relax }}{26}{algorithm.1}%
+\contentsline {algorithm}{\numberline {2}{\ignorespaces 解析高斯算法\relax }}{31}{algorithm.2}%
+\contentsline {algorithm}{\numberline {3}{\ignorespaces 联邦学习中的安全模型算法：$\mathcal {A}_{\text {csdp}}$\relax }}{39}{algorithm.3}%
+\contentsline {algorithm}{\numberline {4}{\ignorespaces 混洗器中的拆分混洗算法\relax }}{42}{algorithm.4}%
