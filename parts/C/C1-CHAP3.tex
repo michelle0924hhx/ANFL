@@ -5,7 +5,7 @@
 \section{引言}
 与传统的集中式深度学习相比，联邦学习通过分布式训练在一定程度上缓解了隐私泄漏的问题。然而，许多研究表明，攻击者仍然可以通过模型训练的梯度损害用户的隐私[13]。文献[20]表明，深度学习技术可以"记忆"模型中的训练数据信息。在这种情况下，敌方一旦通过白盒推理攻击或者黑盒推理攻击访问模型，就可以推演出客户端本地的训练数据。
 
-在传统的集中式隐私保护方案中，数据管理者倾向于给每个用户的数据以相同的隐私预算。同样的隐私预算忽略了用户之间的差异。有些用户希望有更好的隐私保护。而有些用户对某些数据的隐私不敏感。在这种情况下，由于联邦学习模型是分布式结构，从一个大数据库到许多小数据库，所以对于每个用户来说。他们只需要关心他们自己的隐私。他们可以设置不同的隐私预算方案，而不是传统的统一分配，然后在最坏的的情况下注入噪音。所以我们需要注入更少的整体噪音。
+在传统的集中式隐私保护方案中，数据管理者倾向于给每个用户的数据以相同的隐私预算。同样的隐私预算忽略了用户之间的差异。有些用户希望有更好的隐私保护。而有些用户对某些数据的隐私不敏感。在这种情况下，由于联邦学习模型是分布式结构，从一个大数据库到许多小数据库，所以对于每个用户来说。他们只需要关心他们自己的隐私。他们可以设置不同的隐私预算方案，而不是传统的统一分配，然后在最坏的的情况下注入噪音。
 
 机器学习中模型的优化问题可以概括为ERM（经验风险最小化）问题：
 \begin{equation}\label{eq:ERM}
@@ -22,12 +22,12 @@
 
 基于输入的扰动和输出的扰动基本可以视为一个黑匣子模型，简单直接。但是这种添加噪声的方式无法对训练过程中数据的相互依赖性和输出有效性作出有用的、紧密的描述。在输入数据中加入过多的噪声，可能会影响模型训练的收敛性。在输出参数中加入过于保守的噪声，也就是根据最坏的攻击情况去添加噪声，可能会影响模型的实用性。因此本文采用一种更加复杂的方法来分析训练过程中训练数据对模型输出的贡献比率，然后根据每一层神经网络对模型输出的贡献率，在梯度上自适应添加噪声。
 
-基于梯度加噪的差分隐私保护方法作为主流的差分隐私应用于深度学习模型的方法之一，方案的目标是满足差分隐私条件下实现最优的模型可用性。文献[]提出了一个$\left(\epsilon_{c}+\epsilon_{d}\right)$-差分隐私版本的随机梯度下降算法。在模型的每一次迭代过程中，对梯度添加高斯噪声，并通过差分隐私的组合性和隐私放大效果，得到完全隐私损失的上界。传统的联邦学习中使用差分隐私的主要流程如下所示：
+当前在深度学习模型中应用差分隐私的主流方案是在模型的梯度上添加噪声，方案的目标是在满足差分隐私的条件下，实现整体模型的最优可用性。文献[]提出了一个$\left(\epsilon_{c}+\epsilon_{d}\right)$-差分隐私版本的随机梯度下降算法。在模型的每一次迭代过程中，对梯度添加高斯噪声，并通过差分隐私的组合性和隐私放大效果，得到完全隐私损失的上界。传统的联邦学习中使用差分隐私的主要流程如下所示：
 \begin{itemize}
 \item 本地计算:
 客户端 $\mathrm{i}$ 根据本地数据库 $\mathcal{D}_{\mathrm{i}}$ 和接受的服务器的全局模型 $\mathrm{w}_{\mathrm{G}}^{\mathrm{t}}$ 作为本地的参数，即 $\mathrm{w}_{\mathrm{i}}^{\mathrm{t}}=\mathrm{w}_{\mathrm{G}}^{\mathrm{t}}$， 进 行梯度下降策略进行本地模型训练得到 $\mathrm{w}_{\mathrm{i}}^{\mathrm{t}+1} \quad(\mathrm{t}$ 表示当前round) 。
 
-\item: 模型扰动:
+\item 模型扰动:
 每个客户端产生一个随机噪音 $\mathrm{n},\mathrm{n}$ 是符合高斯分布的，使用 $\overline{\mathbf{w}_{\mathrm{i}}}^{\mathrm{t}+1}=\mathrm{w}_{\mathrm{i}}^{\mathrm{t}+1}+\mathrm{n}$ 扰动本地模型 (这里注意w是一个矩阵，那么n就对矩阵的每一个元素产生噪音）。
 
 \item 模型聚合:
@@ -42,24 +42,20 @@
 
 然而，传统的基于差分隐私的联邦学习框架对所有本地数据添加相同的干扰，难免降低了全局模型的精度。
 
-本章提出的隐私保护方案是基于本地客户端的本地数据维度的，从以下三个方面展开研究：第一，通过在本地模型训练的梯度下降算法过程中针对不同层的贡献比自适应添加噪声；第二，采用解析高斯机制，计算对其梯度施加的噪声大小；第三，使用差分隐私的组合定理和后处理定理分析模型整体的隐私预算和性质。
-
 在本文中，我们认为中央参数服务器是半可信的，一个"诚实但好奇"的实体。也就是说，服务器将遵循与所有用户的协议。然而，通过利用完全访问用户梯度的便利，它也试图在训练过程中获得关于客户端的额外的信息。出于这个原因，我们的提出的自适应加噪机制目的是保护发送到服务器的本地梯度不被推断出任何关于用户的额外信息，并且尽量维持原有模型的精度。
 
-\section{自适应差分的 SGD 算法}
+总的来说，本章提出的隐私保护方案是基于本地客户端的本地数据维度的，从以下三个方面展开研究：第一，通过在本地模型训练的梯度下降算法过程中针对不同层的贡献比自适应添加噪声；第二，采用解析高斯机制，计算对其梯度施加的噪声大小；第三，使用差分隐私的组合定理和后处理定理分析模型整体的隐私预算和性质。
 
-算法\ref{基于自适应差分隐私的随机梯度下降算法}详细描述了在本地客户端训练过程中，在SGD算法中添加自适应差分隐私，并使用解析高斯机制衡量所添加的噪声大小。首先，我们采用先验组合机制计算$eps_{iter}$和$\delta_{iter}$（算法第5行）。每个客户端对训练数据进行采样，并计算他们的隐私预算$\delta_{u}$。如果$\delta_{u}>\delta$，用户将终止采样和训练，并且不上传其梯度信息（算法第7-10行）。否则，用户将用一个随机样本计算梯度（算法第11-12行）。然后使用解析机制对梯度进行剪辑并注入适当的噪声。最后，服务器对用户的梯度进行平均，并更新模型参数$w$。该算法有四个主要部分：自适应差分隐私，梯度范数裁剪，隐私预算累积，以及解析高斯计算噪声量。
+\section{基于自适应差分隐私的随机梯度下降算法}
 
-在本节接下来的四个部分，我们将详细描述如何在神经网络的随机梯度下降算法中自适应添加噪声、梯度剪裁以及使用解析高斯机制衡量添加的噪声大小。
-
-\newpage
+算法\ref{基于自适应差分隐私的随机梯度下降算法}详细描述了在本地客户端训练过程中，在SGD算法中添加自适应差分隐私，并使用解析高斯机制衡量所添加的噪声大小。首先，我们采用先验组合机制计算$eps_{iter}$和$\delta_{iter}$（算法第7行）。每个客户端对训练数据进行采样，并计算他们的隐私预算$\delta_{u}$。如果$\delta_{u}>\delta$，用户将终止采样和训练，并且不上传其梯度信息（算法第9-12行）。否则，用户将计算梯度的贡献率（算法第16行），接着使用拉普拉斯机制注入自适应的噪声量（算法第18行），然后对梯度进行范数裁剪（算法第19行）。最后，服务器对用户的梯度进行平均，并更新模型参数$w$。该算法有三个主要部分：自适应差分隐私，梯度范数裁剪，以及采用解析高斯计算累积添加的噪声量。
 
 \begin{algorithm}[!htb]
 	\caption{基于自适应差分隐私的随机梯度下降算法}
 	\label{基于自适应差分隐私的随机梯度下降算法}
 	\begin{algorithmic}[1]
 		\footnotesize
-		\STATE \textbf{输入:} 预估迭代次数$T$，学习率$\alpha$，梯度裁剪阈值$C$，目标损失函数$l$，解析高斯机制噪声$(\Delta, \varepsilon, \delta)$
+		\STATE \textbf{输入:} 预估迭代次数$T$，学习率$\alpha$，梯度裁剪阈值$C$，目标损失函数$l$，解析高斯机制噪声$(\Delta, \varepsilon, \delta)$，$f$贡献率阈值，$p$注入噪声的概率
 		\STATE \textbf{输出:} 模型梯度
 		\STATE 初始化模型权重$w$
 		\WHILE{$\exists \delta_{u}<\delta$}
@@ -73,15 +69,21 @@
 				\ENDIF
 				\STATE 从客户端数据集中随机采样
 				\STATE $g t_{u}=\nabla l(w, x)$
+				\STATE 计算梯度的平均贡献率
+				\STATE $C_{j}\left(x_{i}\right)=\frac{1}{n} \sum_{i=1}^{n} C_{x_{i, j}}\left(x_{i}\right), j \in[1, u]$
+				\STATE 添加自适应噪声
+				\STATE $g t_{u}^{\prime}=g t_{u}+\frac{1}{\left|D_{i}^{t}\right|} \operatorname{Lap}\left(\frac{G S_{l}}{\epsilon_{j}}\right)$
 				\STATE $g t_{u}=g t_{u} / \max \left(1, \frac{\left\|g t_{u}\right\|}{C}\right)$
 				\STATE $n$++
 			\ENDFOR
-			$w=w-\alpha * g r a d / n$
+			\STATE $w=w-\alpha * g r a d / n$
 		\ENDWHILE
 	\end{algorithmic}
 \end{algorithm}
 
 \section{详细设计}
+在本节接下来的三个部分，我们将详细描述如何在神经网络的随机梯度下降算法中自适应添加噪声、梯度剪裁以及使用解析高斯机制衡量添加的噪声大小。
+
 \subsection{自适应噪声添加}
 在第二章我们详细介绍了深度神经网络的结构，每个用户在本地用原始数据进行训练，在神经网络中进行前向传播操作，得到本地模型的输出。输入层的前向传播是神经网络中前向传播算法的第一步。
 
@@ -91,6 +93,19 @@
 	\caption{层间依赖传播算法}
 	\label{fig:层间依赖传播算法}	
 \end{figure}
+
+我们采用层间相关性传播算法计算每一层对模型输出的贡献比率。每个用户都在本地对原始数据在神经网络中进行前向传播的训练，这可以获得一个新的数据操作，从而获得本地模型的输出。
+
+例如图\ref{fig:层间依赖传播算法}所示，我们有：
+\begin{equation}
+C_{a_{7}}^{l_{2}}\left(x_{i}\right)=\sum_{a_{j} \in l_{3}} C_{a_{7} \leftarrow a_{j}}^{l_{2} \leftarrow l_{3}}\left(x_{i}\right)=C_{a_{7} \leftarrow a_{8}}^{l_{2} \leftarrow l_{3}}\left(x_{i}\right)+C_{a_{7} \leftarrow a_{9}}^{l_{2} \leftarrow l_{3}}\left(x_{i}\right)
+\end{equation}
+
+其中，"$\leftarrow$"表示两部分之间的连接关系。"$l_{2} \leftarrow l_{3}$" 是指深度神经网络中第2层和第3层之间相邻层的连接关系。
+当第k层为输出层时，我们有:
+\begin{equation}
+C_{a_{i}}^{l_{k}}\left(x_{i}\right)=f\left(x_{i}, \omega_{i}^{r}\right)
+\end{equation}
 
 根据矩阵层之间的线性相关性，神经元$a_{i}$在第k层的贡献$C_{a_{i}}^{l_{k}}\left(x_{i}\right)$等于连接到神经元$a_{i}$的相邻层的贡献之和：
 \begin{equation}\label{eq:层间传播1}
@@ -114,13 +129,24 @@ C_{a_{i} \leftarrow a_{j}}^{l_{k-1} \leftarrow l_{k}}\left(x_{i}\right)=\left\{\
 
 其中$\mu$是一个无限接近于零，但大于零的数字。从上述公式中，我们可以认为每一层的贡献是相等的，而且贡献是逐层传递的。根据以上公式的推导，我们能得到神经网络模型中每一层以及每个神经元的贡献值。
 
-在第二章中介绍了关于神经网络的结构，
+通过从数据元组中提取同一属性的贡献，我们可以计算出每个属性类对模型输出的平均贡献：
+\begin{equation}\label{eq:属性添加自适应扰动}
+C_{j}\left(x_{i}\right)=\frac{1}{n} \sum_{i=1}^{n} C_{x_{i, j}}\left(x_{i}\right), j \in[1, u]
+\end{equation}
+
+在原始的参数上计算神经网络中每个属性类对于模型输出的贡献后，按照公式\ref{eq:属性添加自适应扰动-拉普拉斯机制}采用拉普拉斯机制在属性类的贡献率中注入噪音以保护原始的参数。
+\begin{equation}\label{eq:属性添加自适应扰动-拉普拉斯机制}
+\ddot{C}_{j}\left(x_{i}\right)=C_{j}\left(x_{i}\right)+\operatorname{Lap}\left(\frac{G S_{c}}{\epsilon_{c}}\right), j \in[1, u]
+\end{equation}
+其中，函数的局部敏感度为$G S_{c}=\frac{2 u}{|D|}$，$u,|D|$分别代表了属性和数据元组的最大数量。
+
+在第二章中我们介绍了关于神经网络的结构，
 \begin{equation}\label{eq:神经网络参数传递}
 y=a(\mathbf{x} * \omega+b)
 \end{equation}
 
-公式\ref{eq:神经网络参数传递}是学习模型中每个隐藏神经元的转化过程。
-其中$\mathbf{x}$代表输入向量，$y$是输出，$b$和$\omega$分别代表偏置项和权重矩阵。$a()$是一个激活函数，用于结合线性变换和非线性变换。$y=a(\mathbf{x} * \omega+b)$ 是线性变换部分。
+公式\ref{eq:神经网络参数传递}表示学习模型中每个隐藏神经元的转化过程。
+其中$\mathbf{x}$代表输入向量，$y$是输出，$b$和$\omega$分别代表{}偏置项和权重矩阵。$a()$是一个激活函数，用于结合线性变换和非线性变换。$y=a(\mathbf{x} * \omega+b)$ 是线性变换部分。
 
 由于神经网络的结构，上一层的输出是下一层的输入，由此我们可以得出，原始的训练数据只被第一隐层的线性变换所利用。直观地说，为了得到一个具有隐私保护的学习模型，我们可以在第一层隐藏层的数据中注入噪声。正如Phan等人\upcite{ref36}提到的，对于线性变换有一种传统的方法，即向原始数据注入具有相同隐私预算的噪声，但是这容易导致隐私预算增加，并且使原始数据失真过多。因此，本文提出一种自适应噪声添加算法，针对每个梯度计算其贡献值，根据贡献值进行梯度裁剪并添加噪声。
 
@@ -143,40 +169,23 @@ x_{i, j} \text { with probability } 1-p
 
 $f$和$p$是超参数，用户可以根据自己的情况来调整。
 
-也就是说，隐私预算$\epsilon_{l}$是根据贡献率:$\epsilon_{j}=\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \epsilon_{l}$。按比例分配给每个属性类。自适应噪声按以下方式注入属性中:
+也就是说，隐私预算$\epsilon_{l}$是根据贡献率:$\epsilon_{j}=\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \epsilon_{l}$按比例分配给每个属性类，自适应噪声按以下方式注入属性中:
 \begin{equation}\label{eq:神经网络加噪3}
 x_{i, j}^{\prime}=x_{i, j}+\frac{1}{\left|D_{i}^{t}\right|} \operatorname{Lap}\left(\frac{G S_{l}}{\epsilon_{j}}\right)
 \end{equation}
 
-在不丧失一般性的情况下，调整因子$f$和$p$的值与系统的准确性和隐私水平有关。即$f$越小，$p$越大。越高的秘密水平，准确性越低，反之亦然。
-
-我们采用层间相关性传播算法计算每一层对模型输出的贡献比率。每个用户都在本地对原始数据在神经网络中进行前向传播的训练，这可以获得一个新的数据操作，从而获得本地模型的输出。根据相邻层之间的线性关系，在第k层的神经元的贡献$C_{a_{i}}^{l_{k}}\left(x_{i}\right)$等于连接到神经元$a_{i}$的相邻层的贡献之和：
-\begin{equation}\label{eq:神经网络加噪4}
-C_{a_{i}}^{l_{k}}\left(x_{i}\right)=\sum_{a_{j} \in l_{k+1}} C_{a_{i} \leftarrow a_{j}}^{l_{k} \leftarrow l_{k+1}}\left(x_{i}\right)
-\end{equation}
-
-例如图\ref{fig:层间依赖传播算法}所示，我们有：
-\begin{equation}
-C_{a_{7}}^{l_{2}}\left(x_{i}\right)=\sum_{a_{j} \in l_{3}} C_{a_{7} \leftarrow a_{j}}^{l_{2} \leftarrow l_{3}}\left(x_{i}\right)=C_{a_{7} \leftarrow a_{8}}^{l_{2} \leftarrow l_{3}}\left(x_{i}\right)+C_{a_{7} \leftarrow a_{9}}^{l_{2} \leftarrow l_{3}}\left(x_{i}\right)
-\end{equation}
-
-其中，"$\leftarrow$"表示两部分之间的连接关系。"$l_{2} \leftarrow l_{3}$" 是指深度神经网络中第2层和第3层之间相邻层的连接关系。
-当第k层为输出层时，我们有:
-\begin{equation}
-C_{a_{i}}^{l_{k}}\left(x_{i}\right)=f\left(x_{i}, \omega_{i}^{r}\right)
-\end{equation}
+在不丧失一般性的情况下，调整因子$f$和$p$的值与系统的准确性和隐私水平有关。即$f$越小，$p$越大。越高的秘密水平，准确性越低，反之亦然。当f值为0.15，p设置为0.85时，使用自适应的噪声分布与拉普拉斯机制基本吻合。我们可以得出一个令人信服的结论，在相同的噪声水平下，自适应噪声添加的隐私预算接近于原始的拉普拉斯机制，因此我们的方案在缩小调整系数范围的情况下能达到相近的隐私保护效果。
 
 \subsection{梯度范数裁剪}
-在模型的每一轮迭代过程中，算法将计算添加了高斯噪声的梯度$g=\nabla f+N\left(0, \Delta^{2} \sigma^{2} I\right)$, 方差是 $\sigma^{2}$ 。对梯度注入的噪声量 $\Delta^{2} \sigma^{2}$ 会根据用户个体对于梯度 $g$ 在二范数下的最 大全局敏感度, 即 $\Delta$ 。由于梯度的大小没有一个先验的界限, 我们用二范数的固定值来裁剪每个梯度。
+在模型的每一轮迭代过程中，算法将计算添加了拉普拉斯噪声的梯度$g t_{u}^{\prime}=g t_{u}+\frac{1}{\left|D_{i}^{t}\right|} \operatorname{Lap}\left(\frac{G S_{l}}{\epsilon_{j}}\right)$, 方差是 $2 b^{2}$ 。对梯度注入的噪声量$\frac{1}{\left|D_{i}^{t}\right|} \operatorname{Lap}\left(\frac{G S_{l}}{\epsilon_{j}}\right)$，决定于用户个体对于梯度 $g$ 在二范数下的最大全局敏感度, 即$\delta$ 。由于梯度的大小没有一个先验的界限, 我们采用二范数的固定值对每个梯度进行裁剪。
 
-用户上传的梯度向量将可以改写为 $g=g / \max \left(1, \frac{\|g\|}{C}\right)$, 其 中 $C$ 为裁剪阈值。参数裁剪行为确保了梯度值小于 $\mathrm{i}$ 一定的阈值, 即当 $\|g\| \leq C$ 时, 那么 $g$ 保持不变; 当 $\|g\|>C$ 时, 它按比例缩小为 $C_{\circ}$ 可以注意到, 这种形式的梯度裁剪是获得全局灵敏度的常用的方法。
+用户上传的梯度向量将可以改写为$g t_{u}=g t_{u} / \max \left(1, \frac{\left\|g t_{u}\right\|}{C}\right)$, 其中 $C$是裁剪阈值。对于梯度的裁剪能保证梯度值小于设定的阈值$\mathrm{i}$。 也就是当 $\|g\| \leq C$ ，$g$ 保持不变；当$\|g\|>C$ 时, 它会按照裁剪比例缩小为 $C_{\circ}$。
 
-但是参数clip$c$的值如果太小，那么裁剪后的噪声会较小，算法添加的噪声较小时可能会破坏梯度估计的无偏性；但是如果不对梯度进行裁剪，大量的噪声添加到每个梯度会导致模型的可用性大大降低。在模型训练前期，梯度所包含的数据信息更多，因此可以对应添加更多的高丝噪声，使用较大的clip$c$的值，使得梯度裁剪后的模型偏差更小；而在模型训练后期，梯度所包含的数据信息相对较小了，如果还使用相同的clip$c$，会引入很多不必要的噪声。
+但是如果裁剪阈值$C$ 的值如果太小，那么裁剪后的噪声会较小，算法添加的噪声较小时可能会破坏梯度估计的无偏性；可是如果不对梯度进行裁剪，大量的噪声添加到每个梯度会导致模型的可用性大大降低。在模型训练前期，梯度所包含的数据信息更多，因此可以对应添加更多的高丝噪声，使用较大的$C$ 的值，使得梯度裁剪后的模型偏差更小；而在模型训练后期，梯度所包含的数据信息相对较小了，如果还使用相同的$C$ ，会引入很多不必要的噪声。
 
-因此我们根据训练轮数和层间贡献率动态调整裁剪的值。在每次迭代中，该算法使用方差为$sigma^{2}$的高斯机制来计算噪声梯度$g=\nabla f+N\left(0, \sigma^{2} I\right)$。噪声$sigma^{2}$的大小取决于一个个体在$l_{2}$规范下对$g$的最大影响，即$Delta$。由于对梯度的大小没有先验的约束，我们以$l_{2}$规范对每个梯度进行剪辑。因此，梯度向量$g$被$g=g/max \left(1, \frac{\|g\|}{C}\right)$取代，以达到剪裁阈值$C$。这种剪裁保证了如果$|g\| \leq C$，那么$mathrm{g}$将被保留，而如果$|g\|>C$，它将被缩减为准则$C$。
+因此我们根据训练轮数和层间贡献率动态调整梯度裁剪阈值$C$：在每次迭代中，该算法使用方差为$2 b^{2}$ 的拉普拉斯机制来计算噪声梯度$g t_{u}^{\prime}=g t_{u}+\frac{1}{\left|D_{i}^{t}\right|} \operatorname{Lap}\left(\frac{G S_{l}}{\epsilon_{j}}\right)$。噪声$2 b^{2}$ 的大小取决于一个个体在$l_{2}$规范下对$g$的最大影响，即$\delta$。由于对梯度的大小没有先验的约束，我们以$l_{2}$规范对每个梯度进行剪辑。因此，梯度向量$g$被$g t_{u}=g t_{u} / \max \left(1, \frac{\left\|g t_{u}\right\|}{C}\right)$取代，以达到剪裁阈值$C$。这种剪裁保证了如果$|g t_{u}\| \leq C$，那么$g t_{u}$将被保留，而如果$|g\|>C$，它将被裁减为梯度准则$C$。
 
 \subsection{解析高斯机制}
-高斯机制是差分隐私数据分析算法的基本组成部分。差分隐私的定义可以理解为: 如果删除或者替换数据集中的个体对输出分布的影响可以忽略不计, 那么对私有数据的计算不会泄漏数据集中个体的敏感信息。
 在第二章的基础知识中, 我们简要介绍了传统的高斯机制。它的定义如下: 
 \begin{define}\label{差分隐私高斯机制}
 对于任意 $\varepsilon \in(0,1)$ 与 $c^{2}>2 \ln (1.25 / \delta)$, 高斯噪声参数满足 $\sigma \geq c \Delta_{2} f / \varepsilon$ 的高斯干扰机制为 $(\varepsilon, \delta)$-差分隐私。
@@ -286,52 +295,58 @@ G S_{l} &=\sum_{a_{i} \in l_{1}} \sum_{j=1}^{u}\left\|\sum_{x_{i} \in D_{i}^{t}}
 根据上述推倒证明可知，在联邦学习的神经网络中添加自适应噪声后，所上传的梯度是满足$\left(\epsilon_{c}+\epsilon_{l}\right)$差分隐私的。在满足差分隐私的基础上，在下一节我们会给出隐私损失累积函数计算隐私成本。
 
 \section{隐私预算分析}
-对于本章所提出的在随机梯度下降算法的上进行差分隐私保护算法，除了确保算法运行的准确率以外，另一个重要的问题就是评估算法训练时的数据隐私损失成本。为此，提出隐私损失累积函数的概念来进行每次迭代过程访问训练数据的隐私损失以及随着训练进展时的累积隐私损失。
-为不失一般性，令 $\sigma=\frac{\sqrt{2 \log (1.25 / \delta)}}{\varepsilon}$， 文献[36]严格证明，对于抽样概率 $q=\frac{\mathcal{L}}{N}$ 且 $\varepsilon<1$， 则对于完整样本而言，每次迭代过程都是 $(O(q \varepsilon),q \varepsilon)$-差分隐私的。 但文献并末对迭代过程以及噪声强度对差分隐私损失的影响展开研究，故无法对噪声强度以及剪切阈值$C$进行有依据的选取。故首先需要研究迭代过程对差分隐私的影响机制。
+本章所提出的自适应差分隐私保护方案是通过在随机梯度下降算法上添加自适应的拉普拉斯扰动，保护数据的隐私性。在上一节我们已经证明了此算法满足$\left(\epsilon_{c}+\epsilon_{l}\right)$差分隐私，那另外一个非常重要的问题就是评估在训练过程中添加噪声所累积的隐私预算成本。在本节中，我们提出隐私损失累计函数的概念，去计算算法迭代过程中添加噪声所累积的隐私预算成本。
 
-事实上，若令 $\sigma \geqslant c_{2} \frac{q \sqrt{T \log (1 / \delta)}}{\varepsilon}$，则同样应用文献[36]方法，可以严格证明算法对于任意的 $\varepsilon<c_{1} q^{2} T$ 都是 $(O(q \varepsilon \sqrt{T}),\delta)-$ 差分隐私的，其中 $c_{1}$ 和 $c_{2}$ 为常数。与文献\upcite{ref36}相比，本文算法能够在相同迭代步骤下，大幅度降低 $\varepsilon$ 的数值，对数据的隐私性保护更高。进一步地， 对于两个相邻的数据集 $d$，$d^{\prime} \in D$ 和映射机制 $M$，引入一个辅助输入变量 aux和输出$o \in R$， 定义映射机制$M$在输出$o$处的隐私损失为:
-\begin{equation}
-c\left(o ; M, a u x, d, d^{\prime}\right) \triangleq \log \frac{\operatorname{Pr}[M(a u x, d)=o]}{\operatorname{Pr}\left[M\left(a u x, d^{\prime}\right)=o\right]}
+根据差分隐私的组成定理，被查询n次的数据的隐私风险将增加n倍。因此，我们希望查询次数越少越好，至少要有一个界限。在实验环境中，我们可以通过几次尝试确定一个相对理想的迭代次数，然后在每次迭代中平均分配隐私预算。然而，在实践中很难选择迭代的数量，因为任何尝试都会增加额外的隐私风险。当数量太小时，会发生预拟合，导致性能不佳；如果数量太大，注入的噪声会过大，这将影响模型的准确性。另一种尝试是使用等比例递增的注入噪声序列，这样无论我们有多少次迭代，我们都能找到有限的隐私预算。
+
+根据上文提出的解析高斯机制，结合差分隐私的组成定理，我们设计了一个解析高斯组成定理：
+\begin{theorem}[解析高斯组成定理]\label{解析高斯组成定理}
+假使存在算法$M_{i}$满足$\left(\varepsilon_{i}, \delta_{i}\right)$-差分隐私，那么对于$M_{[k]}=\left(M_{1}, M_{2}, \ldots, M_{k}\right)$，有$M_{[k]}$也是满足$(\varepsilon, \delta)$-差分隐私的，其中
+$$
+\delta=\sum_{i=1}^{k} B(i, k, p)\left[\Phi\left(\frac{H \sqrt{i}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{i}}\right)-e^{\varepsilon} \Phi\left(-\frac{H \sqrt{i}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{i}}\right)\right]
+$$
+\end{theorem}
+
+我们采用朴素贝叶斯机制计算$\delta$可以得到：
+\begin{equation}\label{eq:朴素贝叶斯}
+\delta=\sum_{i=1}^{k} B(i, k, p)\left[\operatorname{Pr}\left[L_{d, d^{\prime}} * i>\varepsilon\right]-e^{\varepsilon} \operatorname{Pr}\left[L_{d^{\prime}, d} * i<-\varepsilon\right]\right]
 \end{equation}
 
-对于所提差分隐私SGD算法而言，神经网络各层权重系数的参数值与每次迭代过程中的差分隐私机制有着紧密的关联，从而对于给定的映射机制 $M$，在第 $\lambda$ 次迭代过程的隐私损失定义为:
-\begin{equation}\label{eq:隐私损失定义}
-\begin{array}{r}
-\alpha_{\mathcal{M}}\left(\lambda ; a u x, d, d^{\prime}\right) \triangleq \log \mathbb{E}_{o \sim M(a u x, d)}[\exp (\lambda c(o) ; M \\
-\left.\left.\left.d,d^{\prime}\right)\right)\right]
-\end{array}
+在此情况下，隐私损失变量$L_{M, d, d^{\prime}}$和$L_{M, d^{\prime}, d}$同时满足$N(\eta, 2 \eta)$分布，并且$\eta=$ $H^{2} / 2 \sigma^{2}$。因此可以采用解析高斯机制这样表达隐私预算损失：
+\begin{equation}\label{eq:隐私预算计算1}
+\begin{aligned}
+& \operatorname{Pr}\left[L_{d, d^{\prime}} * i>\varepsilon\right]=\operatorname{Pr}[N(\eta i, 2 \eta i)>\varepsilon] \\
+=& \operatorname{Pr}\left[N(0,1)>\frac{-\eta i+\varepsilon}{\sqrt{2 \eta i}}\right]=\operatorname{Pr}\left[N(0,1)<\frac{\eta i-\varepsilon}{\sqrt{2 \eta i}}\right] \\
+=& \operatorname{Pr}\left[N(0,1)<\sqrt{\frac{\eta i}{2}}-\frac{\varepsilon \sigma}{\sqrt{2 \eta i}}\right]=\Phi\left(\frac{H \sqrt{i}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{i}}\right)
+\end{aligned}
 \end{equation}
 
-进一步地，映射机制 $M$ 的损失边界值定义为：
-\begin{equation}\label{eq:损失边界值定义}
-\alpha_{\mathcal{M}}(\lambda) \triangleq \max _{a u x, d, d^{\prime}} \alpha_{M}\left(\lambda ; a u x, d, d^{\prime}\right)
+然后，可以计算得到隐私预算：
+\begin{equation}\label{eq:隐私预算计算2}
+\delta=\sum_{i=1}^{k} B(i, k, p)\left[\Phi\left(\frac{H \sqrt{i}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{i}}\right)-e^{\varepsilon} \Phi\left(-\frac{H \sqrt{i}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{i}}\right)\right]
 \end{equation}
 
-其满足以下特性：
+因为随着算法迭代次数$T$的增加，$\Phi\left(\frac{H \sqrt{T}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{T}}\right)-e^{\varepsilon} \Phi\left(-\frac{H \sqrt{T}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{T}}\right)$也在增加，因此可以计算得到：
 
-\begin{itemize}
-\item 组合特性：给定一个机制 $M$, 由一组子机制顺序 $\left\{M_{1}, M_{2}, \cdots, M_{k}\right\}$ 组成,并满足$M_{i}: \prod_{j=1}^{i-1} R_{j} \times D \rightarrow R_{i}$，从而总隐私损失边界满足：
-\begin{equation}\label{eq:损失边界值定义2}
-\alpha_{M}(\lambda) \leqslant \sum_{i=1}^{k} \alpha_{M_{i}}(\lambda)
+\begin{equation}\label{eq:隐私预算计算3}
+\begin{aligned}
+& \sum_{i=1}^{T} B(i, T, p)\left[\operatorname{Pr}\left[L_{d, d^{\prime}} * i>\varepsilon\right]-e^{\varepsilon} \operatorname{Pr}\left[L_{d^{\prime}, d} * i<-\varepsilon\right]\right] \\
+\leq & \sum_{i=1}^{T} B(i, T, p)\left[\operatorname{Pr}\left[L_{d, d^{\prime}} * T>\varepsilon\right]-e^{\varepsilon} \operatorname{Pr}\left[L_{d^{\prime}, d} * T<-\varepsilon\right]\right] \\
+\leq & \operatorname{Pr}\left[L_{d, d^{\prime}} * T>\varepsilon\right]-e^{\varepsilon} \operatorname{Pr}\left[L_{d^{\prime}, d} * T<-\varepsilon\right]
+\end{aligned}
 \end{equation}
 
-\item 差分隐私边界：$\forall \varepsilon>0$， 映射机制 $M$ 是 $(\varepsilon,\delta)$ 差分隐私的，当且仅当：
-\begin{equation}\label{eq:损失边界值定义2}
-\delta=\min _{\lambda} \exp \left(\alpha_{M}(\lambda)-\lambda \varepsilon\right)
-\end{equation}
-\end{itemize}
-
-上述2条性质确定了深度神经网络算法每次迭代的隐私损失以及所能够达到侵犯数据隐私容忍度的最大迭代次数。特别地，在附加高斯噪声的情况下，不妨令 $\mu_{0}$，$\mu_{1}$ 分别为 $N\left(0,\sigma^{2}\right)$ 和 $N\left(0,\sigma^{2}\right)$ 的概率密度函数，而 $\mu$ 为两个高斯密度函数的混合概率密度函数，即$\mu=(1-q) \mu_{0}+q \mu_{1}$。依据式\ref{eq:隐私损失定义}-\ref{eq:损失边界值定义2}可推导得 $\alpha$ $(\lambda)=\log \max \left(E_{1},E_{2}\right)$， 其中:
-\begin{equation}\label{eq:隐私容忍1}
-E_{1}=\mathbb{E}_{z \sim \mu_{0}}\left[\left(\frac{\mu_{0}(z)}{\mu(z)}\right)^{\lambda}\right]
+当隐私预算$\delta$相同时，$\sigma_{1} \leq \sigma_{2} \leq \sigma_{3}$。替换$\sigma=\alpha H \sqrt{T} / \sqrt{2 \epsilon}$，则有
+\begin{equation}\label{eq:隐私预算计算4}
+\Phi(\sqrt{\epsilon / 2}(1 / \alpha-\alpha))-e^{\varepsilon} \Phi(-\sqrt{\epsilon / 2}(1 / \alpha+\alpha)) \leq \delta
 \end{equation}
 
-\begin{equation}\label{eq:隐私容忍2}
-E_{1}=\mathbb{E}_{z \sim \mu_{0}}\left[\left(\frac{\mu_{0}(z)}{\mu(z)}\right)^{\lambda}\right]
-\end{equation}
+因此，$\sigma_{1} \leq \sigma_{3}=O(\sqrt{T})$。与之前的工作相比，我们的隐私预算能够在相同的迭代次数$T$，更低的上紧界，达到满足$\left(\epsilon_{c}+\epsilon_{l}\right)$的差分隐私。
 
 \section{本章总结}
 联邦学习以分布式学习技术为基础，使参与者彼此通过一定的方式（如中心服务器）联合起来训练一个神经网络。在这个过程中，参与者不需要将自己的隐私数据暴露出来便可以参与协作训练，可以克服参与者本地数据集较小、数据样本比较单一、隐私泄露等缺点。虽然基本的分布式协作深度学习没有直接暴露参与者的隐私数据集，但是恶意攻击者仍然可以通过共享的参数等信息获得一定的隐私信息。 
 
-本章详细介绍了基于梯度自适应加噪的差分隐私保护模型对于模型准确度的影响。其中梯度下降作为一种常见的深度学习优化方法，将梯度进行噪声扰动是最早被提出、也是目前相对主流的差分隐私加噪方案之一。我们设计了一个自适应噪声添加的方案，根据贡献率注入不同隐私预算的噪声。与传统的注入噪声的方法相比，我们在相同的隐私保护程度下最大限度地提高了模型的准确性。然后我们采用解析高斯机制计算对其梯度施加的干扰大小，最后分析了模型整体的隐私预算。然而，客户端的匿名性不足以防止侧信道链接攻击，例如，如果客户端在每次迭代中同时上传了大量的权重更新，云仍然可以将它们链接在一起。因此下一章将针对一种训练轮数无关的安全聚合模型进行研究。
+本章详细介绍了如何在深度学习模型的随机梯度下降算法中添加自适应的拉普拉斯噪声。其中梯度下降作为一种常见的深度学习优化方法，在梯度上添加扰动是最早被提出、也是当前比较主流的差分隐私加噪方案之一。我们设计了一个自适应噪声添加的方案，在神经网络前向传播算法中，根据属性对于模型输出的贡献率注入不同隐私预算的噪声。与传统的注入噪声的方法相比，我们在相同的隐私保护程度下最大限度地提高了模型的准确性，并且证明了算法能满足$\left(\epsilon_{c}+\epsilon_{l}\right)$差分隐私。然后我们采用解析高斯机制计算对梯度施加的噪声量大小，分析了模型整体的隐私预算。
+
+然而，在客户端的本地数据集添加的噪声只能保证本地数据的匿名性，不能够防止外部攻击者针对通信信道的攻击。如果客户端在每次迭代中同时上传了大量的权重更新，中央云服务器仍然可以将它们链接在一起，推导出参数信息。而且，当参与一次迭代的客户端数量达到上千人时，会导致聚合任务升级成一个高维任务，隐私预算暴增。因此，下一章我们对联邦学习模型框架进行了改进，在现有的联邦学习模型上新增混洗器，实现联邦学习框架的隐私安全，提高整体联邦学习模型的精度。
 
