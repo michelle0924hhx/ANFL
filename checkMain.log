@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.9.8)  5 OCT 2021 15:16
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.9.8)  6 OCT 2021 16:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2090,7 +2090,7 @@ tine_RB.otf
 
 ]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/it' will be
-(Font)              scaled to size 12.0pt on input line 19.
+(Font)              scaled to size 12.0pt on input line 18.
 Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
 mapping=tex-text;" at 12.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
@@ -2167,11 +2167,8 @@ mapping=tex-text;" at 14.05249pt
 tine_RB.otf
 Requested font "Heiti SC Medium/OT:language=dflt;" at 14.05249pt
  -> /System/Library/Fonts/STHeiti Medium.ttc
-[1
-
-]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
-(Font)              scaled to size 5.0pt on input line 15.
+(Font)              scaled to size 5.0pt on input line 5.
 Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
 apping=tex-text;" at 5.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
@@ -2190,7 +2187,7 @@ Requested font "cmbsy5" at 5.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5
 .tfm
 LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 15.
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 5.
 Requested font "msam5" at 5.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.
 tfm
@@ -2199,6 +2196,9 @@ Requested font "msbm5" at 5.0pt
 tfm
 Requested font "rsfs5" at 5.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/rsfs/rsfs5.tfm
+[1
+
+]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
 (Font)              scaled to size 10.95pt on input line 16.
 Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
@@ -2217,8 +2217,22 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [2]
-File: fig2/C1/联邦学习概况.png Graphic file (type bmp)
-<fig2/C1/联邦学习概况.png>
+File: fig2/C1/联邦学习.png Graphic file (type bmp)
+<fig2/C1/联邦学习.png>
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
+(Font)              scaled to size 14.4pt on input line 27.
+Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
+mapping=tex-text;" at 14.4pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
+tine_RB.otf
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
+(Font)              scaled to size 12.045pt on input line 27.
+Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
+mapping=tex-text;" at 12.045pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
+tine_RB.otf
+Requested font "Heiti SC Medium/OT:language=dflt;" at 12.045pt
+ -> /System/Library/Fonts/STHeiti Medium.ttc
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -2229,21 +2243,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [3]
-LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 14.4pt on input line 35.
-Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
-mapping=tex-text;" at 14.4pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
-tine_RB.otf
-LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 12.045pt on input line 35.
-Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
-mapping=tex-text;" at 12.045pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
-tine_RB.otf
-Requested font "Heiti SC Medium/OT:language=dflt;" at 12.045pt
- -> /System/Library/Fonts/STHeiti Medium.ttc
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2262,6 +2261,25 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [5]
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
+(Font)              scaled to size 6.0pt on input line 56.
+Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
+mapping=tex-text;" at 6.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
+tine_RB.otf
+
+
+Package natbib Warning: Citation `25' on page 6 undefined on input line 56.
+
+
+Package natbib Warning: Citation `26' on page 6 undefined on input line 56.
+
+
+Package natbib Warning: Citation `27' on page 6 undefined on input line 56.
+
+
+Package natbib Warning: Citation `28' on page 6 undefined on input line 56.
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2320,6 +2338,13 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [12]
+File: fig2/C2/联邦学习模型流程.png Graphic file (type bmp)
+<fig2/C2/联邦学习模型流程.png>
+
+Overfull \hbox (3.685pt too wide) in paragraph at lines 28--29
+ [][] 
+ []
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2341,19 +2366,14 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [14]
-Overfull \hbox (6.6993pt too wide) in paragraph at lines 53--54
-\TU/SongtiSCLight(0)/m/n/12 图[]\TU/LinLibertine(0)/m/n/12 2.2[]\TU/SongtiSCLigh
+Overfull \hbox (6.6993pt too wide) in paragraph at lines 59--60
+\TU/SongtiSCLight(0)/m/n/12 图[]\TU/LinLibertine(0)/m/n/12 2.3[]\TU/SongtiSCLigh
 t(0)/m/n/12 所 示，|  假 设 现 有 输 入 层 的 训 练 数 据 为 $\OML/cmm/m/it/12 D \OT1/cmr/m/n/1
 2 = [] \OML/cmm/m/it/12 ; x[] \OMS/cmsy/m/n/12 2
  []
 
 File: fig2/C2/前馈神经网络.png Graphic file (type bmp)
 <fig2/C2/前馈神经网络.png>
-
-Overfull \hbox (23.61136pt too wide) in paragraph at lines 57--58
- [][] 
- []
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2396,37 +2416,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [18]
-LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/it' will be
-(Font)              scaled to size 8.0pt on input line 127.
-Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
-mapping=tex-text;" at 8.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
-tine_RI.otf
-Requested font "Kaiti SC/OT:language=dflt;" at 8.0pt
- -> /System/Library/AssetsV2/com_apple_MobileAsset_Font6/00e58c0676b9e589e9309d
-bca4b795bbba3b5420.asset/AssetData/Kaiti.ttc
-LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/it' will be
-(Font)              scaled to size 6.0pt on input line 127.
-Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
-mapping=tex-text;" at 6.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
-tine_RI.otf
-Requested font "Kaiti SC/OT:language=dflt;" at 6.0pt
- -> /System/Library/AssetsV2/com_apple_MobileAsset_Font6/00e58c0676b9e589e9309d
-bca4b795bbba3b5420.asset/AssetData/Kaiti.ttc
-LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 8.0pt on input line 140.
-Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
-mapping=tex-text;" at 8.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
-tine_RB.otf
-LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 6.0pt on input line 140.
-Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
-mapping=tex-text;" at 6.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
-tine_RB.otf
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2436,6 +2425,19 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [19]
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
+(Font)              scaled to size 8.0pt on input line 146.
+Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
+mapping=tex-text;" at 8.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
+tine_RB.otf
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
+(Font)              scaled to size 5.0pt on input line 156.
+Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
+mapping=tex-text;" at 5.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
+tine_RB.otf
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2445,17 +2447,14 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [20]
-LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 5.0pt on input line 170.
-Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
-mapping=tex-text;" at 5.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
-tine_RB.otf
-
-Overfull \hbox (2.29166pt too wide) in paragraph at lines 172--173
+Overfull \hbox (2.29166pt too wide) in paragraph at lines 168--169
 []\TU/SongtiSCLight(0)/m/n/12 与 拉 普 拉 斯 机 制 类 似，|  高 斯 机 制 对 输 入 的 所 有 维 度 添 加 
 高 斯 噪 声 干 扰 $\OML/cmm/m/it/12 N []$\TU/SongtiSCLight(0)/m/n/12 。| 
  []
+
+
+Package natbib Warning: Citation `ref53' on page 21 undefined on input line 186
+.
 
 ) (./parts/C/C1-CHAP3.tex
 
@@ -2468,6 +2467,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [21]
 第三章
+
+Package natbib Warning: Citation `37' on page 22 undefined on input line 17.
+
+
+Package natbib Warning: Citation `38' on page 22 undefined on input line 17.
+
+
+Package natbib Warning: Citation `39' on page 22 undefined on input line 17.
+
 [22
 
 ]
@@ -2553,7 +2561,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [28]
-Overfull \hbox (10.62132pt too wide) in paragraph at lines 186--187
+Overfull \hbox (10.62132pt too wide) in paragraph at lines 176--177
 \TU/SongtiSCLight(0)/m/n/12 中，|  该 算 法 使 用 方 差 为 $\OT1/cmr/m/n/12 2\OML/cmm/m/i
 t/12 b[]$ \TU/SongtiSCLight(0)/m/n/12 的 拉 普 拉 斯 机 制 来 计 算 噪 声 梯 度 $\OML/cmm/m/i
 t/12 gt[] \OT1/cmr/m/n/12 = \OML/cmm/m/it/12 gt[] \OT1/cmr/m/n/12 + [] [] []$\T
@@ -2752,6 +2760,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [44]
+Requested font "eufm5" at 5.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/euler/eufm5.tf
+m
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2783,9 +2795,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [48]
-Requested font "eufm5" at 5.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/euler/eufm5.tf
-m
 File: fig2/C5/CNN结构.png Graphic file (type bmp)
 <fig2/C5/CNN结构.png>
 
@@ -2904,7 +2913,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 [58]) [59] (./checkMain.bbl) [60
 
 
-] [61] [62] [63] [64] [65] [66]
+] [61] [62] [63] [64] [65]
 (./parts/D/D2-ACHNOWLEDGEMENT.tex
 Requested font "STFangsong/OT" at 11.99997pt
  -> /System/Library/AssetsV2/com_apple_MobileAsset_Font6/4c66b413a81d594dc2fc43
@@ -2958,31 +2967,34 @@ Package fontspec Info: Font family 'STFangsong(0)' created for font
 Requested font "STFangsong/OT:language=dflt;" at 14.4pt
  -> /System/Library/AssetsV2/com_apple_MobileAsset_Font6/4c66b413a81d594dc2fc43
 0266c1629c30a5237b.asset/AssetData/STFANGSO.ttf
-[67
+[66
 
 
-]) [68] (./parts/D/D3-MYACHIEVEMENTS.tex
+]) [67] (./parts/D/D3-MYACHIEVEMENTS.tex
 Requested font "Heiti SC Medium/OT:language=dflt;" at 14.4pt
  -> /System/Library/Fonts/STHeiti Medium.ttc
-) (./checkMain.ind) [69
+) (./checkMain.ind)
+
+Package natbib Warning: There were undefined citations.
+
+[68
 
 
-]
-(./checkMain.aux)
+] (./checkMain.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.47188pt have occurred.
 
 Package rerunfilecheck Info: File `checkMain.out' has not changed.
-(rerunfilecheck)             Checksum: 71FDCFC0A147BC84B4774CC43E13B16D;6145.
+(rerunfilecheck)             Checksum: 88C7B9929EAD194DC77151F0BD9D55C3;6177.
  ) 
 Here is how much of TeX's memory you used:
- 31466 strings out of 476919
- 663108 string characters out of 5821841
- 891545 words of memory out of 5000000
- 50834 multiletter control sequences out of 15000+600000
- 431355 words of font info for 253 fonts, out of 8000000 for 9000
+ 31391 strings out of 476919
+ 658043 string characters out of 5821841
+ 891586 words of memory out of 5000000
+ 50762 multiletter control sequences out of 15000+600000
+ 431323 words of font info for 249 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  101i,14n,124p,1178b,935s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on checkMain.pdf (82 pages).
+Output written on checkMain.pdf (81 pages).
