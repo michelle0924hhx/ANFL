@@ -7,7 +7,9 @@ With the rapid development of artificial intelligence and the proliferation of m
 
 Data silos are one of the key challenges that distributed data processing and distributed machine learning facing. As a solution to address data silos, Federated Learning is a promising distributed computing framework that can train models locally on multiple decentralised edge devices without transferring their data to servers. With the increasing awareness of privacy among citizens and the improvement of related laws, privacy security in federation learning is also a growing concern, and recent research work has shown that it has been possible to restore users' private data by attacking the gradient parameters of the model, i.e. it is not enough to protect privacy by keeping the data local, and privacy-preserving techniques just protect privacy at the huge expense of model accuracy. 
 
-To this end, this paper uses differential privacy techniques to protect the privacy of users in federated learning, and analyses the adaptive interference mechanism against the gradient descent algorithm during model training for distributed scenarios.In order to achieve the goal of improving model accuracy, we propose a secure split-shuffle model to prevent attacks by malicious servers. The main work of this paper includes the following aspects:
+To this end, this paper uses differential privacy techniques to protect the privacy of users in federated learning, and analyses the adaptive interference mechanism against the gradient descent algorithm during model training for distributed scenarios.In order to achieve the goal of improving model accuracy, we propose a secure split-shuffle model to prevent attacks by malicious servers. 
+
+The main work of this paper includes the following aspects:
 
 \begin{enumerate}
 	\item In a federated learning differential privacy scenario, this paper presents a novel, local adaptive differential privacy interference algorithm. In a client-side locally trained neural network model, the contribution ratio of each attribute class to the model output is calculated by analysing the forward propagation algorithm, and then we develop an adaptive noise addition scheme that injects noise with different privacy budgets according to the contribution ratio. Compared with the traditional method of injecting noise, we maximise the accuracy of the model with the same degree of privacy protection, reduce the impact of noise on the model output results and improve the model accuracy.
@@ -15,6 +17,6 @@ To this end, this paper uses differential privacy techniques to protect the priv
 	\item In this paper, we do experiments on three datasets，then demonstrate the combination of the local adaptive differential privacy algorithm and the secure shuffle framework can reach the balance between model accuracy and privacy in the federated learning model.
 \end{enumerate}
 %\hspace{-0.5cm}
-{\sihao{\textbf{Keywords:}}} \textit{Federated learning, Privacy preserving, Local differential privacy , Security shuffle}
+{\sihao{\textbf{Keywords:}}} \textit{Federated learning, Privacy preserving, Differential privacy , Security shuffle}
 
 
