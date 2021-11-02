@@ -1,4 +1,5 @@
 \contentsline {algorithm}{\numberline {1}{\ignorespaces 随机梯度下降算法\relax }}{12}{algorithm.1}%
-\contentsline {algorithm}{\numberline {2}{\ignorespaces 基于自适应差分隐私的随机梯度下降算法\relax }}{21}{algorithm.2}%
-\contentsline {algorithm}{\numberline {3}{\ignorespaces 联邦学习中的安全模型算法：$\mathcal {A}_{\text {csdp}}$\relax }}{34}{algorithm.3}%
-\contentsline {algorithm}{\numberline {4}{\ignorespaces 混洗器中的拆分混洗算法\relax }}{35}{algorithm.4}%
+\contentsline {algorithm}{\numberline {2}{\ignorespaces 随机递归动量算法\relax }}{25}{algorithm.2}%
+\contentsline {algorithm}{\numberline {3}{\ignorespaces 差分隐私随机动量优化算法\relax }}{28}{algorithm.3}%
+\contentsline {algorithm}{\numberline {4}{\ignorespaces 联邦学习中的安全模型算法：$\mathcal {A}_{\text {csdp}}$\relax }}{37}{algorithm.4}%
+\contentsline {algorithm}{\numberline {5}{\ignorespaces 混洗器中的拆分混洗算法\relax }}{38}{algorithm.5}%

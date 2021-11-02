@@ -225,6 +225,15 @@ A_{11} \leq e^{\tilde{\epsilon}} A_{10}+\tilde{\delta}
 
 根据文献\upcite{ref50}中已有的标准随机梯度下降算法收敛结果中使用的定理\ref{随机梯度下降算法的收敛性}对$G^{2}$的约束条件，证明了混洗算法可在$G^{2}=$ $L^{2} \max \left\{d^{1-\frac{2}{p}}, 1\right\}\left(1+\frac{c d}{q n}\left(\frac{e^{\epsilon_{0}}+1}{e^{\epsilon_{0}-1}}\right)^{2}\right)$时达到全局最优解。
 
+\section{实验评估}
+
+\subsection{实验准备}
+
+\subsection{实验设计}
+
+\subsection{实验分析}
+
+
 \section{本章总结}
 本章节我们针对联邦学习模型的整体框架进行了改进，提出了安全混洗模型，在本地客户端和中央服务器之间加设混洗器，通过对本地客户端进行随机抽样，将上传的梯度进行拆分混洗，增加隐私放大效果。然后发送给中央服务器进行聚合。并对方案进行了隐私性证明，表明此安全混洗算法可以保证$\varepsilon_{\mathrm{c}}$的差分隐私，然后对此方案在中央服务器上的随机梯度下降算法进行了收敛性的分析，证明在凸函数上，梯度$\mathbf{g}_{t}$满足$\mathbb{E}\left[\mathbf{g}_{t}\right]=\nabla_{\theta_{t}} F\left(\theta_{t}\right)$时模型能达到全局收敛。本章所提出的方案能在保证模型收敛性的情况下，减少隐私预算。
 

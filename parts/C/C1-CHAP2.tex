@@ -2,20 +2,6 @@
 \label{ch2}
 在本章节中我们将介绍本文研究所需要的一些基本知识，有助于更好的理解之后章节的内容。
 
-\section{联邦学习}
-
-
-\subsection{模型框架}
-
-\begin{figure}[!hbt]
-\centering
-	\includegraphics[scale=0.45]{fig2/C2/联邦学习模型流程}%联邦学习的系统架构
-	\caption{联邦学习模型工作流程}
-	\label{fig:联邦学习模型工作流程}	
-\end{figure}
-
-
-
 \section{神经网络}
 \subsection{基本结构}
 深度学习模型通常采用神经网络的形式。已经为不同的应用提出了各种神经网络架构，例如多层感知器、卷积神经网络和循环神经网络。神经网络\upcite{ref34}最初的设计灵感来源于人脑的结构。我们知道，人类的大脑是处理信息的主要部分，也是人中枢神经系统中的重要部分。人脑中含有大量的神经元，它们像网状物一样复杂的相互连接。当人脑接收到外部环境或者感觉器官传入的刺激（兴奋），它随着神经元一层一层的将刺激（兴奋）传导到神经中枢（大脑或脊髓），神经中枢根据接收到的信号，作出不同的判断，最后传递到输出神经。
@@ -43,10 +29,13 @@
 	\begin{algorithmic}[1]
 		\footnotesize
 		\STATE \textbf{输入:} 学习率$\alpha$
-		\STATE \textbf{输出:} 模型梯度
+		\STATE \textbf{输出:} 初始参数$\theta$
 		\STATE 初始化模型权重$\theta$，作为梯度下降的起始点
-		\STATE 根据训练集上计算所得的梯度更新模型权重：$\theta_{i+1}=\theta_{i}-\alpha \times \nabla_{\theta} J(\theta)$
-		\STATE 重复上一步骤直至损失函数收敛，达到全局最优点
+		\WHILE{模型未达到全局最优点}
+		\STATE 从训练集中采包含m个样本的小批量
+		\STATE 计算梯度估计：
+		\STATE 梯度下降：
+		\ENDWHILE
 	\end{algorithmic}
 \end{algorithm}
 
@@ -71,6 +60,23 @@ F(\boldsymbol{\theta}):=\frac{1}{n} \sum_{i=1}^{n} f_{i}(\boldsymbol{\theta})
 对于函数$f$：$\mathbb{R}^{d} \rightarrow \mathbb{R}$，如果对于任意的$\boldsymbol{\theta}_{1}, \boldsymbol{\theta}_{2} \in \mathbb{R}^{d}$，都有\\$\left\|\nabla f\left(\boldsymbol{\theta}_{1}\right)-\nabla f\left(\boldsymbol{\theta}_{2}\right)\right\|_{2} \leq L\left\|\boldsymbol{\theta}_{1}-\boldsymbol{\theta}_{2}\right\|_{2}$，则称函数$f$满足L-Lipschitz（L-利普希茨连续条件）。
 \end{define}
 
+\section{联邦学习}
+传统的集中式深度学习需要将训练数据放在一起到数据中心。该模型以集中方式进行训练。而联邦学习允许数据所有者拥有一个私人学习网络，该网络使用本地数据集进行训练。之后，每个参与者将本地模型的梯度上传到云服务器。通过使用云服务器收集的全局梯度进行更新，可以避免局部模型过度拟合。此外，它还保护本地数据不被其他参与者或云服务器直接知道。
+
+\begin{itemize}
+\item \textbf{初始化：}
+所有用户在个字的设备上都有一个预先分配的神经网络模型，并且可以自愿加入联邦学习协议，指定相同的深度学习和模型训练目标。
+\item  \textbf{本地训练：}在一个给定的通信回合中，联邦学习参与者首先从中央服务器下载全局模型参数，然后在各自的本地数据集$D_{i}$上进行模型训练，更新模型参数:$\omega_{i}^{r+1} \leftarrow \omega_{i}^{r}-\eta_{i} \nabla g\left(D_{i}^{t}, \omega_{i}^{r}\right)$
+\item \textbf{中央参数聚合：}中央服务器等待所有本地客户端将更新后的模型参数上传，聚合得到全局模型的参数，之后更新全局模型：$\omega^{r+1} \leftarrow \omega^{r}-\eta \frac{\sum_{U_{i} \in U^{t}} \varsigma U_{i}}{\sum_{U_{i} \in U^{t}}\left|D_{i}^{t}\right|}$
+\item \textbf{迭代更新：}迭代地执行上述步骤直至全局模型参数满足收敛条件，最终得到最优的全局模型。
+\end{itemize}
+
+\begin{figure}[!hbt]
+\centering
+	\includegraphics[scale=0.45]{fig2/C2/联邦学习模型流程}%联邦学习的系统架构
+	\caption{联邦学习模型工作流程}
+	\label{fig:联邦学习模型工作流程}	
+\end{figure}
 
 \section{差分隐私}
 \subsection{基本定义}
@@ -86,37 +92,35 @@ F(\boldsymbol{\theta}):=\frac{1}{n} \sum_{i=1}^{n} f_{i}(\boldsymbol{\theta})
 \end{figure}
 
 2016年，Dwork\upcite{ref14}等人首次提出了差分隐私的概念，它在针对数据隐私泄漏的新型隐私定义，目的是使数据库的查询函数对数据集中单条记录的变化不敏感。其思想是添加一定量的噪音来随机化给定算法的输出，从而使攻击者无法区分任何两个相邻的输入数据集的输出。具体的定义如下：
-\begin{define}[(ε,δ)-DP]\label{(ε,δ)-DP}
+\begin{define}[(ε,δ)-差分隐私]\label{(ε,δ)-差分隐私}
 $\mathcal{D}$表示数据集合，$D$和$D^{\prime}$ 为邻近数据集。现有随机算法$M: D \rightarrow R$，D表示定义域，R表示值域。如果对于任意两个邻近数据集$S, S^{\prime} \in \mathcal{S}^{n}$和输出子集$O \subseteq \mathcal{R}$时，总有$$
 \operatorname{Pr}[\mathcal{M}(D) \in S] \leq e^{\epsilon} \operatorname{Pr}\left[\mathcal{M}\left(D^{\prime}\right) \in S\right]+\delta
 $$，则称该随机算法满足 $(\varepsilon, \delta)$-差分隐私。
 \end{define}
 添加项$\delta \in[0,1]$表示以某种概率打破$(\epsilon, 0)$-差分隐私。当$\delta=0$时，则将$M$称为$\epsilon$-差分隐私。$\epsilon$和$\delta$表示隐私预算参数，$\epsilon$和$\delta$越小，算法能提供的隐私保证程度越强。
 
-\begin{define}[l2敏感度]\label{l2-sensitivity}
-对于邻近数据集$S, S^{\prime} \in \mathcal{S}^{n}$，函数$q: \mathcal{S}^{n} \rightarrow \mathcal{R}$的$\ell_{2}$-sensitivity $\Delta(q)$表示为：$\Delta(q)=$ $\sup _{S, S^{\prime}}\left\|q(S)-q\left(S^{\prime}\right)\right\|_{2}$
+差分隐私保护的实现是在查询函数的返回值中注入一定量的干扰噪声，但是注入的噪声量太大会影响最终结果的准确性，太少则无法保障数据的隐私性。那么如何衡量添加的噪声量，既能保障数据的安全，又能维持数据的可用性呢？这里针对数据集提出敏感度的概念，加入的噪声量大小与数据集的敏感度息息相关。对于相邻数据集$D$和$D^{\prime}$，他们的敏感度代表某一个查询函数在这两个相邻数据集上输出的最大不同。查询函数的类型决定了敏感度，也为噪声的添加提供了依据。
+
+\begin{define}[全局敏感度]\label{全局敏感度}
+假设存在函数 $f: D \rightarrow R^{d}$， 输入为一数据集，输出为$d$维的实数向量。 对于任意的邻近数据集 $D$ 和 $D^{\prime}$，
+$$
+G S_{f}=\max _{D, D^{\prime}}\left\|f(D)-f\left(D^{\prime}\right)\right\|_{1}
+$$
+称为函数 $f$ 的全局敏感度。
 \end{define}
-
-尽管 (ε,δ)-差分隐私的概念在输出函数和目标函数添加扰动的方法被广泛使用，但它容易受到子采样结果的松散组合和隐私放大的影响，这使得它不适合随机迭代学习算法。之后，提出了Renyi-差分隐私 (RDP)，它是一种更通用的基于Renyi散度的差分隐私，下面介绍RDP的定义：
-
-\begin{define}[RDP]\label{RDP}
-存在随机算法$\mathcal{M}: \mathcal{S}^{n} \rightarrow \mathcal{R}$，有$\alpha>1, \rho>0$，如果对于任意的邻近数据集$S, S^{\prime} \in \mathcal{S}^{n}$，都有$D_{\alpha}\left(\mathcal{M}(S) \| \mathcal{M}\left(S^{\prime}\right)\right):=\log \mathbb{E}\left[\left(\mathcal{M}(S) / \mathcal{M}\left(S^{\prime}\right)\right)^{\alpha}\right] /(\alpha-$ 1) $\leq \rho$，那么随机算法$\mathcal{M}$满足$(\alpha, \rho)$-Rényi 差分隐私。
-\end{define}
-
-从定义\ref{RDP}可知，$\alpha \in(1, \infty)$时，RDP 根据$\alpha$-阶Rényi散度来度量两个相邻数据集的分布差异。相对于传统差分隐私，RDP能够提供更加严格的隐私预算上界保证。当$\alpha$趋向于无穷时， RDP转换为$\epsilon$-DP。
 
 \subsection{实现机制}
 在差分隐私的实际应用中，如何针对不同的场景和问题设计添加噪声的机制使算法能满足差分隐私保护的要求呢？差分隐私的实现机制主要分为拉普拉斯机制(Lapalace Mechanism）\upcite{ref9}、指数机制(Exponential Mechanism)\upcite{ref32}与高斯机制(Gaussian Mechanism)\upcite{ref33}。其中，指数机制适用于非数值型结果的隐私保护，拉普拉斯机制和高斯机制适用于对数值型结果的隐私保护\upcite{ref35}。
 
 \begin{theorem}[拉普拉斯机制]\label{拉普拉斯机制}
-一个查询函数 $f: D \rightarrow R$, 算法$M$ 满足 $\varepsilon$-差分隐私, 当:
+给定一个基于数据集$D$的查询函数$f(D)$，算法$\ddot{f}(D)$满足 $\varepsilon$-差分隐私, 当:
 $$
-M(D)=f(D)+\operatorname{Lap}\left(\frac{\Delta f}{\varepsilon}\right)
+\ddot{f}(D)=f(D)+\operatorname{Lap}\left(\frac{G S}{\epsilon}\right)
 $$
 \end{theorem}
-其中，噪声参数满足$\frac{\Delta f}{\varepsilon}$ 的 Laplace 分布。
+其中，噪声参数满足$\operatorname{Lap}\left(\frac{G S}{\epsilon}\right)$的 Laplace 分布，$GS$表示数据集的敏感度。
 
-与拉普拉斯机制类似，高斯机制对输入的所有维度添加满足高斯分布的噪声。
+与拉普拉斯机制类似，高斯机制对输入数据的所有维度添加满足高斯分布的噪声。
 \begin{theorem}[高斯机制]\label{高斯机制}
 一个查询函数 $f: D \rightarrow R$, 该算法的l2敏感度表示为$S_{f}$，算法$M$ 满足 $\varepsilon$-差分隐私，当：
 $$
@@ -157,6 +161,34 @@ $$
 \item [(2)] 选择合适的噪声机制和参数实现差分隐私
 \item [(3)] 结合串并行组合定理分析算法累积的总体隐私预算和隐私成本
 \end{enumerate}
+
+\subsection{RDP}
+尽管 (ε,δ)-差分隐私的概念在输出函数和目标函数添加扰动的方法被广泛使用，但它容易受到子采样结果的松散组合和隐私放大的影响，这使得它不适合随机迭代学习算法。之后，提出了Renyi-差分隐私 (RDP)，它是一种更通用的基于Renyi散度的差分隐私，下面介绍RDP的定义：
+
+\begin{define}[RDP]\label{RDP}
+存在随机算法$\mathcal{M}: \mathcal{S}^{n} \rightarrow \mathcal{R}$，有$\alpha>1, \rho>0$，如果对于任意的邻近数据集$S, S^{\prime} \in \mathcal{S}^{n}$，都有$D_{\alpha}\left(\mathcal{M}(S) \| \mathcal{M}\left(S^{\prime}\right)\right):=\log \mathbb{E}\left[\left(\mathcal{M}(S) / \mathcal{M}\left(S^{\prime}\right)\right)^{\alpha}\right] /(\alpha-$ 1) $\leq \rho$，那么随机算法$\mathcal{M}$满足$(\alpha, \rho)$-Rényi 差分隐私。
+\end{define}
+
+从定义\ref{RDP}可知，$\alpha \in(1, \infty)$时，RDP 根据$\alpha$-阶Rényi散度来度量两个相邻数据集的分布差异。相对于传统差分隐私，RDP能够提供更加严格的隐私预算上界保证。当$\alpha$趋向于无穷时， RDP转换为$\epsilon$-DP。
+
+\subsection{联邦学习中的差分隐私}
+传统的联邦学习中使用差分隐私的主要流程如下所示：
+\begin{itemize}
+\item \textbf{本地计算：}
+客户端 $\mathrm{i}$ 根据本地数据库 $\mathcal{D}_{\mathrm{i}}$ 和接受的服务器的全局模型 $\mathrm{w}_{\mathrm{G}}^{\mathrm{t}}$ 作为本地的参数，即 $\mathrm{w}_{\mathrm{i}}^{\mathrm{t}}=\mathrm{w}_{\mathrm{G}}^{\mathrm{t}}$， 采用梯度下降策略进行本地模型训练得到 $\mathrm{w}_{\mathrm{i}}^{\mathrm{t}+1} \quad(\mathrm{t}$ 表示当前通信回合) 。
+
+\item \textbf{模型扰动：}
+每个客户端产生一个随机噪音 $\mathrm{n},\mathrm{n}$ 是符合高斯分布的，使用 $\overline{\mathbf{w}_{\mathrm{i}}}^{\mathrm{t}+1}=\mathrm{w}_{\mathrm{i}}^{\mathrm{t}+1}+\mathrm{n}$ 扰动本地模型 (这里注意w是一个矩阵，n表示对矩阵的每一个元素添加噪音）。
+
+\item \textbf{模型聚合：}
+服务器使用参数聚合算法聚合从客户端收到的 $\overline{\mathrm{w}}_{\mathrm{i}} \mathrm{t}+1$ ，得到新的全局模型参数 $\mathrm{w}_{\mathrm{G}}^{\mathrm{t}+1}$， 也就是扰动过的模型参数。
+
+\item \textbf{模型广播：}
+服务器将新的模型参数广播给每个客户端。
+
+\item \textbf{全局收敛：}
+重复步骤（1）-（4）直至全局模型收敛。
+\end{itemize}
 
 \section{本章小结}
 本章节为基础知识，对于论文的研究所涉及的基础知识定理进行了讲解。本章主要介绍了神经网络的结构和算法、联邦学习系统的学习协议以及差分隐私的基本概念、定义和定理。分布式联邦学习系统是本论文主要使用的系统架构，本文所针对的攻击模型和隐私保护方案都是基于该分布式联邦学习系统。
