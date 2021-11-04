@@ -22,17 +22,13 @@
 \contentsline {section}{\numberline {3.1}引言}{19}{section.3.1}%
 \contentsline {section}{\numberline {3.2}相关理论}{22}{section.3.2}%
 \contentsline {subsection}{\numberline {3.2.1}自适应噪声添加算法}{22}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}随机递归动量算法}{24}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.2}随机递归动量算法}{25}{subsection.3.2.2}%
 \contentsline {subsection}{\numberline {3.2.3}满足RDP的高斯机制}{26}{subsection.3.2.3}%
-\contentsline {section}{\numberline {3.3}自适应动量差分隐私算法}{26}{section.3.3}%
+\contentsline {section}{\numberline {3.3}自适应差分隐私算法}{27}{section.3.3}%
 \contentsline {section}{\numberline {3.4}隐私性证明}{29}{section.3.4}%
-\contentsline {section}{\numberline {3.5}模型效用分析}{30}{section.3.5}%
+\contentsline {section}{\numberline {3.5}模型效用分析}{31}{section.3.5}%
 \contentsline {section}{\numberline {3.6}隐私预算分析}{31}{section.3.6}%
-\contentsline {section}{\numberline {3.7}实验评估}{33}{section.3.7}%
-\contentsline {subsection}{\numberline {3.7.1}实验准备}{33}{subsection.3.7.1}%
-\contentsline {subsection}{\numberline {3.7.2}实验设计}{33}{subsection.3.7.2}%
-\contentsline {subsection}{\numberline {3.7.3}实验分析}{33}{subsection.3.7.3}%
-\contentsline {section}{\numberline {3.8}本章总结}{33}{section.3.8}%
+\contentsline {section}{\numberline {3.7}本章总结}{33}{section.3.7}%
 \contentsline {chapter}{\numberline {第四章\hspace {.3em}}联邦学习的安全混洗模型}{34}{chapter.4}%
 \contentsline {section}{\numberline {4.1}引言}{34}{section.4.1}%
 \contentsline {section}{\numberline {4.2}安全混洗模型}{35}{section.4.2}%
@@ -58,7 +54,7 @@
 \contentsline {chapter}{\numberline {第六章\hspace {.3em}}总结与展望}{55}{chapter.6}%
 \contentsline {section}{\numberline {6.1}论文总结}{55}{section.6.1}%
 \contentsline {section}{\numberline {6.2}论文展望}{56}{section.6.2}%
-\contentsline {chapter}{参考文献}{58}{section*.20}%
-\contentsline {chapter}{致谢}{66}{section*.22}%
-\contentsline {chapter}{发表论文和科研情况}{68}{section*.24}%
+\contentsline {chapter}{参考文献}{58}{section*.21}%
+\contentsline {chapter}{致谢}{66}{section*.23}%
+\contentsline {chapter}{发表论文和科研情况}{68}{section*.25}%
 \contentsfinish 

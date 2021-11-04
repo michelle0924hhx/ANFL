@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.9.8)  2 NOV 2021 11:01
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.9.8)  4 NOV 2021 11:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2334,13 +2334,13 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [11]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 8.0pt on input line 45.
+(Font)              scaled to size 8.0pt on input line 49.
 Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
 mapping=tex-text;" at 8.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
 tine_RB.otf
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 6.0pt on input line 45.
+(Font)              scaled to size 6.0pt on input line 49.
 Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
 mapping=tex-text;" at 6.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
@@ -2349,7 +2349,7 @@ Requested font "Kaiti SC/OT:language=dflt;" at 12.0pt
  -> /System/Library/AssetsV2/com_apple_MobileAsset_Font6/00e58c0676b9e589e9309d
 bca4b795bbba3b5420.asset/AssetData/Kaiti.ttc
 
-Overfull \hbox (10.10115pt too wide) in paragraph at lines 55--57
+Overfull \hbox (10.10115pt too wide) in paragraph at lines 59--61
 [][]\TU/SongtiSCLight(0)/b/n/12 定 义 \TU/LinLibertine(0)/b/n/12 2.1.2. []\TU/Son
 gtiSCLight(0)/m/it/12 对 于 函 数 $\OML/cmm/m/it/12 f$\TU/SongtiSCLight(0)/m/it/12 
 ：| $\U/msb/m/n/12 R[] \OMS/cmsy/m/n/12 ! \U/msb/m/n/12 R$\TU/SongtiSCLight(0)/m
@@ -2366,17 +2366,23 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [12]
+Overfull \hbox (31.49605pt too wide) in paragraph at lines 73--74
+[]\TU/SongtiSCLight(0)/b/n/12 中 央 参 数 聚 合：|  \TU/SongtiSCLight(0)/m/n/12 中 央 服 
+务 器 等 待 所 有 本 地 客 户 端 将 更 新 后 的 模 型 参 数 $\OML/cmm/m/it/12 M\OT1/cmr/m/n/12 1\OM
+L/cmm/m/it/12 ; M\OT1/cmr/m/n/12 2\OML/cmm/m/it/12 ::::M[]$
+ []
+
 File: fig2/C2/联邦学习模型流程.png Graphic file (type bmp)
 <fig2/C2/联邦学习模型流程.png>
 
-Overfull \hbox (3.685pt too wide) in paragraph at lines 76--77
+Overfull \hbox (3.685pt too wide) in paragraph at lines 79--80
  [][] 
  []
 
 File: fig2/C2/相邻数据集示意图.png Graphic file (type bmp)
 <fig2/C2/相邻数据集示意图.png>
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 5.0pt on input line 94.
+(Font)              scaled to size 5.0pt on input line 97.
 Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
 mapping=tex-text;" at 5.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
@@ -2417,7 +2423,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [16]
-Overfull \hbox (6.40698pt too wide) in paragraph at lines 153--154
+Overfull \hbox (6.40698pt too wide) in paragraph at lines 156--157
 []$ \TU/SongtiSCLight(0)/m/it/12 也 满 足 $[]$\TU/LinLibertine(0)/m/it/12 -\TU/Son
 gtiSCLight(0)/m/it/12 差 分 隐 私。| 
  []
@@ -2431,7 +2437,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [17]
-Overfull \hbox (1.66582pt too wide) in paragraph at lines 180--182
+Overfull \hbox (1.66582pt too wide) in paragraph at lines 183--185
 []\TU/SongtiSCLight(0)/b/n/12 模 型 扰 动：|  \TU/SongtiSCLight(0)/m/n/12 每 个 客 户 端 
 产 生 一 个 随 机 噪 音 $[]\OML/cmm/m/it/12 ; []$ \TU/SongtiSCLight(0)/m/n/12 是 符 合 高 斯
  分 布 的，|  使 用 $[][] \OT1/cmr/m/n/12 =
@@ -2469,6 +2475,9 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [21]
+File: fig2/C3/逐层关联传播算法.png Graphic file (type bmp)
+<fig2/C3/逐层关联传播算法.png>
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2497,7 +2506,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [24]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 7.0pt on input line 129.
+(Font)              scaled to size 7.0pt on input line 138.
 Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
 mapping=tex-text;" at 7.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
@@ -2521,12 +2530,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [26]
-Overfull \hbox (45.66959pt too wide) in paragraph at lines 201--202
-[]\TU/SongtiSCLight(0)/m/n/12 在 模 型 的 每 一 轮 迭 代 过 程 中，|  算 法 将 计 算 添 加 了 高 斯 噪 
-声 的 梯 度 $[][] \OT1/cmr/m/n/12 = \OMS/cmsy/m/n/12 r\OML/cmm/m/it/12 F[] [] \OT1/
-cmr/m/n/12 +
- []
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2536,6 +2539,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [27]
+Overfull \hbox (45.66959pt too wide) in paragraph at lines 210--211
+[]\TU/SongtiSCLight(0)/m/n/12 在 模 型 的 每 一 轮 迭 代 过 程 中，|  算 法 将 计 算 添 加 了 高 斯 噪 
+声 的 梯 度 $[][] \OT1/cmr/m/n/12 = \OMS/cmsy/m/n/12 r\OML/cmm/m/it/12 F[] [] \OT1/
+cmr/m/n/12 +
+ []
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2554,12 +2563,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [29]
-Overfull \hbox (6.9089pt too wide) detected at line 230
+Overfull \hbox (6.9089pt too wide) detected at line 239
 [] [][] \OT1/cmr/m/n/12 + [] [][]
  []
 
 
-Overfull \hbox (42.61714pt too wide) in paragraph at lines 240--241
+Overfull \hbox (42.61714pt too wide) in paragraph at lines 249--250
 \TU/SongtiSCLight(0)/m/n/12 决 定。|  最 后 一 个 不 等 子 式 由 算 法 中 选 择 的 自 适 应 步 长 $\OM
 L/cmm/m/it/12 ^^Q[] \OT1/cmr/m/n/12 = [] []$
  []
@@ -2573,7 +2582,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [30]
-Overfull \hbox (12.94438pt too wide) in paragraph at lines 265--267
+Overfull \hbox (12.94438pt too wide) in paragraph at lines 274--276
 \TU/SongtiSCLight(0)/m/n/12 通 过 控 制 $\OML/cmm/m/it/12 ^^P$ \TU/SongtiSCLight(0)
 /m/n/12 可 以 得 到 $\OML/cmm/m/it/12 ^^P \OT1/cmr/m/n/12 = [][] [][] / [][]$\TU/So
 ngtiSCLight(0)/m/n/12 。|  因 此，| $\U/msb/m/n/12 E\OMS/cmsy/m/n/12 kr\OML/cmm/m/i
@@ -2961,13 +2970,13 @@ LaTeX Font Warning: Size substitutions with differences
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `checkMain.out' has not changed.
-(rerunfilecheck)             Checksum: 76870E5A7F61E76F9107338AD134252C;6372.
+(rerunfilecheck)             Checksum: 8E9D783BCA3ED59821D159C13EF50E92;5987.
  ) 
 Here is how much of TeX's memory you used:
- 31361 strings out of 476919
- 654638 string characters out of 5821841
- 896986 words of memory out of 5000000
- 50734 multiletter control sequences out of 15000+600000
+ 31376 strings out of 476919
+ 654913 string characters out of 5821841
+ 895628 words of memory out of 5000000
+ 50747 multiletter control sequences out of 15000+600000
  431323 words of font info for 249 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  101i,14n,124p,1219b,912s stack positions out of 5000i,500n,10000p,200000b,80000s

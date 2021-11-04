@@ -32,9 +32,13 @@
 		\STATE \textbf{输出:} 初始参数$\theta$
 		\STATE 初始化模型权重$\theta$，作为梯度下降的起始点
 		\WHILE{模型未达到全局最优点}
-		\STATE 从训练集中采包含m个样本的小批量
-		\STATE 计算梯度估计：
-		\STATE 梯度下降：
+		\STATE 从训练集中均匀抽出一小批量（minibatch）样本：$\mathbb{B}=\left\{x^{(1)}, \ldots, x^{\left(m^{\prime}\right)}\right\}$
+		\STATE 计算梯度估计：$$
+g=\frac{1}{m^{\prime}} \nabla_{\theta} \sum_{i=1}^{m^{\prime}} L\left(x^{(i)}, y^{(i)}, \theta\right)
+$$
+		\STATE 梯度下降：$$
+\theta=\theta-\epsilon g
+$$
 		\ENDWHILE
 	\end{algorithmic}
 \end{algorithm}
@@ -61,13 +65,12 @@ F(\boldsymbol{\theta}):=\frac{1}{n} \sum_{i=1}^{n} f_{i}(\boldsymbol{\theta})
 \end{define}
 
 \section{联邦学习}
-传统的集中式深度学习需要将训练数据放在一起到数据中心。该模型以集中方式进行训练。而联邦学习允许数据所有者拥有一个私人学习网络，该网络使用本地数据集进行训练。之后，每个参与者将本地模型的梯度上传到云服务器。通过使用云服务器收集的全局梯度进行更新，可以避免局部模型过度拟合。此外，它还保护本地数据不被其他参与者或云服务器直接知道。
-
+传统的集中式深度学习需要将训练数据放在一起到数据中心。该模型以集中方式进行训练。而联邦学习允许数据所有者拥有一个私人学习网络，该网络使用本地数据集进行训练。之后，每个参与者将本地模型的梯度上传到云服务器。通过使用云服务器收集的全局梯度进行更新，可以避免局部模型过度拟合。此外，它还保护本地数据不被其他参与者或云服务器直接知道。联邦学习的基本工作流程如下：
 \begin{itemize}
 \item \textbf{初始化：}
 所有用户在个字的设备上都有一个预先分配的神经网络模型，并且可以自愿加入联邦学习协议，指定相同的深度学习和模型训练目标。
 \item  \textbf{本地训练：}在一个给定的通信回合中，联邦学习参与者首先从中央服务器下载全局模型参数，然后在各自的本地数据集$D_{i}$上进行模型训练，更新模型参数:$\omega_{i}^{r+1} \leftarrow \omega_{i}^{r}-\eta_{i} \nabla g\left(D_{i}^{t}, \omega_{i}^{r}\right)$
-\item \textbf{中央参数聚合：}中央服务器等待所有本地客户端将更新后的模型参数上传，聚合得到全局模型的参数，之后更新全局模型：$\omega^{r+1} \leftarrow \omega^{r}-\eta \frac{\sum_{U_{i} \in U^{t}} \varsigma U_{i}}{\sum_{U_{i} \in U^{t}}\left|D_{i}^{t}\right|}$
+\item \textbf{中央参数聚合：}中央服务器等待所有本地客户端将更新后的模型参数$M1,M2....M_{n}$上传，聚合得到全局模型的参数，之后更新全局模型：$\omega^{r+1} \leftarrow \omega^{r}-\eta \frac{\sum_{U_{i} \in U^{t}} \varsigma U_{i}}{\sum_{U_{i} \in U^{t}}\left|D_{i}^{t}\right|}$
 \item \textbf{迭代更新：}迭代地执行上述步骤直至全局模型参数满足收敛条件，最终得到最优的全局模型。
 \end{itemize}
 

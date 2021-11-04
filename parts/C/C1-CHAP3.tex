@@ -36,23 +36,26 @@
 \section{相关理论}
 
 \subsection{自适应噪声添加算法}
-在第二章我们详细介绍了神经网络的结构，每个用户在本地用原始数据进行训练，在神经网络中进行前向传播操作，得到本地模型的输出。神经网络中前向传播算法的第一步在输入层。当我们使用前馈神经网络接收输入的$x$并产生输出的$y$时，信息通过网络前向传播。我们采用神经网络前向传播算法计算每一层对模型输出的贡献比率，每个本地用户对原始数据在神经网络中进行前向传播的训练，这可以获得一个新的数据操作，从而获得本地模型的输出。
+在第二章我们详细介绍了神经网络的结构，每个用户在本地用原始数据进行训练，在神经网络中进行前向传播操作，得到本地模型的输出。如图\ref{fig:神经网络的前向传播和反向传播流程图}，神经网络中前向传播算法的第一步在输入层。我们使用前馈神经网络接收输入的$x$运行前向传播算法，得到预测值，然后通过反向传播算法不断调整参数使与预测值和真实值之间的误差降低。Bach等人提出了针对神经网络的逐层关联传播算法\upcite{ref65}，它允许分解深度神经网络的预测值，我们利用该算法将神经网络的输出值按层进行分解，得到每层的属性值对于模型输出的贡献比，然后根据属性的贡献率，在梯度下降的过程中添加对应比的高斯噪声。
 
-\begin{equation}\label{eq:神经网络参数传递}
-y=a(\mathbf{x} * \omega+b)
-\end{equation}
+\begin{figure}[!hbt]
+\centering
+	\includegraphics[scale=0.45]{fig2/C3/逐层关联传播算法}%联邦学习的系统架构
+	\caption{神经网络的前向传播和反向传播流程图}
+	\label{fig:神经网络的前向传播和反向传播流程图}	
+\end{figure}
 
-公式\ref{eq:神经网络参数传递}表示神经网络中每个隐藏神经元的转化过程。
-其中$\mathbf{x}$代表输入向量，$y$是输出，$b$和$\omega$分别代表{}偏置项和权重矩阵。$a()$是一个激活函数，用于结合线性变换和非线性变换。$y=a(\mathbf{x} * \omega+b)$ 是线性变换部分。
+在逐层关联传播算法中，根据神经网络的结构自后向前计算归因分数，也称为相关性分数。对于卷积神经网络等网络结构，从输出层开始根据反向传播算法计算归因分数，输出层的归因分数通常作为输出层的预激活值，在反向传播过程中，每一层的所有神经元的归因分数总和是恒定。
+
+在卷积神经网络结构中，每个隐藏神经元的转化过程表示为$y=a(\mathbf{x} * \omega+b)$，其中$\mathbf{x}$代表输入向量，$y$是输出，$b$和$\omega$分别代表{}偏置项和权重矩阵。$a()$是一个激活函数，用于结合线性变换和非线性变换。$y=a(\mathbf{x} * \omega+b)$ 是线性变换部分。
 
 由于神经网络的结构，上一层的输出是下一层的输入，由此我们可以得出，原始的训练数据只被第一个隐藏层的线性变换所利用。直白地说，为了得到一个具有隐私保护的学习模型，我们可以在第一个隐藏层的数据中注入噪声。正如Phan等人\upcite{ref36}提到的，对于线性变换有一种传统的方法，即向原始数据注入具有相同隐私预算的噪声，但是这容易导致隐私预算增加，并且使原始数据失真过多。因此，本文提出一种自适应噪声添加算法，针对每个梯度计算其贡献值，根据贡献值进行梯度裁剪并添加噪声。
 
-第$k$层的神经元 $a_{i}$对于模型输出的贡献率表示为$C_{a_{i}}^{l_{k}}\left(x_{i}\right)$，根据神经网络相邻层间的线形关系，那么神经元$a_{i}$的贡献率即为与之相邻的第$k+1$层的神经元的贡献率之和：
+令$C_{a_{i}}^{l_{k}}\left(x_{i}\right)$表示第$k$层的神经元 $a_{i}$.用"$\leftarrow$"表示两部分之间的连接关系。"$l_{k} \leftarrow l_{k+1}$" 是指深度神经网络中第k层和第k+1层之间相邻层的连接关系。对于模型输出的贡献率，根据神经网络相邻层间的线形关系，那么神经元$a_{i}$的贡献率即为与之相邻的第$k+1$层的神经元的贡献率之和：
 $$
 C_{a_{i}}^{l_{k}}\left(x_{i}\right)=\sum_{a_{j} \in l_{k+1}} C_{a_{i} \leftarrow a_{j}}^{l_{k} \leftarrow l_{k+1}}\left(x_{i}\right)
 $$
 
-用"$\leftarrow$"表示两部分之间的连接关系。"$l_{2} \leftarrow l_{3}$" 是指深度神经网络中第2层和第3层之间相邻层的连接关系。
 当第k层为输出层时，我们有:
 \begin{equation}
 C_{a_{i}}^{l_{k}}\left(x_{i}\right)=f\left(x_{i}, \omega_{i}^{r}\right)
@@ -63,25 +66,32 @@ C_{a_{i}}^{l_{k}}\left(x_{i}\right)=f\left(x_{i}, \omega_{i}^{r}\right)
 C_{a_{i}}^{l_{k}}\left(x_{i}\right)=\sum_{a_{j} \in l_{k+1}} C_{a_{i} \leftarrow a_{j}}^{l_{k} \leftarrow l_{k+1}}\left(x_{i}\right)
 \end{equation}
 
-因此，位于输出层的神经元$a_{j}$的贡献等于模型的输出。第k-1层的神经元$a_{j}$对于第k层的神经元$C_{a_{i} \leftarrow a_{j}}^{l_{k-1} \leftarrow l_{k}}\left(x_{i}\right)$的贡献等于：
+因此，位于输出层的神经元$a_{j}$的贡献等于模型的输出。第k-1层的神经元$a_{j}$对于第k层的神经元的贡献$C_{a_{i} \leftarrow a_{j}}^{l_{k-1} \leftarrow l_{k}}\left(x_{i}\right)$等于：
 \begin{equation}
 C_{a_{i} \leftarrow a_{j}}^{l_{k-1} \leftarrow l_{k}}\left(x_{i}\right)=\left\{\begin{array}{cc}\frac{a_{i} w_{i, j}}{\sum_{a_{i} \in l_{k-1} a_{i} w_{i, j}}} C_{a_{j}}^{l_{k}}\left(x_{i}\right) & \sum_{a_{i} \in l_{k-1}} a_{i} w_{i, j} \neq 0 \\ \mu & \sum_{a_{i} \in l_{k-1}} a_{i} w_{i, j}=0\end{array}\right.
 \end{equation}
 
-其中$\mu$是一个无限接近于零，但大于零的数字。从上述公式中，我们可以认为每一层的贡献是相等的，而且贡献是逐层传递的。根据以上公式的推导，我们能得到神经网络模型中每一层以及每个神经元的贡献值。
+其中$\mu$是一个无限接近于零，但大于零的数字。从上述公式中，我们可以认为每一层的贡献是相等的，而且贡献是逐层传递的。根据以上公式的推导，我们能得到神经网络模型中每一层以及每个神经元的贡献值。那么模型的输出可以表示为层神经元贡献值的累加：
+$$
+\begin{aligned}
+\sum f\left(x_{i}, \omega_{i}^{r}\right) &=C_{a_{8}}^{l_{3}}\left(x_{i}\right)+C_{a_{9}}^{l_{3}}\left(x_{i}\right) \\
+&=C_{a_{4}}^{l_{2}}\left(x_{i}\right)+C_{a_{5}}^{l_{2}}\left(x_{i}\right)+C_{a_{6}}^{l_{2}}\left(x_{i}\right)+C_{a_{7}}^{l_{2}}\left(x_{i}\right) \\
+&=C_{a_{1}}^{l_{1}}\left(x_{i}\right)+C_{a_{2}}^{l_{1}}\left(x_{i}\right)+C_{a_{3}}^{l_{1}}\left(x_{i}\right)
+\end{aligned}
+$$
 
 通过从数据元组中提取同一属性的贡献，我们可以计算出每个属性类对模型输出的平均贡献：
 \begin{equation}\label{eq:属性添加自适应扰动}
 C_{j}\left(x_{i}\right)=\frac{1}{n} \sum_{i=1}^{n} C_{x_{i, j}}\left(x_{i}\right), j \in[1, u]
 \end{equation}
 
-在原始的参数上计算神经网络中每个属性类对于模型输出的贡献后，按照公式\ref{eq:属性添加自适应扰动-拉普拉斯机制}采用拉普拉斯机制在属性类的贡献率中注入噪音以保护原始的参数。
+在原始的参数上计算神经网络中每个属性类对于模型输出的贡献后，按照公式\ref{eq:属性添加自适应扰动-拉普拉斯机制}采用高斯机制在属性类的贡献率中注入噪音以保护原始的参数。
 \begin{equation}\label{eq:属性添加自适应扰动-拉普拉斯机制}
 \ddot{C}_{j}\left(x_{i}\right)=C_{j}\left(x_{i}\right)+\operatorname{Lap}\left(\frac{G S_{c}}{\epsilon_{c}}\right), j \in[1, u]
 \end{equation}
 其中，函数的局部敏感度为$G S_{c}=\frac{2 u}{|D|}$，$u,|D|$分别代表了属性和数据元组的最大数量。
 
-首先，我们引入了两个调整因素$f$和$p$。其中，$f$代表一个阈值，用于决定属性对模型结果输出的贡献是高还是低，其值由用户定义，即贡献超过阈值$f$的属性类对输出的贡献更大。然后，我们向所有这些属性注入自适应拉普拉斯噪声。当贡献率低于阈值$f$时，对这些属性进行概率选择。也就是说，我们抛弃概率为$1-p$的原始数据，并对一些概率为$p$的属性注入自适应拉普拉斯噪声。该公式如下：
+然后，我们引入了两个调整参数$f$和$p$。其中，$f$代表一个阈值，用于决定属性对模型结果输出的贡献是高还是低，其值由联邦学习中的本地用户自己定义，即贡献超过阈值$f$的属性类对输出的贡献更大，我们向所有这些属性注入自适应拉普拉斯噪声。当贡献率低于阈值$f$时，对这些属性进行概率选择。也就是说，我们抛弃概率为$1-p$的原始数据，并对一些概率为$p$的属性注入自适应拉普拉斯噪声。该公式如下：
 \begin{equation}\label{eq:神经网络加噪}
 \tilde{x}_{i, j}=\left\{\begin{array}{ll}
 \ddot{x}_{i, j} & \beta \geq f \\
@@ -89,7 +99,7 @@ C_{j}\left(x_{i}\right)=\frac{1}{n} \sum_{i=1}^{n} C_{x_{i, j}}\left(x_{i}\right
 \end{array}\right.
 \end{equation}
 
-其中$\beta$代表贡献率：$\beta=\frac{\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|}$，当$\beta<f$时，我们有：
+其中$\beta$代表该层神经元的贡献率：$\beta=\frac{\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|}$，当$\beta<f$时，我们有：
 \begin{equation}\label{eq:神经网络加噪2}
 \bar{x}_{i, j}=\left\{\begin{array}{l}
 \ddot{x}_{i, j} \text { with probability } p \\
@@ -97,15 +107,12 @@ x_{i, j} \text { with probability } 1-p
 \end{array}\right.
 \end{equation}
 
-
-$f$和$p$是超参数，用户可以根据自己的情况来调整。
-
-在此方案中，隐私预算$\epsilon_{l}$是根据贡献率:$\epsilon_{j}=\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \epsilon_{l}$按比例分配给每个属性类，自适应噪声按以下方式注入属性中:
+在此方案中，隐私预算$\epsilon_{l}$是根据贡献率:$\epsilon_{j}=\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \epsilon_{l}$按比例分配给每个属性类，自适应高斯噪声按以下方式注入属性中:
 \begin{equation}\label{eq:神经网络加噪3}
 x_{i, j}^{\prime}=x_{i, j}+\frac{1}{\left|D_{i}^{t}\right|} \operatorname{Lap}\left(\frac{G S_{l}}{\epsilon_{j}}\right)
 \end{equation}
 
-在不失一般性的情况下，调整因子$f$和$p$的值与系统的准确性和隐私水平有关。即$f$越小，$p$越大，代表越高的隐私保护水平，模型准确性越低，反之亦然。在第五章我们将通过实验证明，当f值为0.15，p设置为0.85时，使用自适应的噪声分布与拉普拉斯机制基本吻合。在相同的噪声水平下，自适应噪声添加的隐私预算接近于原始的拉普拉斯机制，因此我们的方案在缩小调整系数范围的情况下能达到相近的隐私保护效果。
+在不失一般性的情况下，调整因子$f$和$p$的值与系统的准确性和隐私水平有关。即$f$越小，$p$越大，代表越高的隐私保护水平，模型准确性越低，反之亦然。
 
 \subsection{随机递归动量算法}
 尽管随机梯度下降作为非常主流的一种优化模型的算法，在数据量大并且添加了噪声的情况下，SGD的学习过程会很慢，导致模型迟迟难以达到收敛。此处，引入动量这一物理学中的概念。想象一下丘陵地带的一个球正试图到达最深的山谷。当山坡坡度很高时，球会获得很大的动力，随着坡度的降低，球的动量和速度也随之降低，最终停在山谷的最深处。引入动量的SGD Momentum算法借用了动量的概念，在进行梯度更新的时候引入历史梯度的方向进行比较，若两者方向一致，则增强当前方向的梯度；若不一致，则衰减当前方向的梯度。
@@ -158,7 +165,7 @@ x_{i, j}^{\prime}=x_{i, j}+\frac{1}{\left|D_{i}^{t}\right|} \operatorname{Lap}\l
 当机制$\mathcal{M}$满足$(\epsilon, \delta)$-RDP时，对于任意的$0<\delta<1$，机制$\mathcal{M}$都可以转换为$(\epsilon+\log (1 / \delta) /(\alpha-1), \delta)$-差分隐私。
 \end{theorem}
 
-\section{自适应动量差分隐私算法}
+\section{自适应差分隐私算法}
 算法的主要思想是基于从先前更新中获得的信息迭代构建差分隐私梯度估计器$\mathbf{v}_{p}^{t}$。算法\ref{基于凸ERM的自适应差分隐私随机优化算法}详细描述了在本地客户端训练过程中，在SGD算法中添加自适应差分隐私，并使用差分隐私组合定理衡量所添加的噪声大小。首先，我们采用先验组合机制计算$eps_{iter}$和$\delta_{iter}$（算法第行）。每个客户端对训练数据进行采样，并计算他们的隐私预算$\delta_{u}$。如果$\delta_{u}>\delta$，用户将终止采样和训练，并且不上传其梯度信息（算法第11-13行）。然后，我们根据$\mathbf{v}^{t}=\nabla F_{\mathcal{B}_{t}}\left(\boldsymbol{\theta}^{t}\right)+(1-\gamma)\left(\mathbf{v}_{p}^{t-1}-\nabla F_{\mathcal{B}_{t}}\left(\boldsymbol{\theta}^{t-1}\right)\right)$等式不断的迭代更新$\mathbf{v}^{t}$，$\nabla F_{\mathcal{B}_{t}}\left(\boldsymbol{\theta}^{t}\right), \nabla F_{\mathcal{B}_{t}}\left(\boldsymbol{\theta}^{t-1}\right)$ 都表示小批量的随机梯度，$\mathbf{v}_{p}^{t-1}$是在最后一次迭代中计算得到的差分梯度估计器。$\gamma$表示动量参数，用于控制先验参数$\mathbf{v}_{p}^{t-1}-\nabla F_{\mathcal{B}_{t}}\left(\boldsymbol{\theta}^{t-1}\right)$的衰减率。这样的做法可以让早期的梯度对当前梯度的影响越来越小，如果没有衰减值，模型往往会震荡难以收敛，甚至发散。之后，对梯度进行范数裁剪（算法第17行），在更新后的权重系数$\mathbf{v}^{t}$上添加噪声矩阵为$\sigma_{2} \mathbf{I}_{d}$的高斯噪声$\mathbf{u}^{t}$，以使加噪后的梯度满足差分隐私。高斯随机向量的方差 $\sigma_{0}^{2}, \sigma^{2}$ 由我们基于RDP的分析确定，下文将仔细阐述。最后，服务器对用户上传的梯度进行聚合，并更新模型参数$w$。该算法有三个主要部分：带有动量的梯度估计，满足RDP的高斯噪声，自适应梯度裁剪。
 
 \begin{algorithm}[!htb]
@@ -314,14 +321,6 @@ $$
 
 因此，$\sigma_{1} \leq \sigma_{3}=O(\sqrt{T})$。与之前的工作相比，我们的隐私预算能够在相同的迭代次数$T$，更低的上紧界，达到满足$\left(\epsilon_{c}+\epsilon_{l}\right)$的差分隐私。
 
-\section{实验评估}
-
-\subsection{实验准备}
-
-
-\subsection{实验设计}
-
-\subsection{实验分析}
 
 \section{本章总结}
 
