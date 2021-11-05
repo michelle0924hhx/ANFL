@@ -125,7 +125,7 @@ $$
 
 与拉普拉斯机制类似，高斯机制对输入数据的所有维度添加满足高斯分布的噪声。
 \begin{theorem}[高斯机制]\label{高斯机制}
-一个查询函数 $f: D \rightarrow R$, 该算法的l2敏感度表示为$S_{f}$，算法$M$ 满足 $\varepsilon$-差分隐私，当：
+一个查询函数 $f: D \rightarrow R$, 该算法的敏感度表示为$S_{f}$，算法$M$ 满足 $\varepsilon$-差分隐私，当：
 $$
 \mathcal{M}(d) \triangleq f(d)+\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)
 $$
@@ -165,33 +165,6 @@ $$
 \item [(3)] 结合串并行组合定理分析算法累积的总体隐私预算和隐私成本
 \end{enumerate}
 
-\subsection{RDP}
-尽管 (ε,δ)-差分隐私的概念在输出函数和目标函数添加扰动的方法被广泛使用，但它容易受到子采样结果的松散组合和隐私放大的影响，这使得它不适合随机迭代学习算法。之后，提出了Renyi-差分隐私 (RDP)，它是一种更通用的基于Renyi散度的差分隐私，下面介绍RDP的定义：
-
-\begin{define}[RDP]\label{RDP}
-存在随机算法$\mathcal{M}: \mathcal{S}^{n} \rightarrow \mathcal{R}$，有$\alpha>1, \rho>0$，如果对于任意的邻近数据集$S, S^{\prime} \in \mathcal{S}^{n}$，都有$D_{\alpha}\left(\mathcal{M}(S) \| \mathcal{M}\left(S^{\prime}\right)\right):=\log \mathbb{E}\left[\left(\mathcal{M}(S) / \mathcal{M}\left(S^{\prime}\right)\right)^{\alpha}\right] /(\alpha-$ 1) $\leq \rho$，那么随机算法$\mathcal{M}$满足$(\alpha, \rho)$-Rényi 差分隐私。
-\end{define}
-
-从定义\ref{RDP}可知，$\alpha \in(1, \infty)$时，RDP 根据$\alpha$-阶Rényi散度来度量两个相邻数据集的分布差异。相对于传统差分隐私，RDP能够提供更加严格的隐私预算上界保证。当$\alpha$趋向于无穷时， RDP转换为$\epsilon$-DP。
-
-\subsection{联邦学习中的差分隐私}
-传统的联邦学习中使用差分隐私的主要流程如下所示：
-\begin{itemize}
-\item \textbf{本地计算：}
-客户端 $\mathrm{i}$ 根据本地数据库 $\mathcal{D}_{\mathrm{i}}$ 和接受的服务器的全局模型 $\mathrm{w}_{\mathrm{G}}^{\mathrm{t}}$ 作为本地的参数，即 $\mathrm{w}_{\mathrm{i}}^{\mathrm{t}}=\mathrm{w}_{\mathrm{G}}^{\mathrm{t}}$， 采用梯度下降策略进行本地模型训练得到 $\mathrm{w}_{\mathrm{i}}^{\mathrm{t}+1} \quad(\mathrm{t}$ 表示当前通信回合) 。
-
-\item \textbf{模型扰动：}
-每个客户端产生一个随机噪音 $\mathrm{n},\mathrm{n}$ 是符合高斯分布的，使用 $\overline{\mathbf{w}_{\mathrm{i}}}^{\mathrm{t}+1}=\mathrm{w}_{\mathrm{i}}^{\mathrm{t}+1}+\mathrm{n}$ 扰动本地模型 (这里注意w是一个矩阵，n表示对矩阵的每一个元素添加噪音）。
-
-\item \textbf{模型聚合：}
-服务器使用参数聚合算法聚合从客户端收到的 $\overline{\mathrm{w}}_{\mathrm{i}} \mathrm{t}+1$ ，得到新的全局模型参数 $\mathrm{w}_{\mathrm{G}}^{\mathrm{t}+1}$， 也就是扰动过的模型参数。
-
-\item \textbf{模型广播：}
-服务器将新的模型参数广播给每个客户端。
-
-\item \textbf{全局收敛：}
-重复步骤（1）-（4）直至全局模型收敛。
-\end{itemize}
 
 \section{本章小结}
 本章节为基础知识，对于论文的研究所涉及的基础知识定理进行了讲解。本章主要介绍了神经网络的结构和算法、联邦学习系统的学习协议以及差分隐私的基本概念、定义和定理。分布式联邦学习系统是本论文主要使用的系统架构，本文所针对的攻击模型和隐私保护方案都是基于该分布式联邦学习系统。

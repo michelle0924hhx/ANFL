@@ -20,7 +20,25 @@
 
 基于输入的扰动和输出的扰动基本可以视为一个黑匣子模型，简单直接。但是这种添加噪声的方式无法对训练过程中数据的相互依赖性和输出有效性作出有用的、紧密的描述。在输入数据中加入过多的噪声，可能会影响模型训练的收敛性。在输出参数中加入过于保守的噪声，也就是根据最坏的攻击情况去添加噪声，可能会影响模型的实用性。
 
-当前在深度学习模型中应用差分隐私的主流方案是在模型的梯度上添加噪声，方案的目标是在满足差分隐私的条件下，实现整体模型的最优可用性。Song等人\upcite{ref47}提出了一个$\left(\epsilon_{c}+\epsilon_{d}\right)$-差分隐私版本的随机梯度下降算法。在模型的每一次迭代过程中，对梯度添加高斯噪声，并通过差分隐私的组合性和隐私放大效果，得到完全隐私损失的上界。与SGD 相比，差分隐私随机梯度下降 (DP-SGD) 严重降低了训练模型的效用。 如图所示，当差分隐私隐私提供的隐私强度增加时，MNIST数据集上逻辑回归的训练和验证的损失率迅速增加。由DP-SGD训练的卷积神经网络(CNN)的测试精度比MNIST 上的非差分隐私网络低得多。Goodfellow\upcite{ref64}提出了$\ell_{2}$范式梯度裁剪的方式以限制函数敏感度，并设计了“Moments Accountant”（MA）来计算更准确的隐私预算估计。
+当前在深度学习模型中应用差分隐私的主流方案是在模型的梯度上添加噪声，方案的目标是在满足差分隐私的条件下，实现整体模型的最优可用性。Song等人\upcite{ref47}提出了一个$\left(\epsilon_{c}+\epsilon_{d}\right)$-差分隐私版本的随机梯度下降算法。在本地模型的每一次迭代过程中，对梯度添加高斯噪声，并通过差分隐私的组合性和隐私放大效果，得到完全隐私损失的上界。传统的联邦学习中使用差分隐私的主要流程如下所示：
+\begin{itemize}
+\item \textbf{本地计算：}
+客户端 $\mathrm{i}$ 根据本地数据库 $\mathcal{D}_{\mathrm{i}}$ 和接受的服务器的全局模型 $\mathrm{w}_{\mathrm{G}}^{\mathrm{t}}$ 作为本地的参数，即 $\mathrm{w}_{\mathrm{i}}^{\mathrm{t}}=\mathrm{w}_{\mathrm{G}}^{\mathrm{t}}$， 采用梯度下降策略进行本地模型训练得到 $\mathrm{w}_{\mathrm{i}}^{\mathrm{t}+1} \quad(\mathrm{t}$ 表示当前通信回合) 。
+
+\item \textbf{模型扰动：}
+每个客户端产生一个随机噪音 $\mathrm{n},\mathrm{n}$ 是符合高斯分布的，使用 $\overline{\mathbf{w}_{\mathrm{i}}}^{\mathrm{t}+1}=\mathrm{w}_{\mathrm{i}}^{\mathrm{t}+1}+\mathrm{n}$ 扰动本地模型 (这里注意w是一个矩阵，n表示对矩阵的每一个元素添加噪音）。
+
+\item \textbf{模型聚合：}
+服务器使用参数聚合算法聚合从客户端收到的 $\overline{\mathrm{w}}_{\mathrm{i}} \mathrm{t}+1$ ，得到新的全局模型参数 $\mathrm{w}_{\mathrm{G}}^{\mathrm{t}+1}$， 也就是扰动过的模型参数。
+
+\item \textbf{模型广播：}
+服务器将新的模型参数广播给每个客户端。
+
+\item \textbf{全局收敛：}
+重复步骤（1）-（4）直至全局模型收敛。
+\end{itemize}
+
+与SGD 相比，差分隐私随机梯度下降 (DP-SGD) 严重降低了训练模型的效用。 如图所示，当差分隐私隐私提供的隐私强度增加时，MNIST数据集上逻辑回归的训练和验证的损失率迅速增加。由DP-SGD训练的卷积神经网络(CNN)的测试精度比MNIST 上的非差分隐私网络低得多。Goodfellow\upcite{ref64}提出了$\ell_{2}$范式梯度裁剪的方式以限制函数敏感度，并设计了“Moments Accountant”（MA）来计算更准确的隐私预算估计。
 
 然而，在传统的基于差分隐私的联邦学习框架中，数据管理者倾向于给每个用户的数据以相同的隐私预算，同样的隐私预算忽略了用户之间的差异。有些用户希望有更好的隐私保护。而有些用户对某些数据的隐私不敏感。在这种情况下，由于联邦学习模型是分布式结构，从一个大数据库到许多小数据库，所以对于每个用户来说。他们只需要关心他们自己的隐私。他们可以设置不同的隐私预算方案，而不是传统的统一分配，然后在最坏的的情况下注入噪音。而基于梯度扰动的方法的问题在于它们的迭代性质会导致隐私预算的飙升。因此，当前的主要挑战是设计一种新型的满足差分隐私的扰动算法，既能保证模型的效用性，并且维持较高的计算效率。本文采用一种更加复杂的方法来分析训练过程中训练数据对模型输出的贡献比率，然后根据每一层神经网络对模型输出的贡献率，在梯度上自适应添加噪声，并在梯度下降的过程中采用拉普拉斯平滑机制保证模型的快速收敛。拉普拉斯平滑（Laplacian Smoothing，LS）可以看作是一种对高斯噪声注入的随机梯度进行后处理的去噪技术。
 
@@ -36,7 +54,7 @@
 \section{相关理论}
 
 \subsection{自适应噪声添加算法}
-在第二章我们详细介绍了神经网络的结构，每个用户在本地用原始数据进行训练，在神经网络中进行前向传播操作，得到本地模型的输出。如图\ref{fig:神经网络的前向传播和反向传播流程图}，神经网络中前向传播算法的第一步在输入层。我们使用前馈神经网络接收输入的$x$运行前向传播算法，得到预测值，然后通过反向传播算法不断调整参数使与预测值和真实值之间的误差降低。Bach等人提出了针对神经网络的逐层关联传播算法\upcite{ref65}，它允许分解深度神经网络的预测值，我们利用该算法将神经网络的输出值按层进行分解，得到每层的属性值对于模型输出的贡献比，然后根据属性的贡献率，在梯度下降的过程中添加对应比的高斯噪声。
+在第二章我们详细介绍了联邦学习的流程和神经网络的结构，每个用户在本地设备在私有数据集上进行训练，得到本地模型的输出。本地训练的流程如图\ref{fig:神经网络的前向传播和反向传播流程图}所示，神经网络中前向传播算法的第一步在输入层。我们使用前馈神经网络接收输入的$x$运行前向传播算法，得到预测值，然后通过反向传播算法不断调整参数使与预测值和真实值之间的误差降低。Bach等人提出了针对神经网络的逐层关联传播算法\upcite{ref65}，它允许分解深度神经网络的预测值，我们利用该算法将神经网络的输出值按层进行分解，得到每层的属性值对于模型输出的贡献比，然后根据属性的贡献率，在梯度下降的过程中添加对应比的高斯噪声。
 
 \begin{figure}[!hbt]
 \centering
@@ -45,13 +63,13 @@
 	\label{fig:神经网络的前向传播和反向传播流程图}	
 \end{figure}
 
-在逐层关联传播算法中，根据神经网络的结构自后向前计算归因分数，也称为相关性分数。对于卷积神经网络等网络结构，从输出层开始根据反向传播算法计算归因分数，输出层的归因分数通常作为输出层的预激活值，在反向传播过程中，每一层的所有神经元的归因分数总和是恒定。
+在逐层关联传播算法中，根据神经网络的结构自后向前计算归因值，也称为相关性分数。对于卷积神经网络等网络结构，从输出层开始根据反向传播算法计算归因分数，输出层的归因分数通常作为输出层的预激活值，在反向传播过程中，每一层的所有神经元的归因分数总和是恒定。
 
-在卷积神经网络结构中，每个隐藏神经元的转化过程表示为$y=a(\mathbf{x} * \omega+b)$，其中$\mathbf{x}$代表输入向量，$y$是输出，$b$和$\omega$分别代表{}偏置项和权重矩阵。$a()$是一个激活函数，用于结合线性变换和非线性变换。$y=a(\mathbf{x} * \omega+b)$ 是线性变换部分。
+在卷积神经网络结构中，每个隐藏神经元的转化过程表示为$y=a(\mathbf{x} * \omega+b)$，其中$\mathbf{x}$代表输入向量，$y$是输出，$b$和$\omega$分别代表{}偏置项和权重矩阵。$a()$是一个激活函数，用于结合线性变换和非线性变换。
 
-由于神经网络的结构，上一层的输出是下一层的输入，由此我们可以得出，原始的训练数据只被第一个隐藏层的线性变换所利用。直白地说，为了得到一个具有隐私保护的学习模型，我们可以在第一个隐藏层的数据中注入噪声。正如Phan等人\upcite{ref36}提到的，对于线性变换有一种传统的方法，即向原始数据注入具有相同隐私预算的噪声，但是这容易导致隐私预算增加，并且使原始数据失真过多。因此，本文提出一种自适应噪声添加算法，针对每个梯度计算其贡献值，根据贡献值进行梯度裁剪并添加噪声。
+由于神经网络的结构，上一层的输出是下一层的输入，由此我们可以得出，原始的训练数据只被第一个隐藏层的线性变换所利用。直白地说，为了得到一个具有隐私保护的学习模型，我们可以在第一个隐藏层的数据中注入噪声。正如Phan等人\upcite{ref36}提到的，对于线性变换有一种传统的方法，即向原始数据注入具有相同隐私预算的噪声，但是这容易导致隐私预算增加，并且使原始数据失真过多。因此，本文提出一种自适应噪声添加算法，针对每个梯度计算其贡献值，根据属性对于模型输出的贡献率添加对应比例的高斯噪声。
 
-令$C_{a_{i}}^{l_{k}}\left(x_{i}\right)$表示第$k$层的神经元 $a_{i}$.用"$\leftarrow$"表示两部分之间的连接关系。"$l_{k} \leftarrow l_{k+1}$" 是指深度神经网络中第k层和第k+1层之间相邻层的连接关系。对于模型输出的贡献率，根据神经网络相邻层间的线形关系，那么神经元$a_{i}$的贡献率即为与之相邻的第$k+1$层的神经元的贡献率之和：
+令$C_{a_{i}}^{l_{k}}\left(x_{i}\right)$表示第$k$层的神经元 $a_{i}$，"$\leftarrow$"表示神经网络每一层之间的连接关系。"$l_{k} \leftarrow l_{k+1}$" 是指深度神经网络中第k层和第k+1层之间相邻层的连接关系。对于模型输出的贡献率，根据神经网络相邻层间的线形关系，那么神经元$a_{i}$的贡献率即为与之相邻的第$k+1$层的神经元的贡献率之和：
 $$
 C_{a_{i}}^{l_{k}}\left(x_{i}\right)=\sum_{a_{j} \in l_{k+1}} C_{a_{i} \leftarrow a_{j}}^{l_{k} \leftarrow l_{k+1}}\left(x_{i}\right)
 $$
@@ -74,9 +92,9 @@ C_{a_{i} \leftarrow a_{j}}^{l_{k-1} \leftarrow l_{k}}\left(x_{i}\right)=\left\{\
 其中$\mu$是一个无限接近于零，但大于零的数字。从上述公式中，我们可以认为每一层的贡献是相等的，而且贡献是逐层传递的。根据以上公式的推导，我们能得到神经网络模型中每一层以及每个神经元的贡献值。那么模型的输出可以表示为层神经元贡献值的累加：
 $$
 \begin{aligned}
-\sum f\left(x_{i}, \omega_{i}^{r}\right) &=C_{a_{8}}^{l_{3}}\left(x_{i}\right)+C_{a_{9}}^{l_{3}}\left(x_{i}\right) \\
-&=C_{a_{4}}^{l_{2}}\left(x_{i}\right)+C_{a_{5}}^{l_{2}}\left(x_{i}\right)+C_{a_{6}}^{l_{2}}\left(x_{i}\right)+C_{a_{7}}^{l_{2}}\left(x_{i}\right) \\
-&=C_{a_{1}}^{l_{1}}\left(x_{i}\right)+C_{a_{2}}^{l_{1}}\left(x_{i}\right)+C_{a_{3}}^{l_{1}}\left(x_{i}\right)
+\sum f\left(x_{i}, \omega_{i}^{r}\right) &=C_{a_{8}}^{l_{3}}\left(x_{i}\right)+C_{a_{9}}^{l_{3}}\left(x_{i}\right)\\
+&+C_{a_{4}}^{l_{2}}\left(x_{i}\right)+C_{a_{5}}^{l_{2}}\left(x_{i}\right)+C_{a_{6}}^{l_{2}}\left(x_{i}\right)+C_{a_{7}}^{l_{2}}\left(x_{i}\right)\\
+&+C_{a_{1}}^{l_{1}}\left(x_{i}\right)+C_{a_{2}}^{l_{1}}\left(x_{i}\right)+C_{a_{3}}^{l_{1}}\left(x_{i}\right)
 \end{aligned}
 $$
 
@@ -85,13 +103,13 @@ $$
 C_{j}\left(x_{i}\right)=\frac{1}{n} \sum_{i=1}^{n} C_{x_{i, j}}\left(x_{i}\right), j \in[1, u]
 \end{equation}
 
-在原始的参数上计算神经网络中每个属性类对于模型输出的贡献后，按照公式\ref{eq:属性添加自适应扰动-拉普拉斯机制}采用高斯机制在属性类的贡献率中注入噪音以保护原始的参数。
+在原始的参数上计算神经网络中每个梯度对于模型输出的贡献后，按照公式\ref{eq:属性添加自适应扰动-拉普拉斯机制}采用高斯机制根据属性类的贡献率在属性值中注入噪音以保护原始的参数。
 \begin{equation}\label{eq:属性添加自适应扰动-拉普拉斯机制}
-\ddot{C}_{j}\left(x_{i}\right)=C_{j}\left(x_{i}\right)+\operatorname{Lap}\left(\frac{G S_{c}}{\epsilon_{c}}\right), j \in[1, u]
+\ddot{C}_{j}\left(x_{i}\right)=C_{j}\left(x_{i}\right)+\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right), j \in[1, u]
 \end{equation}
-其中，函数的局部敏感度为$G S_{c}=\frac{2 u}{|D|}$，$u,|D|$分别代表了属性和数据元组的最大数量。
+其中，函数的局部敏感度为$S_{f}=\frac{2 u}{|D|}$，$u,|D|$分别代表了属性和数据元组的最大数量。
 
-然后，我们引入了两个调整参数$f$和$p$。其中，$f$代表一个阈值，用于决定属性对模型结果输出的贡献是高还是低，其值由联邦学习中的本地用户自己定义，即贡献超过阈值$f$的属性类对输出的贡献更大，我们向所有这些属性注入自适应拉普拉斯噪声。当贡献率低于阈值$f$时，对这些属性进行概率选择。也就是说，我们抛弃概率为$1-p$的原始数据，并对一些概率为$p$的属性注入自适应拉普拉斯噪声。该公式如下：
+然后，我们引入了两个调整参数$f$和$p$。其中，$f$代表一个阈值，用于决定属性对模型结果输出的归因分数是高还是低，其值由联邦学习中的本地用户自己定义，即贡献超过阈值$f$的梯度对输出的贡献更大，我们向所有这些梯度注入自适应拉普拉斯噪声。当归隐分数低于阈值$f$时，对这些梯度进行概率选择。也就是说，我们抛弃概率为$1-p$的原始数据，并对一些概率为$p$的梯度注入自适应拉普拉斯噪声。该公式如下：
 \begin{equation}\label{eq:神经网络加噪}
 \tilde{x}_{i, j}=\left\{\begin{array}{ll}
 \ddot{x}_{i, j} & \beta \geq f \\
@@ -99,7 +117,7 @@ C_{j}\left(x_{i}\right)=\frac{1}{n} \sum_{i=1}^{n} C_{x_{i, j}}\left(x_{i}\right
 \end{array}\right.
 \end{equation}
 
-其中$\beta$代表该层神经元的贡献率：$\beta=\frac{\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|}$，当$\beta<f$时，我们有：
+其中$\beta$代表该层神经元的归因分数：$\beta=\frac{\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|}$，当$\beta<f$时，我们有：
 \begin{equation}\label{eq:神经网络加噪2}
 \bar{x}_{i, j}=\left\{\begin{array}{l}
 \ddot{x}_{i, j} \text { with probability } p \\
@@ -107,63 +125,39 @@ x_{i, j} \text { with probability } 1-p
 \end{array}\right.
 \end{equation}
 
-在此方案中，隐私预算$\epsilon_{l}$是根据贡献率:$\epsilon_{j}=\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \epsilon_{l}$按比例分配给每个属性类，自适应高斯噪声按以下方式注入属性中:
+在此方案中，隐私预算$\epsilon_{l}$是根据各自的归因分数按比例分配给每个梯度：$\sigma$=$\sigma_{j}=\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \sigma_{l}$，自适应高斯噪声按以下方式注入梯度中:
 \begin{equation}\label{eq:神经网络加噪3}
-x_{i, j}^{\prime}=x_{i, j}+\frac{1}{\left|D_{i}^{t}\right|} \operatorname{Lap}\left(\frac{G S_{l}}{\epsilon_{j}}\right)
+x_{i, j}^{\prime}=x_{i, j}+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)
 \end{equation}
 
-在不失一般性的情况下，调整因子$f$和$p$的值与系统的准确性和隐私水平有关。即$f$越小，$p$越大，代表越高的隐私保护水平，模型准确性越低，反之亦然。
-
-\subsection{随机递归动量算法}
-尽管随机梯度下降作为非常主流的一种优化模型的算法，在数据量大并且添加了噪声的情况下，SGD的学习过程会很慢，导致模型迟迟难以达到收敛。此处，引入动量这一物理学中的概念。想象一下丘陵地带的一个球正试图到达最深的山谷。当山坡坡度很高时，球会获得很大的动力，随着坡度的降低，球的动量和速度也随之降低，最终停在山谷的最深处。引入动量的SGD Momentum算法借用了动量的概念，在进行梯度更新的时候引入历史梯度的方向进行比较，若两者方向一致，则增强当前方向的梯度；若不一致，则衰减当前方向的梯度。
-
-在随机递归动量算法中，我们额外引入了变量$v$，它代表梯度参数在整体空间中移动的方向和速度，设置为负梯度的指数衰减平均值。在物理学中，动量被定义为物体的质量和运动速度的乘积。在随机递归动量算法中，我们假设单位质量，所以速度向量$v$也可以看作是梯度的动量。超参数α∈[0,1)决定了先前梯度的贡献指数衰减的速度。梯度的更新规则如\ref{动量更新梯度1}、\ref{动量更新梯度2}所示。
-\begin{equation}\label{动量更新梯度1}
-\boldsymbol{v} \leftarrow \alpha \boldsymbol{v}-\epsilon \nabla_{\boldsymbol{\theta}}\left(\frac{1}{m} \sum_{i=1}^{m} L\left(\boldsymbol{f}\left(\boldsymbol{x}^{(i)} ; \boldsymbol{\theta}\right), \boldsymbol{y}^{(i)}\right)\right)
-\end{equation}
-
-\begin{equation}\label{动量更新梯度2}
-\boldsymbol{\theta} \leftarrow \boldsymbol{\theta}+\boldsymbol{v}
-\end{equation}
-
-算法\ref{随机递归动量算法}具体展示了应用了动量的随机梯度下降算法，速度$v$累积了梯度元素：$\nabla_{\boldsymbol{\theta}}\left(\frac{1}{m} \sum_{i=1}^{m} L\left(\boldsymbol{f}\left(\boldsymbol{x}^{(i)} ; \boldsymbol{\theta}\right), \boldsymbol{y}^{(i)}\right)\right)$，$\alpha$越大，代表着之前梯度的运动方向对当前梯度下降的方向影响越大。
+在不失一般性的情况下，调整因子$f$和$p$的值与系统的准确性和隐私水平有关。即$f$越小，$p$越大，代表越高的隐私保护水平，模型准确性越低，反之亦然。算法ref{自适应高斯噪声算法}详细描述了自适应高斯噪声算法，我们将层间依赖算法于随机梯度下降算法相结合，关键的步骤包括：计算梯度以及归因分数，根据归因分数分配相应的隐私预算，在梯度上添加高斯噪声，最后进行梯度下降。
 
 \begin{algorithm}[!htb]
-	\caption{随机递归动量算法}
-	\label{随机递归动量算法}
+	\caption{自适应高斯噪声算法}
+	\label{自适应高斯噪声算法}
 	\begin{algorithmic}[1]
 		\footnotesize
-		\STATE \textbf{输入:} 学习率$\epsilon$，动量参数$\alpha$
-		\STATE 初始化模型权重$\boldsymbol{\theta}^{0}$，初始化更新速度$v$
-		\WHILE{模型未收敛}
-			\STATE 从训练集为$\left\{\boldsymbol{x}^{(1)}, \ldots,\boldsymbol{x}^{(m)}\right\}$，目标标签为$\boldsymbol{y}^{(i)}$的训练样本中随机采样$m$个样本
-			\STATE 计算梯度：$\boldsymbol{g} \leftarrow \frac{1}{m} \nabla_{\boldsymbol{\theta}} \sum_{i} L\left(f\left(\boldsymbol{x}^{(i)} ; \boldsymbol{\theta}\right), \boldsymbol{y}^{(i)}\right)$
-			\STATE 更新动量的速度： $\boldsymbol{v} \leftarrow \alpha \boldsymbol{v}-\epsilon \boldsymbol{g}$
-			\STATE 更新梯度：$\boldsymbol{\theta} \leftarrow \boldsymbol{\theta}+\boldsymbol{v}$
-		\ENDWHILE
+		\STATE \textbf{输入:} 数据集 $\left\{x_{1}, \ldots, x_{N}\right\}$，损失函数$\mathcal{L}(\theta)=$ $\frac{1}{N} \sum_{i} \mathcal{L}\left(\theta, x_{i}\right)$，学习率$\eta_{t}$, 隐私预算$\sigma$, 批大小$L$
+		\STATE 初始化：模型权重$\theta_{0}$
+		\FOR{ $t \in[T]$}
+			\STATE 以概率$L / N$随机采样一批数据集$L_{t}$
+			\STATE 计算梯度\\$\mathbf{g}_{t}\left(x_{i}\right) \leftarrow \nabla_{\theta_{t}} \mathcal{L}\left(\theta_{t}, x_{i}\right)$
+			\STATE 计算梯度的贡献率\\$\beta=\frac{\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|}$
+			\STATE 根据贡献率分配相应的隐私预算\\$\sigma==\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \sigma_{l}$
+			\STATE 添加高斯噪声\\$\tilde{\mathbf{g}}_{t} \leftarrow \frac{1}{L} \sum_{i}\left(\overline{\mathbf{g}}_{t}\left(x_{i}\right)+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right)$
+			\STATE 梯度下降\\$\theta_{t+1} \leftarrow \theta_{t}-\eta_{t} \tilde{\mathbf{g}}_{t}$
+		\ENDFOR
+		\STATE \textbf{输出:} $\theta_{t}$
 	\end{algorithmic}
 \end{algorithm}
 
-在随机梯度下降算法中，模型更新步长的大小只是梯度的范数乘以学习率。而应用了动量算法后，步长的大小取决于梯度序列的大小和对齐程度。当许多连续梯度指向完全相同的方向时，步长最大。如果动量算法总是观察梯度$g$，那么它将在-$g$的方向上加速，直到达到一个终端速度，其中每一步的大小为$\frac{\epsilon\|\boldsymbol{g}\|}{1-\alpha}$。
+\subsection{拉普拉斯平滑机制}
+在本章的开头曾介绍了联邦学习中的ERM问题，它是模型训练的关键问题：在梯度下降的过程中，如何快速使ERM函数收敛，达到全局的最优点，使模型的输出值与真实值最接近，提高模型精度。因为我们已经在梯度中添加了高斯噪声，对模型的收敛速度也会产生影响，当ERM非凸时，可能导致函数无法达到全局最优点。因此，在本节中，我们提出了拉普拉斯平滑机制，针对加噪后的梯度，采用拉普拉斯平滑机制使随机梯度下降算法在非凸ERM和凸ERM的情况都能达到全局收敛。
 
-\subsection{满足RDP的高斯机制}
-\begin{theorem}\label{子采样}
-给定含有n个数据点的数据集X，子采样程序表达为：从数据集X的所有子集中以均匀分布的方式随机选择m个子样本，$\gamma:=m / n$表示子采样程序的采样率。
-\end{theorem}
 
-如果机制$\mathcal{M}$满足$(\epsilon, \delta)$-差分隐私，那么结合子采样的机制 $\mathcal{M}  o   subsample$满足$\left(\epsilon^{\prime}, \delta^{\prime}\right)$-差分隐私，其中$\epsilon^{\prime}=\log \left(1+\gamma\left(e^{\epsilon}-1\right)\right)$，$\delta^{\prime}=\gamma \delta$。那么，当对机制进行采样率 $\gamma<1$的子采样时，通过样本量的缩小，将满足$(\epsilon, \delta)$-差分隐私的机制$\mathcal{M}$放大为$\left(\epsilon^{\prime}, \delta^{\prime}\right)$-差分隐私。
+\subsection{自适应梯度裁剪}
+在传统的差分隐私随机梯度下降算法中，提供隐私保护的常用技术是限制函数的敏感度并添加与敏感度界限成比例的高斯噪声。为此，我们需要在每一轮SGD上限制梯度的敏感性。Abadi\upcite{ref65}等人提出通过梯度范数裁剪保证函数的敏感度有界。如果损失函数是可微的（如果不可微，则使用子梯度）和 Lipschitz 有界的，用Lipschitz 界限制梯度范数，并用它来推导出梯度的灵敏度。 如果损失函数导数作为输入的函数有界（例如，在逻辑回归的情况下，可以通过最大可能的输入范数来限制梯度范数），从而推导出梯度的灵敏度。 如果损失函数不像深度学习应用中那样具有已知的 Lipschitz 界，则很难推导出梯度范数的先验界。 在每次训练迭代中，可以使用经验值来获得梯度范数的近似界限，并在这个近似界限处裁剪梯度。 然而，经验值的可用性是一个强有力的假设，在没有经验值的情况下如何针对自适应添加的噪声裁剪梯度是一个难题。
 
-\begin{theorem}\label{高斯机制实现RDP算法}
-给定函数$q: \mathcal{S}^{n} \rightarrow \mathcal{R}$，对于高斯机制$\mathcal{M}=q(S)+\mathbf{u}$，其中 $\mathbf{u} \sim N\left(0, \sigma^{2} \mathbf{I}\right)$，此高斯机制满足$\left(\alpha, \alpha \Delta^{2}(q) /\left(2 \sigma^{2}\right)\right)$-RDP。
-\end{theorem}
-
-如果我们将定理\ref{高斯机制实现RDP算法}中定义的高斯机制$\mathcal{M}$应用于使用均匀采样的样本子集上，当$\sigma^{\prime 2}=\sigma^{2} / \Delta^{2}(q) \geq 0.7, \alpha \leq 2 \sigma^{2} \log (1 / \tau \alpha(1+$ $\left.\left.\sigma^{\prime 2}\right)\right) / 3+1$时，机制$\mathcal{M}$满足$\left(\alpha, 3.5 \tau^{2} \Delta^{2}(q) \alpha / \sigma^{2}\right)$-RDP。
-
-假定 $\Delta(q)=1$，定理\ref{高斯机制实现RDP算法}表明，要实现满足 $\left(\alpha, 3.5 \tau^{2} \alpha / \sigma^{2}\right)$-RDP的子采样高斯机制，需要满足$\sigma^{2} \geq 0.7$。Abadi等人提出了“动量会计”方案，当 $\tau$趋近于0时并且$\sigma^{2} \geq 1, \alpha \leq \sigma^{2} \log (1 / \tau \sigma)$时，可以达到渐进$\left(\alpha, \tau^{2} \alpha /(1-\tau) \sigma^{2}+O\left(\tau^{3} \alpha^{3} / \sigma^{3}\right)\right)$-RDP的隐私保障。与Abadi等人的“Moments Account”方案相比，我们的结果在隐私保障上能满足闭式界，对于$\sigma^{2}$的要求也更宽松。
-
-\begin{theorem}\label{RDP向DP的转换}
-当机制$\mathcal{M}$满足$(\epsilon, \delta)$-RDP时，对于任意的$0<\delta<1$，机制$\mathcal{M}$都可以转换为$(\epsilon+\log (1 / \delta) /(\alpha-1), \delta)$-差分隐私。
-\end{theorem}
 
 \section{自适应差分隐私算法}
 算法的主要思想是基于从先前更新中获得的信息迭代构建差分隐私梯度估计器$\mathbf{v}_{p}^{t}$。算法\ref{基于凸ERM的自适应差分隐私随机优化算法}详细描述了在本地客户端训练过程中，在SGD算法中添加自适应差分隐私，并使用差分隐私组合定理衡量所添加的噪声大小。首先，我们采用先验组合机制计算$eps_{iter}$和$\delta_{iter}$（算法第行）。每个客户端对训练数据进行采样，并计算他们的隐私预算$\delta_{u}$。如果$\delta_{u}>\delta$，用户将终止采样和训练，并且不上传其梯度信息（算法第11-13行）。然后，我们根据$\mathbf{v}^{t}=\nabla F_{\mathcal{B}_{t}}\left(\boldsymbol{\theta}^{t}\right)+(1-\gamma)\left(\mathbf{v}_{p}^{t-1}-\nabla F_{\mathcal{B}_{t}}\left(\boldsymbol{\theta}^{t-1}\right)\right)$等式不断的迭代更新$\mathbf{v}^{t}$，$\nabla F_{\mathcal{B}_{t}}\left(\boldsymbol{\theta}^{t}\right), \nabla F_{\mathcal{B}_{t}}\left(\boldsymbol{\theta}^{t-1}\right)$ 都表示小批量的随机梯度，$\mathbf{v}_{p}^{t-1}$是在最后一次迭代中计算得到的差分梯度估计器。$\gamma$表示动量参数，用于控制先验参数$\mathbf{v}_{p}^{t-1}-\nabla F_{\mathcal{B}_{t}}\left(\boldsymbol{\theta}^{t-1}\right)$的衰减率。这样的做法可以让早期的梯度对当前梯度的影响越来越小，如果没有衰减值，模型往往会震荡难以收敛，甚至发散。之后，对梯度进行范数裁剪（算法第17行），在更新后的权重系数$\mathbf{v}^{t}$上添加噪声矩阵为$\sigma_{2} \mathbf{I}_{d}$的高斯噪声$\mathbf{u}^{t}$，以使加噪后的梯度满足差分隐私。高斯随机向量的方差 $\sigma_{0}^{2}, \sigma^{2}$ 由我们基于RDP的分析确定，下文将仔细阐述。最后，服务器对用户上传的梯度进行聚合，并更新模型参数$w$。该算法有三个主要部分：带有动量的梯度估计，满足RDP的高斯噪声，自适应梯度裁剪。

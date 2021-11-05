@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.9.8)  4 NOV 2021 11:27
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.9.8)  5 NOV 2021 11:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1483,9 +1483,6 @@ Package fontspec Info: Font family 'CourierNew(0)' created for font 'Courier
 
 LaTeX Warning: Label `eq:ERM' multiply defined.
 
-
-LaTeX Warning: Label `子采样' multiply defined.
-
 )
 \openout1 = `checkMain.aux'.
 
@@ -2428,21 +2425,6 @@ Overfull \hbox (6.40698pt too wide) in paragraph at lines 156--157
 gtiSCLight(0)/m/it/12 差 分 隐 私。| 
  []
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 15.62503pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.62503pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
-
-[17]
-Overfull \hbox (1.66582pt too wide) in paragraph at lines 183--185
-[]\TU/SongtiSCLight(0)/b/n/12 模 型 扰 动：|  \TU/SongtiSCLight(0)/m/n/12 每 个 客 户 端 
-产 生 一 个 随 机 噪 音 $[]\OML/cmm/m/it/12 ; []$ \TU/SongtiSCLight(0)/m/n/12 是 符 合 高 斯
- 分 布 的，|  使 用 $[][] \OT1/cmr/m/n/12 =
- []
-
 ) (./parts/C/C1-CHAP3.tex
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -2452,11 +2434,26 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[18]
+[17]
 第三章
-[19
+[18
 
 ]
+Overfull \hbox (1.66582pt too wide) in paragraph at lines 28--30
+[]\TU/SongtiSCLight(0)/b/n/12 模 型 扰 动：|  \TU/SongtiSCLight(0)/m/n/12 每 个 客 户 端 
+产 生 一 个 随 机 噪 音 $[]\OML/cmm/m/it/12 ; []$ \TU/SongtiSCLight(0)/m/n/12 是 符 合 高 斯
+ 分 布 的，|  使 用 $[][] \OT1/cmr/m/n/12 =
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 15.62503pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.62503pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
+
+[19]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2466,6 +2463,9 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [20]
+File: fig2/C3/逐层关联传播算法.png Graphic file (type bmp)
+<fig2/C3/逐层关联传播算法.png>
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2475,9 +2475,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [21]
-File: fig2/C3/逐层关联传播算法.png Graphic file (type bmp)
-<fig2/C3/逐层关联传播算法.png>
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2496,6 +2493,19 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [23]
+Overfull \hbox (6.22305pt too wide) in paragraph at lines 128--129
+[]\TU/SongtiSCLight(0)/m/n/12 在 此 方 案 中，|  隐 私 预 算 $\OML/cmm/m/it/12 ^^O[]$ \TU
+/SongtiSCLight(0)/m/n/12 是 根 据 各 自 的 归 因 分 数 按 比 例 分 配 给 每 个 梯 度：| $\OML/cmm/m/
+it/12 ^^[$\TU/LinLibertine(0)/m/n/12 =$\OML/cmm/m/it/12 ^^[[] \OT1/cmr/m/n/12 =
+
+ []
+
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
+(Font)              scaled to size 7.0pt on input line 140.
+Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
+mapping=tex-text;" at 7.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
+tine_RB.otf
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2505,13 +2515,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [24]
-LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 7.0pt on input line 138.
-Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
-mapping=tex-text;" at 7.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
-tine_RB.otf
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2530,16 +2533,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [26]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 15.62503pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.62503pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
-
-[27]
-Overfull \hbox (45.66959pt too wide) in paragraph at lines 210--211
+Overfull \hbox (45.66959pt too wide) in paragraph at lines 201--202
 []\TU/SongtiSCLight(0)/m/n/12 在 模 型 的 每 一 轮 迭 代 过 程 中，|  算 法 将 计 算 添 加 了 高 斯 噪 
 声 的 梯 度 $[][] \OT1/cmr/m/n/12 = \OMS/cmsy/m/n/12 r\OML/cmm/m/it/12 F[] [] \OT1/
 cmr/m/n/12 +
@@ -2553,22 +2547,17 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[28]
+[27]
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 15.62503pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.62503pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
+LaTeX Warning: Reference `高斯机制实现RDP算法' on page 28 undefined on input line 214.
 
-(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[29]
-Overfull \hbox (6.9089pt too wide) detected at line 239
+Overfull \hbox (6.9089pt too wide) detected at line 230
 [] [][] \OT1/cmr/m/n/12 + [] [][]
  []
 
 
-Overfull \hbox (42.61714pt too wide) in paragraph at lines 249--250
+Overfull \hbox (42.61714pt too wide) in paragraph at lines 240--241
 \TU/SongtiSCLight(0)/m/n/12 决 定。|  最 后 一 个 不 等 子 式 由 算 法 中 选 择 的 自 适 应 步 长 $\OM
 L/cmm/m/it/12 ^^Q[] \OT1/cmr/m/n/12 = [] []$
  []
@@ -2581,8 +2570,23 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[30]
-Overfull \hbox (12.94438pt too wide) in paragraph at lines 274--276
+[28]
+
+LaTeX Warning: Reference `高斯机制实现RDP算法' on page 29 undefined on input line 242.
+
+
+LaTeX Warning: Reference `RDP向DP的转换' on page 29 undefined on input line 242.
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 15.62503pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.62503pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
+
+[29]
+Overfull \hbox (12.94438pt too wide) in paragraph at lines 265--267
 \TU/SongtiSCLight(0)/m/n/12 通 过 控 制 $\OML/cmm/m/it/12 ^^P$ \TU/SongtiSCLight(0)
 /m/n/12 可 以 得 到 $\OML/cmm/m/it/12 ^^P \OT1/cmr/m/n/12 = [][] [][] / [][]$\TU/So
 ngtiSCLight(0)/m/n/12 。|  因 此，| $\U/msb/m/n/12 E\OMS/cmsy/m/n/12 kr\OML/cmm/m/i
@@ -2597,27 +2601,18 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
+[30]) (./parts/C/C1-CHAP4.tex
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 15.62503pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.62503pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
+
 [31]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 15.62503pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.62503pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
-
-[32]) (./parts/C/C1-CHAP4.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 15.62503pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.62503pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
-
-[33]
 第四章
-[34
+[32
 
 ]
 File: fig2/C4/shuffle模型.png Graphic file (type bmp)
@@ -2631,7 +2626,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[35]
+[33]
 File: fig2/C4/安全shuffle.png Graphic file (type bmp)
 <fig2/C4/安全shuffle.png>
 
@@ -2643,25 +2638,25 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
+[34]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 15.62503pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.62503pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
+
+[35]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 15.62503pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.62503pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
+
 [36]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 15.62503pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.62503pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
-
-[37]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 15.62503pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.62503pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
-
-[38]
 File: fig2/C4/混洗器.png Graphic file (type bmp)
 <fig2/C4/混洗器.png>
 
@@ -2673,7 +2668,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[39]
+[37]
 LaTeX Font Info:    Trying to load font information for U+euf on input line 123
 .
  (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/ueuf.fd
@@ -2697,7 +2692,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[40]
+[38]
 Overfull \hbox (13.28091pt too wide) in paragraph at lines 143--144
 []\TU/SongtiSCLight(0)/m/n/12 假 设 现 有 数 据 集：| $\OMS/cmsy/m/n/12 D[] \OT1/cmr/m/
 n/12 = [] [] [] \OMS/cmsy/m/n/12 2 \U/euf/m/n/12 S[]$\TU/SongtiSCLight(0)/m/n/1
@@ -2717,7 +2712,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[41]
+[39]
 Overfull \hbox (5.63396pt too wide) in paragraph at lines 192--193
 \TU/SongtiSCLight(0)/m/n/12 如 算 法[]\TU/LinLibertine(0)/m/n/12 4[]\TU/SongtiSCLi
 ght(0)/m/n/12 的 第 \TU/LinLibertine(0)/m/n/12 15 \TU/SongtiSCLight(0)/m/n/12 行 所
@@ -2743,27 +2738,27 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
+[40]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 15.62503pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.62503pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
+
+[41]) (./parts/C/C1-CHAP5.tex
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 15.62503pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.62503pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
+
 [42]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 15.62503pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.62503pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
-
-[43]) (./parts/C/C1-CHAP5.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 15.62503pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.62503pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
-
-[44]
 第五章
-[45
+[43
 
 ]
 
@@ -2774,7 +2769,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[46]
+[44]
 File: fig2/C5/CNN结构.png Graphic file (type bmp)
 <fig2/C5/CNN结构.png>
 
@@ -2786,7 +2781,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[47]
+[45]
 File: fig2/C5/梯度固定.png Graphic file (type bmp)
 <fig2/C5/梯度固定.png>
 
@@ -2798,7 +2793,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[48]
+[46]
 File: fig2/C5/自适应干扰实验.png Graphic file (type bmp)
 <fig2/C5/自适应干扰实验.png>
 
@@ -2810,7 +2805,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[49]
+[47]
 File: fig2/C5/自适应干扰实验对比.png Graphic file (type bmp)
 <fig2/C5/自适应干扰实验对比.png>
 File: fig2/C5/SA-FL.png Graphic file (type bmp)
@@ -2828,7 +2823,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[50]
+[48]
 File: fig2/C5/SA-FL2.png Graphic file (type bmp)
 <fig2/C5/SA-FL2.png>
 
@@ -2840,7 +2835,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[51]
+[49]
 File: fig2/C5/SA-FL对比实验.png Graphic file (type bmp)
 <fig2/C5/SA-FL对比实验.png>
 
@@ -2852,27 +2847,27 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
+[50]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 15.62503pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.62503pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
+
+[51]) (./parts/C/C1-CHAP6.tex
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 15.62503pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.62503pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
+
 [52]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 15.62503pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.62503pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
-
-[53]) (./parts/C/C1-CHAP6.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 15.62503pt, for example:
-(fancyhdr)                \setlength{\headheight}{15.62503pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
-
-[54]
 第六章
-[55
+[53
 
 ]
 
@@ -2883,22 +2878,22 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[56]) [57] (./checkMain.bbl) [58
+[54]) [55] (./checkMain.bbl) [56
 
 
-] [59] [60] [61] [62] [63]
+] [57] [58] [59] [60] [61]
 Underfull \hbox (badness 1881) in paragraph at lines 315--316
 []\TU/LinLibertine(0)/m/n/12 Abadi M, Chu A, Goodfellow I, et al. Deep learning
  with differential pri-
  []
 
-[64]
+[62]
 Underfull \hbox (badness 1881) in paragraph at lines 322--323
 []\TU/LinLibertine(0)/m/n/12 Abadi M, Chu A, Goodfellow I, et al. Deep learning
  with differential pri-
  []
 
-[65] (./parts/D/D2-ACHNOWLEDGEMENT.tex
+[63] (./parts/D/D2-ACHNOWLEDGEMENT.tex
 Requested font "STFangsong/OT" at 11.99997pt
  -> /System/Library/AssetsV2/com_apple_MobileAsset_Font6/4c66b413a81d594dc2fc43
 0266c1629c30a5237b.asset/AssetData/STFANGSO.ttf
@@ -2951,13 +2946,13 @@ Package fontspec Info: Font family 'STFangsong(0)' created for font
 Requested font "STFangsong/OT:language=dflt;" at 14.4pt
  -> /System/Library/AssetsV2/com_apple_MobileAsset_Font6/4c66b413a81d594dc2fc43
 0266c1629c30a5237b.asset/AssetData/STFANGSO.ttf
-[66
+[64
 
 
-]) [67] (./parts/D/D3-MYACHIEVEMENTS.tex
+]) [65] (./parts/D/D3-MYACHIEVEMENTS.tex
 Requested font "Heiti SC Medium/OT:language=dflt;" at 14.4pt
  -> /System/Library/Fonts/STHeiti Medium.ttc
-) (./checkMain.ind) [68
+) (./checkMain.ind) [66
 
 
 ]
@@ -2967,18 +2962,27 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.47188pt have occurred.
 
 
+LaTeX Warning: There were undefined references.
+
+
 LaTeX Warning: There were multiply-defined labels.
 
-Package rerunfilecheck Info: File `checkMain.out' has not changed.
-(rerunfilecheck)             Checksum: 8E9D783BCA3ED59821D159C13EF50E92;5987.
+
+Package rerunfilecheck Warning: File `checkMain.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `checkMain.out':
+(rerunfilecheck)             Before: 40A3A363C49F31C5CFC0F76F804F987D;5895
+(rerunfilecheck)             After:  9BB77C1B001FFE4669669612BE04E339;5753.
  ) 
 Here is how much of TeX's memory you used:
- 31376 strings out of 476919
- 654913 string characters out of 5821841
- 895628 words of memory out of 5000000
- 50747 multiletter control sequences out of 15000+600000
+ 31372 strings out of 476919
+ 654878 string characters out of 5821841
+ 895314 words of memory out of 5000000
+ 50743 multiletter control sequences out of 15000+600000
  431323 words of font info for 249 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  101i,14n,124p,1219b,912s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on checkMain.pdf (81 pages).
+Output written on checkMain.pdf (79 pages).
