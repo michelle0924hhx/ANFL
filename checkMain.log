@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.9.8)  9 NOV 2021 20:56
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.9.8)  11 NOV 2021 16:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1483,6 +1483,9 @@ Package fontspec Info: Font family 'CourierNew(0)' created for font 'Courier
 
 LaTeX Warning: Label `eq:ERM' multiply defined.
 
+
+LaTeX Warning: Label `eq:神经网络加噪3' multiply defined.
+
 )
 \openout1 = `checkMain.aux'.
 
@@ -2493,7 +2496,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [23]
-Overfull \hbox (6.22305pt too wide) in paragraph at lines 134--135
+Overfull \hbox (6.22305pt too wide) in paragraph at lines 128--129
 []\TU/SongtiSCLight(0)/m/n/12 在 此 方 案 中，|  隐 私 预 算 $\OML/cmm/m/it/12 ^^O[]$ \TU
 /SongtiSCLight(0)/m/n/12 是 根 据 各 自 的 归 因 分 数 按 比 例 分 配 给 每 个 梯 度：| $\OML/cmm/m/
 it/12 ^^[$\TU/LinLibertine(0)/m/n/12 =$\OML/cmm/m/it/12 ^^[[] \OT1/cmr/m/n/12 =
@@ -2501,12 +2504,12 @@ it/12 ^^[$\TU/LinLibertine(0)/m/n/12 =$\OML/cmm/m/it/12 ^^[[] \OT1/cmr/m/n/12 =
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 139--140
+Underfull \hbox (badness 10000) in paragraph at lines 133--134
 
  []
 
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 7.0pt on input line 146.
+(Font)              scaled to size 7.0pt on input line 140.
 Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
 mapping=tex-text;" at 7.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
@@ -2520,6 +2523,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [24]
+Overfull \hbox (17.87814pt too wide) in paragraph at lines 159--160
+[]\TU/SongtiSCLight(0)/m/n/12 假 设 在 随 机 梯 度 下 降 算 法 的 第 $\OML/cmm/m/it/12 t$ \T
+U/SongtiSCLight(0)/m/n/12 轮 迭 代 过 程 中，|  梯 度 向 量 表 示 为 $\OML/cmm/m/it/12 g[] \O
+T1/cmr/m/n/12 = []$\TU/SongtiSCLight(0)/m/n/12 。|
+ []
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2529,16 +2538,11 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [25]
-Overfull \hbox (17.87814pt too wide) in paragraph at lines 165--166
-[]\TU/SongtiSCLight(0)/m/n/12 假 设 在 随 机 梯 度 下 降 算 法 的 第 $\OML/cmm/m/it/12 t$ \T
-U/SongtiSCLight(0)/m/n/12 轮 迭 代 过 程 中，|  梯 度 向 量 表 示 为 $\OML/cmm/m/it/12 g[] \O
-T1/cmr/m/n/12 = []$\TU/SongtiSCLight(0)/m/n/12 。|
- []
-
 Requested font "Songti SC Light/OT:language=dflt;" at 8.0pt
  -> /System/Library/Fonts/Supplemental/Songti.ttc
 Requested font "Songti SC Light/OT:language=dflt;" at 6.0pt
  -> /System/Library/Fonts/Supplemental/Songti.ttc
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2588,6 +2592,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [30]
 
+LaTeX Warning: Reference `基于凸ERM的自适应差分隐私随机优化算法' on page 31 undefined on input l
+ine 339.
+
+
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
 (fancyhdr)                \setlength{\headheight}{15.62503pt}.
@@ -2596,7 +2604,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [31]
-Overfull \hbox (12.94438pt too wide) in paragraph at lines 336--338
+Overfull \hbox (12.94438pt too wide) in paragraph at lines 355--357
 \TU/SongtiSCLight(0)/m/n/12 通 过 控 制 $\OML/cmm/m/it/12 ^^P$ \TU/SongtiSCLight(0)
 /m/n/12 可 以 得 到 $\OML/cmm/m/it/12 ^^P \OT1/cmr/m/n/12 = [][] [][] / [][]$\TU/So
 ngtiSCLight(0)/m/n/12 。|  因 此，| $\U/msb/m/n/12 E\OMS/cmsy/m/n/12 kr\OML/cmm/m/i
@@ -2873,18 +2881,21 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.47188pt have occurred.
 
 
+LaTeX Warning: There were undefined references.
+
+
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `checkMain.out' has not changed.
-(rerunfilecheck)             Checksum: 885DCE434D4E7858A807AFFC0B066CCA;4787.
+(rerunfilecheck)             Checksum: D0E5C28B7484F2FCFE38D923D5B72306;4795.
  ) 
 Here is how much of TeX's memory you used:
  31299 strings out of 476919
- 653080 string characters out of 5821841
- 889833 words of memory out of 5000000
+ 653059 string characters out of 5821841
+ 889850 words of memory out of 5000000
  50676 multiletter control sequences out of 15000+600000
  431339 words of font info for 251 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 101i,14n,124p,1219b,914s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 101i,14n,124p,1178b,914s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on checkMain.pdf (71 pages).

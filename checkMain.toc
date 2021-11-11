@@ -21,10 +21,10 @@
 \contentsline {section}{\numberline {3.2}模型设计}{20}{section.3.2}%
 \contentsline {subsection}{\numberline {3.2.1}模型概览}{20}{subsection.3.2.1}%
 \contentsline {subsection}{\numberline {3.2.2}自适应噪声添加算法}{21}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}分层梯度裁剪算法}{24}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.3}自适应梯度裁剪算法}{24}{subsection.3.2.3}%
 \contentsline {subsection}{\numberline {3.2.4}自适应差分隐私算法}{27}{subsection.3.2.4}%
-\contentsline {section}{\numberline {3.3}隐私性和收敛性证明}{28}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}隐私性证明}{28}{subsection.3.3.1}%
+\contentsline {section}{\numberline {3.3}隐私性和收敛性证明}{29}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}隐私性证明}{29}{subsection.3.3.1}%
 \contentsline {subsection}{\numberline {3.3.2}模型效用分析}{31}{subsection.3.3.2}%
 \contentsline {subsection}{\numberline {3.3.3}隐私预算分析}{32}{subsection.3.3.3}%
 \contentsline {section}{\numberline {3.4}实验分析}{34}{section.3.4}%
