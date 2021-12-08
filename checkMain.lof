@@ -2,14 +2,24 @@
 \contentsline {figure}{\numberline {1.1}{\ignorespaces 联邦学习模型概况\relax }}{3}{figure.caption.6}%
 \addvspace {10.0pt}
 \contentsline {figure}{\numberline {2.1}{\ignorespaces 神经网络结构图\relax }}{11}{figure.caption.7}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces 联邦学习模型工作流程\relax }}{14}{figure.caption.8}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces 联邦学习模型工作流程\relax }}{13}{figure.caption.8}%
 \contentsline {figure}{\numberline {2.3}{\ignorespaces 差分隐私的相邻数据集示意图\relax }}{14}{figure.caption.9}%
 \addvspace {10.0pt}
 \contentsline {figure}{\numberline {3.1}{\ignorespaces 神经网络的前向传播和反向传播流程图\relax }}{22}{figure.caption.10}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces 自适应差分隐私流程图\relax }}{27}{figure.caption.11}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces 自适应差分隐私流程图\relax }}{28}{figure.caption.11}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces MNIST手写数字数据集\relax }}{35}{figure.caption.12}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces 模型网络结构\relax }}{35}{figure.caption.13}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces 仿真联邦系统模型概览\relax }}{36}{figure.caption.14}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces 实现本地自适应差分隐私的伪代码片段\relax }}{37}{figure.caption.15}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces 在MNIST数据集上噪声大小，裁剪阈值和隐藏层数量这三个参数对于训练准确率的影响\relax }}{38}{figure.caption.17}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces 在MNIST数据集上不同噪声水平下训练的准确率\relax }}{40}{figure.caption.18}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces 不同隐私保护方案在MNIST（左列）和CIFAR-10（右列）数据集上训练的测试误差和梯度范数下降情况\relax }}{42}{figure.caption.20}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces 在不同模型上进行成员推理攻击的准确率\relax }}{43}{figure.caption.21}%
 \addvspace {10.0pt}
-\contentsline {figure}{\numberline {4.1}{\ignorespaces 联邦学习安全模型框架\relax }}{36}{figure.caption.12}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces 联邦学习安全模型与原联邦学习模型的信任域对比\relax }}{37}{figure.caption.13}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces 联邦学习安全混洗模型中执行参数拆分混洗的混洗器\relax }}{40}{figure.caption.14}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces 联邦学习安全模型框架\relax }}{47}{figure.caption.22}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces 联邦学习安全混洗模型中执行参数拆分混洗的混洗器\relax }}{51}{figure.caption.23}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces 安全混洗模型中参与混洗的本地客户端数量对联合模型精度的影响\relax }}{56}{figure.caption.24}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces 安全混洗模型中通信轮数和客户端采样比对联合模型精度的影响\relax }}{57}{figure.caption.25}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces 自适应差分混洗模型和其他联邦学习隐私保护模型的比较\relax }}{58}{figure.caption.26}%
 \addvspace {10.0pt}
 \contentsfinish 

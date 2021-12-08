@@ -10,7 +10,7 @@
 \arg \min _{\theta \in \mathcal{C}}\left(F(\theta):=\frac{1}{m} \sum_{i=1}^{m} F_{i}(\theta)\right)
 \end{equation}
 
-从隐私保护的角度讲，我们只要截断了从原始输入到输出，在其中加入一道隐私保护屏障，具体在哪一步截断则对应于不同的方法。差分隐私保护机器学习的方法具体有以下几种：
+通过优化ERM函数间接优化模型参数，使模型的实际输出与预测值更加接近，模型的准确率越高。从隐私保护的角度讲，我们只要截断了从原始输入到输出，在其中加入一道隐私保护屏障，具体在哪一步截断则对应于不同的方法。差分隐私保护机器学习的方法具体有以下几种：
 \begin{itemize}
 	\item \textbf{输入扰动：} 输入扰动是在获取的训练数据上直接添加噪声，之后的模型训练和优化都是基于加躁后的训练数据\upcite{ref37}\upcite{ref38}\upcite{ref39}。
 	\item \textbf{输出扰动：} 输出扰动沿袭了拉普拉斯机制最简单的思路，即考虑函数输出的敏感度来添加噪声，那么在ERM公式中我们只需要考虑argmin函数输出的敏感度，基于这个敏感度来添加拉普拉斯噪声即可得到一个简单的满足差分隐私的ERM方法\upcite{ref36}。
@@ -51,9 +51,9 @@
 
 本文的模型主要针对本地设备的模型训练添加自适应的噪声和梯度裁剪算法，保证中央服务器接收到的满足$\epsilon$-差分隐私的权重，从而防止模型反演攻击、模型重建攻击、成员推理攻击等。
 
-在本文中，我们认为中央参数服务器是半可信的（Honest but Curious, HbC），一个"诚实但好奇"的实体。也就是说，服务器将遵循与所有用户的协议。然而，通过利用通信信道访问用户梯度的便利，它也试图在训练过程中反推出关于客户端的额外的信息。出于这个原因，我们的提出的自适应加噪机制目的是保护发送到服务器的本地梯度不被推断出任何关于用户的本地训练样本信息，并且尽量维持原有模型的精度。为实现相同的效用保证，我们算法的梯度复杂度（即计算的随机梯度总数）为$O\left(n^{3 / 2}\right)$，比之前的最佳结果高出$\Theta\left(n^{1 / 2}\right)$。 之后我们在凸ERM和非凸ERM（逻辑回归和卷积神经网络）上进行实验，评估我们提出的方法，发现我们的方法不仅产生了在模型精度方面最接近非差分隐私的模型，而且还降低了计算成本。
+在本文中，我们认为中央参数服务器是半可信的（Honest but Curious, HbC），一个"诚实但好奇"的实体。也就是说，服务器将遵循与所有用户的协议。然而，通过利用通信信道访问用户梯度的便利，它也试图在训练过程中反推出关于客户端的额外的信息。出于这个原因，我们的提出的自适应加噪机制目的是保护发送到服务器的本地梯度不被推断出任何关于用户的本地训练样本信息，并且尽量维持原有模型的精度。为实现相同的效用保证，我们算法的梯度复杂度（即计算的随机梯度总数）为$O\left(n^{3 / 2}\right)$，比之前的最佳结果高出$\Theta\left(n^{1 / 2}\right)$。 之后我们在MNIST和FICAR-10数据集上进行实验，评估我们提出的方法，并与前人的四种差分隐私保护方案进行对比，发现我们的方法不仅产生了在模型精度方面最接近非差分隐私的模型，而且还降低了隐私预算。并且，我们针对添加本地自适应差分隐私方案的模型进行成员推理攻击，评估了该方案的隐私保护效应。
 
-总的来说，本章提出的隐私保护方案是基于本地客户端的本地数据维度，从以下三个方面展开研究：
+总的来说，本章提出的隐私保护方案是基于本地客户端的本地数据维度，从以下两个方面展开研究：
 \begin{enumerate}
 \item [(1)] 通过在本地模型训练的梯度下降算法过程中针对不同层的贡献比自适应添加高斯噪声。
 \item [(2)] 根据训练轮数和层间贡献率对梯度进行自适应裁剪。
@@ -329,83 +329,217 @@ G S_{l} &=\sum_{a_{i} \in l_{1}} \sum_{j=1}^{u}\left\|\sum_{x_{i} \in D_{i}^{t}}
 \end{aligned}
 \end{equation}
 
-根据上述推倒证明可知，在联邦学习的神经网络中添加自适应噪声后，所上传的梯度是满足$\left(\epsilon_{c}+\epsilon_{l}\right)$-差分隐私的。在满足差分隐私的基础上，在下一节我们结合差分隐私的组合定理和后处理定理设计动量组合机制，计算累积的隐私预算。
+根据上述推倒证明可知，在联邦学习的神经网络中添加自适应噪声后，所上传的梯度是满足$\left(\epsilon_{c}+\epsilon_{l}\right)$-差分隐私的。在满足差分隐私的基础上，在下一节我们结合差分隐私的组合定理，计算累积的隐私预算。
 
-\subsection{隐私预算分析}
-本章所提出的自适应差分隐私保护方案是通过在随机梯度下降算法上添加自适应的高斯噪声，保护数据的隐私性。在上一节我们已经证明了此算法满足$\left(\epsilon_{c}+\epsilon_{l}\right)$差分隐私，那另外一个非常重要的问题就是评估在训练过程中添加噪声所累积的隐私预算成本。在本节中，我们提出动量组合的概念，去计算算法迭代过程中添加噪声所累积的隐私预算成本。
+\subsection{隐私参数分析}
+本章所提出的自适应差分隐私保护方案是通过在随机梯度下降算法上添加自适应的高斯噪声，保护数据的隐私性。在上一节我们已经证明了此算法满足$\left(\epsilon_{c}+\epsilon_{l}\right)$差分隐私，那另外一个非常重要的问题就是评估在训练过程中添加噪声所累积的隐私预算成本。
 
-根据差分隐私的并串行组合定理，被查询n次的数据的隐私预算将增加n倍。因此，我们希望查询次数越少越好，至少要有一个界限。在实验环境中，我们可以通过几次尝试确定一个相对理想的迭代次数，然后在每次迭代中平均分配隐私预算。然而，在实践中很难选择迭代的数量，因为任何尝试都会增加额外的隐私风险。当数量太小时，会发生预拟合，导致性能不佳；如果数量太大，注入的噪声会过大，这将影响模型的准确性。另一种尝试是使用等比例递增的注入噪声序列，这样无论我们有多少次迭代，我们都能找到有限的隐私预算\upcite{ref32}。
+我们向梯度中添加高斯噪声以得到加躁后的数据，根据第二章所给出的高斯机制的定理可知，当隐私参数$\sigma=\sqrt{2 \log \frac{1.25}{\delta}} / \varepsilon$时，每一批次的输出都满足$(\varepsilon, \delta)$-差分隐私。考虑到训练批次是以概率$q=L / N$从数据集中随机采样的，根据隐私放大定理和差分隐私的强组合定理，隐私性由$(\varepsilon, \delta)$-差分隐私扩大到 $(q \varepsilon, q \delta)$-差分隐私。
 
-根据上文提出的差分隐私的并串行组合定理，我们设计了一个动量组合定理：
-\begin{theorem}[动量组合定理]\label{动量组合定理}
-假使存在算法$M_{i}$满足$\left(\varepsilon_{i}, \delta_{i}\right)$-差分隐私，那么对于$M_{[k]}=\left(M_{1}, M_{2}, \ldots, M_{k}\right)$，有$M_{[k]}$也是满足$(\varepsilon, \delta)$-差分隐私的，其中
+然而，组合定理并没有考虑到特定的噪声分布，给出的隐私边界较为松散。在本节中，我们采用“Moments Accountant”（MA）机制，去计算算法迭代过程中添加噪声所累积的隐私预算成本。MA机制通过跟踪隐私损失随机变量随时间的变化，并结合组合定理，对于采样的高斯机制给出更严格的隐私损失估计。
+
+隐私损失是一个随机变量，取决于添加到算法中的随机噪声。假使算法$\mathcal{M}$是满足 $(\varepsilon, \delta)$-差分隐私的，那么$\mathcal{M}$中的隐私损失随机变量是存在严格的尾部边界。尾部边界在概率分布中是一个非常重要的信息。我们通过计算隐私损失随机变量的对数矩
+，结合标准的马尔科夫不等式，得到尾部边界，也差分隐私算法的隐私损失。
+
+对于邻近数据集 $d, d^{\prime} \in \mathcal{D}^{n}$，算法$\mathcal{M}$，额外输入aux，算法的输出$o \in \mathcal{R}$的隐私损失表示为：
 $$
-\delta=\sum_{i=1}^{k} B(i, k, p)\left[\Phi\left(\frac{H \sqrt{i}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{i}}\right)-e^{\varepsilon} \Phi\left(-\frac{H \sqrt{i}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{i}}\right)\right]
+c\left(o ; \mathcal{M}, \mathrm{aux}, d, d^{\prime}\right) \triangleq \log \frac{\operatorname{Pr}[\mathcal{M}(\mathrm{aux}, d)=o]}{\operatorname{Pr}\left[\mathcal{M}\left(\mathrm{aux}, d^{\prime}\right)=o\right]}
+$$
+
+由于在随机梯度下降算法$\mathcal{M}$中，通过迭代的梯度下降更新权重，每一轮输出的梯度满足差分隐私，根据差分隐私的串行组合定理，最终的模型输出也满足差分隐私。我们定义第$\lambda^{\text {th }}$个时刻的时刻生成函数：
+$$
+\begin{aligned}
+\alpha_{\mathcal{M}}(\lambda ; \operatorname{aux},&\left.d, d^{\prime}\right) \triangleq\log \mathbb{E}_{o \sim \mathcal{M}(\operatorname{aux}, d)}\left[\exp \left(\lambda c\left(o ; \mathcal{M}, \text { aux }, d, d^{\prime}\right)\right)\right]
+\end{aligned}
+$$
+
+为了证明给定算法$\mathcal{M}$的隐私保障，我们对于每一轮的$\alpha_{\mathcal{M}}\left(\lambda ;\right.$ aux $\left., d, d^{\prime}\right)$给出严格的尾部边界，考虑到所有可能的额外输入和邻近数据集$\left., d, d^{\prime}\right)$，整体的时刻函数为：
+$$
+\alpha_{\mathcal{M}}(\lambda) \triangleq \max _{\text {aux }, d, d^{\prime}} \alpha_{\mathcal{M}}\left(\lambda ; \text { aux }, d, d^{\prime}\right)
+$$
+
+$\alpha_{\mathcal{M}}(\lambda)$满足串行组合定理和尾部边界定理：
+
+\begin{theorem}[时刻函数的串行组合]\label{时刻函数的串行组合}
+假设算法$\mathcal{M}$是由一系列自适应算法$\mathcal{M}_{1}, \ldots, \mathcal{M}_{k}$组合而成的，满足$\mathcal{M}_{i}: \prod_{j=1}^{i-1} \mathcal{R}_{j} \times \mathcal{D} \rightarrow \mathcal{R}_{i}$，那么对于任意的$\lambda$都满足：
+$$
+\alpha_{\mathcal{M}}(\lambda) \leq \sum_{i=1}^{k} \alpha_{\mathcal{M}_{i}}(\lambda)
 $$
 \end{theorem}
 
-我们采用朴素贝叶斯机制计算$\delta$可以得到：
-\begin{equation}\label{eq:朴素贝叶斯}
-\delta=\sum_{i=1}^{k} B(i, k, p)\left[\operatorname{Pr}\left[L_{d, d^{\prime}} * i>\varepsilon\right]-e^{\varepsilon} \operatorname{Pr}\left[L_{d^{\prime}, d} * i<-\varepsilon\right]\right]
-\end{equation}
-
-在此情况下，隐私损失变量$L_{M, d, d^{\prime}}$和$L_{M, d^{\prime}, d}$同时满足$N(\eta, 2 \eta)$分布，并且$\eta=$ $H^{2} / 2 \sigma^{2}$。因此可以采用动量组合定理这样表达隐私预算损失：
-\begin{equation}\label{eq:隐私预算计算1}
-\begin{aligned}
-& \operatorname{Pr}\left[L_{d, d^{\prime}} * i>\varepsilon\right]=\operatorname{Pr}[N(\eta i, 2 \eta i)>\varepsilon] \\
-=& \operatorname{Pr}\left[N(0,1)>\frac{-\eta i+\varepsilon}{\sqrt{2 \eta i}}\right]=\operatorname{Pr}\left[N(0,1)<\frac{\eta i-\varepsilon}{\sqrt{2 \eta i}}\right] \\
-=& \operatorname{Pr}\left[N(0,1)<\sqrt{\frac{\eta i}{2}}-\frac{\varepsilon \sigma}{\sqrt{2 \eta i}}\right]=\Phi\left(\frac{H \sqrt{i}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{i}}\right)
-\end{aligned}
-\end{equation}
-
-然后，可以计算得到隐私预算：
-\begin{equation}\label{eq:隐私预算计算2}
-\delta=\sum_{i=1}^{k} B(i, k, p)\left[\Phi\left(\frac{H \sqrt{i}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{i}}\right)-e^{\varepsilon} \Phi\left(-\frac{H \sqrt{i}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{i}}\right)\right]
-\end{equation}
-
-因为随着算法迭代次数$T$的增加，$\Phi\left(\frac{H \sqrt{T}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{T}}\right)-e^{\varepsilon} \Phi\left(-\frac{H \sqrt{T}}{2 \sigma}-\frac{\varepsilon \sigma}{H \sqrt{T}}\right)$也在增加，因此可以计算得到：
-
-\begin{equation}\label{eq:隐私预算计算3}
-\begin{aligned}
-& \sum_{i=1}^{T} B(i, T, p)\left[\operatorname{Pr}\left[L_{d, d^{\prime}} * i>\varepsilon\right]-e^{\varepsilon} \operatorname{Pr}\left[L_{d^{\prime}, d} * i<-\varepsilon\right]\right] \\
-\leq & \sum_{i=1}^{T} B(i, T, p)\left[\operatorname{Pr}\left[L_{d, d^{\prime}} * T>\varepsilon\right]-e^{\varepsilon} \operatorname{Pr}\left[L_{d^{\prime}, d} * T<-\varepsilon\right]\right] \\
-\leq & \operatorname{Pr}\left[L_{d, d^{\prime}} * T>\varepsilon\right]-e^{\varepsilon} \operatorname{Pr}\left[L_{d^{\prime}, d} * T<-\varepsilon\right]
-\end{aligned}
-\end{equation}
-
-当隐私预算$\delta$相同时，$\sigma_{1} \leq \sigma_{2} \leq \sigma_{3}$。替换$\sigma=\alpha H \sqrt{T} / \sqrt{2 \epsilon}$，则有
-\begin{equation}\label{eq:隐私预算计算4}
-\Phi(\sqrt{\epsilon / 2}(1 / \alpha-\alpha))-e^{\varepsilon} \Phi(-\sqrt{\epsilon / 2}(1 / \alpha+\alpha)) \leq \delta
-\end{equation}
-
-因此，$\sigma_{1} \leq \sigma_{3}=O(\sqrt{T})$。与之前的工作相比，我们的隐私预算能够在相同的迭代次数$T$，更低的上紧界，达到满足$\left(\epsilon_{c}+\epsilon_{l}\right)$的差分隐私。
-
-\subsection{模型收敛性分析}
-根据 $\widetilde{\boldsymbol{\theta}}$的定义，可以得到：
+\begin{theorem}[时刻函数的尾部边界]\label{时刻函数的尾部边界}
+对于任意的 $\varepsilon>0$，算法$\mathcal{M}$是满足$(\varepsilon, \delta)$-差分隐私的，当
 $$
-\mathbb{E}\|\nabla F(\widetilde{\boldsymbol{\theta}})\|_{2}=\frac{1}{T} \sum_{t=0}^{T-1} \mathbb{E}\left\|\nabla F\left(\boldsymbol{\theta}^{t}\right)\right\|_{2} \leq \frac{1}{T} \sum_{t=0}^{T-1} \mathbb{E}\left\|\mathbf{v}_{p}^{t}\right\|_{2}+\frac{1}{T} \sum_{t=0}^{T-1} \mathbb{E}\left\|\nabla F\left(\boldsymbol{\theta}^{t}\right)-\mathbf{v}_{p}^{t}\right\|_{2}
+\delta=\min _{\lambda} \exp \left(\alpha_{\mathcal{M}}(\lambda)-\lambda \varepsilon\right)
 $$
-其中期望值覆盖算法的所有随机性。对于算法\ref{基于凸ERM的自适应差分隐私随机优化算法}建立严格的效用保证的关键挑战是如何在自适应步长$\eta_{t}$和梯度$\mathbf{v}_{p}^{t}$上的随机噪声$\mathbf{u}^{t}$
-推导出$\sum_{t=0}^{T-1} \mathbb{E}\left\|\mathbf{v}_{p}^{t}\right\|_{2} / T$ and $\sum_{t=0}^{T-1} \mathbb{E}\left\|\nabla F\left(\boldsymbol{\theta}^{t}\right)-\mathbf{v}_{p}^{t}\right\|_{2} / T$的严格上界。
+\end{theorem}
 
-首先，考虑到自适应步长$\eta_{t}$，推导出$\sum_{t=0}^{T-1} \mathbb{E}\left\|\mathbf{v}_{p}^{t}\right\|_{2} / T$ 的上界：
-$$
-\frac{4 n_{0} L D_{F}}{T \zeta}+\frac{1}{T \zeta} \sum_{t=0}^{T-1} \mathbb{E}\left\|\nabla F\left(\boldsymbol{\theta}^{t}\right)-\mathbf{v}_{p}^{t}\right\|_{2}^{2}+2 \zeta
-$$
-其中，$D_{F}=F\left(\boldsymbol{\theta}^{0}\right)-F\left(\boldsymbol{\theta}^{*}\right)$。然后，可以推导出项$\sum_{t=0}^{T-1} \mathbb{E} \| \mathbf{v}_{p}^{t}-$ $\nabla F\left(\boldsymbol{\theta}^{t}\right) \|_{2}^{2} / T$的上界：
-$$
-\frac{2(1-\gamma)^{2} \zeta^{2}}{n_{0}^{2} \gamma b}+\frac{2 \gamma G^{2}}{b}+\frac{G^{2}}{T \gamma b_{0}}+\frac{T d \sigma^{2}+d \sigma_{0}^{2}}{T \gamma}
-$$
-该多项式的第一项由自适应步长$\eta_{t}$决定，最后一项由在梯度$\mathbf{v}_{p}^{t}$上的随机噪声$\mathbf{u}^{t}$决定。该边界的最后一项由$d \sigma^{2} / \gamma$决定，从而验证了通过自适应步长能有效控制$\mathbf{v}^{t}$ 的敏感度，添加噪声的参数 $\sigma^{2}$越小，即能保证模型的效用越高。
+根据定理\ref{时刻函数的尾部边界}，在算法的每一次迭代中，通过计算$\alpha_{\mathcal{M}_{i}}(\lambda)$然后限定其尾部边界，结合\ref{时刻函数的串行组合}，就可以得到整体时刻函数的尾部边界，通过隐私损失变量的尾部边界计算得到整体的隐私损失。
 
-最后，结合上述给出的两个上界，可以得到：
-$$
-\mathbb{E}\|\nabla F(\widetilde{\boldsymbol{\theta}})\|_{2} \leq C_{1} \zeta+C_{2} \frac{\sqrt{L D_{F} d \log (1 / \delta)} G}{n \epsilon \zeta}
-$$
-通过控制 $\zeta$可以得到$\zeta=\left(L D_{F} d \log (1 / \delta)\right)^{1 / 4}\left(C_{2} G\right)^{1 / 2} /\left(C_{1} n \epsilon\right)^{1 / 2}$。因此，$\mathbb{E}\|\nabla F(\widetilde{\boldsymbol{\theta}})\|_{2} \leq C_{3} \zeta$，其中$C_{1}, C_{2}, C_{3}$是常数。
 
-\section{实验分析}
+\section{实验评估}
+\subsection{实验准备}
+在这一节中，我们进行实验来评估本地自适应差分隐私在联邦学习系统中的性能。在模拟的联邦学习系统中，我们假设有四台本地设备，每个本地用户由配备6GB内存、四核2.36GHz Cortex A73处理器和四核Cortex A53 1.8GHz处理器的华为nova3安卓手机模拟。中央服务器由两台联想服务器模拟的，这两台服务器有2个英特尔（R）至强（R）E5-2620 2.10GHZ CPU，32GB内存，512SSD，2TB机械硬盘，运行于Ubuntu 18.04操作系统。
+
+在实验过程中，我们选择了深度学习中常用的两个经典数据集--MNIST手写体数字识别数据集\upcite{ref46}和CIFAR-10数据集\upcite{ref68}进行实验。
+\begin{itemize}
+\item MNIST数据集包含60000个训练样本和10000个测试样本。MNIST是用于分类任务的经典数据集，来源于美国国家标准与技术研究所。总共包含60000个训练样本和10000个测试样本。每个样本为28x28像素的手写数字图像，每个像素点用灰度值表示，灰度值范围为0到255，图像包含十个类别，如下图\ref{fig:MNIST手写数字数据集}所示。
+
+\item CIFAR-10数据集包含了十个类别的RGB彩色图像，总共包含50000个训练样本和10,000个测试岩本。每张图像的大小为32*32。这些图像有以下十个类别：飞机、汽车、鸟、猫、鹿、狗、青蛙。马，船，和卡车。
+
+\end{itemize}
+
+
+\begin{figure}[!hbt]
+\centering
+	\includegraphics[scale=0.6]{fig2/C3/MNIST}%联邦学习的系统架构
+	\caption{MNIST手写数字数据集}
+	\label{fig:MNIST手写数字数据集}	
+\end{figure}
+
+此外，我们让所有用户离线训练一个统一的卷积神经网络，以获得本地用户的梯度。在我们的实验中采用的模型网络结构为CNN，包括2个卷积层（分别包含20个特征图和50个特征图），两个池化层层和两个全连接层（分别为256和10个神经元）。模型的激活函数为ReLU，并引入了DropOut正则以提高模型的泛化能力。图\ref{fig:CNN模型网络结构}展示了CNN的网络结构。
+
+\begin{figure}[!hbt]
+\centering
+	\includegraphics[scale=0.6]{fig2/C3/CNN网络结构}%联邦学习的系统架构
+	\caption{模型网络结构}
+	\label{fig:CNN模型网络结构}	
+\end{figure}
+
+所有的实验都是用PYTHON语言编译的，我们使用Tensorflow去实现本地差分隐私算法，这是一个流行的深度学习库。 本文使用了TensorFlow-Federated，这是TensorFlow中的一个联合学习库。我们在Python的基础上二次开发了该算法，并通过将该算法部署到多个边缘设备上构建了一个真实的联合学习环境。以本地训练集MNIST为例，图\ref{fig:仿真联邦系统模型概览}展示了联邦学习的仿真模型概览。
+
+\begin{figure}[!hbt]
+\centering
+	\includegraphics[scale=0.6]{fig2/C3/联邦系统仿真模型概览}%联邦学习的系统架构
+	\caption{仿真联邦系统模型概览}
+	\label{fig:仿真联邦系统模型概览}	
+\end{figure}
+
+\subsection{实验设计}
+为了实现隐私保护，我们需要在本地训练的随机梯度下降算法中实现梯度的自适应扰动，并采用MA机制跟踪每一次梯度扰动所增加的隐私预算。因此，代码的实现主要分为两个部分：梯度扰动(Sanitizer)，隐私预算跟踪(Accountant)。
+
+图\ref{fig:实现本地自适应差分隐私的伪代码片段}展示了实现梯度扰动和隐私预算跟踪的代码片段，为了实现整体算法满足$\left(\epsilon_{c}+\epsilon_{l}\right)$-差分隐私，Sanitizer需要完成以下三个步骤：首先，通过前向传播算法计算每批样本的梯度及其归因分数；其次，根据每个样本的梯度范数进行梯度裁剪以限制函数敏感度；最后，根据归因分数在梯度上添加自适应的噪声然后更新权重。
+
+\begin{figure}[!hbt]
+\centering
+	\includegraphics[scale=0.5]{fig2/C3/代码片段1}%联邦学习的系统架构
+	\caption{实现本地自适应差分隐私的伪代码片段}
+	\label{fig:实现本地自适应差分隐私的伪代码片段}	
+\end{figure}
+
+在TensorFlow中，由于性能原因，梯度计算是分批进行的，所以在训练过程，随机采样一批训练子样本$B$：
+$\mathbf{g}_{B}=1 /|B| \sum_{x \in B} \nabla_{\theta} \mathcal{L}(\theta, x)$
+。为了限制梯度更新的敏感度，我们需要计算每个批次的梯度$\nabla_{\theta} \mathcal{L}(\theta, x)$，具体由per\_example\_gradients函数实现。这样即使是大批量的训练，训练速度也不会大幅下降。在每个批次的训练中，我们会单独计算损失函数 
+$\mathcal{L}$，也就是每个数据样本$x_{i}$都有单独的损失函数结果$\mathcal{L}$。一旦我们获得了每批数据样本的梯度，
+我们可以很容易地使用TensorFlow操作符来对梯度进行裁剪，添加噪音。
+
+我们的实验主要分为三个部分：
+\begin{enumerate}
+\item [(1)] 针对本地自适应差分隐私方案，分析噪声水平、裁剪阈值、隐藏层数量这些超参数对模型分类准确率影响。
+\item [(2)] 将本地自适应差分隐私方案与基准方案、前人提出的差分隐私SGD方案（如表所示）进行对比，评估指标为模型分类准确率和隐私预算。
+\item [(3)] 在本地自适应差分隐私的联邦学习模型上应用成员推理进行攻击实验，评估模型的隐私保护效用。
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{cc}
+		\hline
+		基准方案名称& 具体算法\\
+		\hline
+		SGD& 没有实现差分隐私的随机梯度下降算法\\
+		DP-SGD\upcite{ref57}& 在梯度上添加固定噪声大小的差分隐私随机梯度下降算法\\
+		DS-SGD\upcite{ref67}& 在梯度下降过程中，选择性的进行参数共享实现隐私保护\\
+		LDP-SGD& 本地差分隐私方案\\
+		\hline
+	\end{tabular}
+	\caption{本地自适应差分隐私与其他四种基准方案}
+	\label{tab1}
+\end{table}
+
+\end{enumerate}
+
+\subsection{结果分析}
+
+\subsubsection{实验一（分析各个参数对模型准确率的影响）} 
+分类模型的精度由多个因素决定，必须仔细调整以获得最佳性能。这些因素包括网络的拓扑结构、隐藏单元的数量以及训练程序的参数，如批量大小和学习率。有些参数是针对隐私的，如梯度规范剪裁边界和噪声水平。本节实验重点研究噪声大小，裁剪阈值和隐藏层数量这三个参数对于模型分类准确率的影响。为了准确的反映每种参数对于准确率的影响，我们控制其余变量。参考值如下：1,000个隐性单元，600个批量，梯度范数边界为4，初始学习率为0.1，在10个训练轮次中递减到最终学习率为0.052，噪声参数$\sigma$分别为0.2和0.5，用于训练CNN网络模型。对于每一种参数组合进行模型训练，直至隐私预算累积至$\left(2,10^{-5}\right)$-差分隐私。具体的实验结果如图\ref{fig:在MNIST数据集上噪声大小，裁剪阈值和隐藏层数量这三个参数对于训练准确率的影响}所示。
+
+\begin{figure}[!hbt]
+\centering
+	\includegraphics[scale=0.32]{fig2/C3/第三章实验一}%联邦学习的系统架构
+	\caption{在MNIST数据集上噪声大小，裁剪阈值和隐藏层数量这三个参数对于训练准确率的影响}
+	\label{fig:在MNIST数据集上噪声大小，裁剪阈值和隐藏层数量这三个参数对于训练准确率的影响}	
+\end{figure}
+
+如图\ref{fig:在MNIST数据集上噪声大小，裁剪阈值和隐藏层数量这三个参数对于训练准确率的影响}（a）展示的是噪声参数$\sigma$对模型准确率的影响，X轴是噪声水平，这个值的选择对准确性有很大影响。通过添加更多的噪音，每步的隐私损失成比例缩小，所以我们可以在给定的累积隐私预算内运行更多的训练轮次。准确率维持在0.88\%至0.98\%之间，我们的框架允许对训练参数进行自适应控制减少了过拟合情况，自适应的噪声添加同时提高了模型的准确性和训练性能。
+
+图\ref{fig:在MNIST数据集上噪声大小，裁剪阈值和隐藏层数量这三个参数对于训练准确率的影响}（b）展示了隐藏层数量对模型准确率的影响，X轴表示隐藏层单元数量。对于非差分隐私模型，更多的隐藏单元能有效避免过度拟合，因为更多的隐藏单元会让我们的训练更有针对性。然而，添加了差分隐私的模型训练，隐藏层数量的增加可能会影响梯度的敏感度，使每次梯度更新时添加更多的噪声。然而我们的根据梯度的归因分数自适应添加噪声的方案能有效的控制敏感度有界，随着隐藏单位的数量增加，模型的准确率依然维持在93\%以上。
+
+图\ref{fig:在MNIST数据集上噪声大小，裁剪阈值和隐藏层数量这三个参数对于训练准确率的影响}（c）展示了梯度范数阈值对模型准确率的影响，X轴表示梯度$l2$范数阈值C。当C为2-3时，模型准确率最高，接着随着C的增加，模型准确率逐渐降低至91\%左右，限制梯度范数会产生两个相反的效果：剪裁破坏了梯度估计的无偏性，如果剪裁参数太小，被剪切的平均梯度可能与真实梯度的方向大不相同。另一方面，增加梯度范数迫使我们在梯度中加入更多的噪声，也就是以σC的比例添加噪声。而我们的自适应梯度裁剪方案能有效的考虑上一轮训练得到的梯度偏差和方差，取训练过程中未被剪辑的梯度范数的中值，模型准确率最高依然能达到95\%左右。
+
+对于不同隐私预算的训练版本，我们用同样的架构进行了实验：一个包括1000个神经元的ReLU隐藏层，以及600个批量大小。为了限制敏感度，我们设置每个神经层的梯度范数阈值为4。我们报告了四种噪声规模的训练结果，分别为小（σ=2）、中（σ=4）、大（σ=8）和更大(10)。这里σ代表训练神经网络的噪声水平。学习率最初设置为0.1，在10个历时中线性下降到0.052，然后固定为0.052。
+
+图\ref{fig:在MNIST数据集上不同噪声水平下训练的准确率}显示了不同噪音水平下的训练的结果，在每张图中，我们都显示了训练和测试准确率的变化情况。对于噪声参数为$\left(2,10^{-5}\right)$，$\left(4,10^{-5}\right)$，$\left(8,10^{-5}\right)$和$\left(10,10^{-5}\right)$的差分隐私，分别达到92\%、94\%、95\%和97\%的测试集准确性。我们的自适应差分隐私SGD方案，使模型在训练集和测试集上的准确度差异很小，这与理论上的观点一致，即添加噪声后的梯度训练依然有很好的泛化作用。相比之下，非差分隐私SGD的训练和测试准确率之间的差距随着训练轮次的增加而增加，容易造成过拟合。在噪声参数为$\left(10,10^{-5}\right)$时，模型在200个训练轮次后能达到接近非差分隐私模型的准确率。
+
+\begin{figure}[!hbt]
+\centering
+	\includegraphics[scale=0.35]{fig2/C3/第三章实验一2}%联邦学习的系统架构
+	\caption{在MNIST数据集上不同噪声水平下训练的准确率}
+	\label{fig:在MNIST数据集上不同噪声水平下训练的准确率}	
+\end{figure}
+
+\subsubsection{实验二（与前人的隐私保护方案进行对比实验）} 
+我们将本文提出的本地自适应差分隐私方案与SGD、DP-SGD、DS-SGD、LDP-SGD方案进行对比实验，选取的数据集为MNIST和CIFAR-10，网络模型为CNN5，具体的参数设置如下表所示。我们比较了不同方案在各个训练时长和迭代周期在测试集上所计算的目标函数的平均损失误差与梯度范数。
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ccc}
+		\hline
+		参数& MNIST& CIFAR-10\\
+		\hline
+		$\sigma$& 0.2/0.5& 0.2/0.5\\
+		$k$& 0.7& 0.7\\
+		梯度范数阈值& 20& 20\\
+		学习率& 0.05& 0.05\\
+		本地设备数量& 1000& 100\\
+		训练轮数& 10& 10\\
+		\hline
+	\end{tabular}
+	\caption{对比实验在数据集MNIST和CIFAR-10上的参数设置}
+	\label{tab1}
+\end{table}
+
+图\ref{fig:不同隐私保护方案在MNIST（左列）和CIFAR-10（右列）数据集上训练的测试误差和梯度范数下降情况}显示了在隐私预算$\sigma$=0.2和$\sigma$=0.5的情况下，不同方案在MNIST数据集上随训练轮次平均测试误差和梯度范数变化情况的对比。
+
+首先，对于MNIST数据集，在没有添加差分隐私保护的原始模型上进行梯度下降训练，经过20个训练轮次后模型在训练集上得到的基准准确率为99\%，我们的方案（Adaptive Differential Privacy-SGD,ADP-SGD）在训练刚开始的一个轮次，训练集的训练误差下降较慢，这是由于刚开始训练时模型中所有梯度的归因分数较高，导致对于每个梯度分配的隐私预算较高，加躁后与原始值差异较大。然而，在2个轮次过后，模型收敛的速度远远超过其他三个基准差分隐私方案。在5个训练轮次之后，训练集的损失率降低至25\%以下，而DS-SGD和DP-SGD的训练损失值在10个轮次之后仅降低至35\%左右，DP-SGD更次之，在40\%左右。相比于噪声参数$\sigma$=0.2，更大的噪声参数$\sigma$=0.5意味着更低的隐私预算，并且最终达到的模型精度也越高。图\ref{fig:不同隐私保护方案在MNIST（左列）和CIFAR-10（右列）数据集上训练的测试误差和梯度范数下降情况}中的（c1）和（d1）展示了模型训练中梯度的下降情况，在相同的隐私预算下，ADP-SGD能在2个训练轮次，梯度范数接近0.01且趋于平稳，意味着模型达到收敛的速度最快。
+
+其次，对于CIFAR-10数据集，由于图像本身复杂度的增加，在没有添加差分隐私保护的原始模型上进行梯度下降训练，经过20个训练轮次后模型在训练集上得到的基准准确率为97\%。LDP在第一个训练轮次的模型收敛速率最高，然而在第二个训练轮次过后，ADP-SGD达到35\%的模型准确率和0.05左右的梯度范数，训练数据损失值和梯度范数均比另外三个基准方案的效果优。综上，我们的方案在调整梯度自适应加躁和自适应裁剪后使得模型收敛率和准确率大大提升。
+
+\begin{figure}[!hbt]
+\centering
+	\includegraphics[scale=0.1]{fig2/C3/第三章实验二}%联邦学习的系统架构
+	\caption{不同隐私保护方案在MNIST（左列）和CIFAR-10（右列）数据集上训练的测试误差和梯度范数下降情况}
+	\label{fig:不同隐私保护方案在MNIST（左列）和CIFAR-10（右列）数据集上训练的测试误差和梯度范数下降情况}	
+\end{figure}
+
+\subsubsection{实验三（针对攻击模型，分析该方案的隐私保护效用）} 
+我们曾在第一章介绍了针对联邦学习模型的隐私攻击，其中成员推理攻击是最流行的一类攻击，旨在确定一个输入样本x是否存在于模型训练集D中。该攻击只假设知道模型的输出预测向量（黑盒），并且是针对有监督的机器学习模型进行的。为了推断成员属性，对抗者使用与目标模型的相同算法训练了很多影子模型。对于每个影子模型，对手随机选择一些数据样本来形成一个训练集和一个评价集。影子模型是在训练集上训练的。然后，他将训练特征数据和验证特征数据都送入影子模型，并获得相应的结果，即每个类别的概率。所以对手可以建立一个分类器，以特征数据的预测结果为输入，以数据是来自训练集（表示为1）还是验证集（表示为0）为标签。有了这个分类器，对手将考虑中的敏感样本的特征值发送到目标模型并检索预测结果。然后，他将预测结果发送给分类器，并得到敏感样本是否是目标模型训练集的成员的结论。
+
+我们重现了文献\upcite{ref70}中的成员推理攻击算法，配置和参数与之相同：目标模型是卷积神经网络，数据集为CIFAR-10。我们为目标模型和影子模型选择了两种规模的训练集：2500和10,000，验证集的大小与训练集相同。对手用不同的训练和验证样本子集运行100个影子模型。使用逻辑回归算法根据预测结果对样本是否包含在训练集中进行分类。
+
+该实验的评估指标为模型的隐私保护效用，因此我们对比了针对自适应差分隐私和无隐私保护的模型进行成员推理攻击的攻击准确率，结果如图\ref{fig:在不同模型上进行成员推理攻击的准确率}所示。
+
+\begin{figure}[!hbt]
+\centering
+	\includegraphics[scale=0.3]{fig2/C3/第三章实验三}%联邦学习的系统架构
+	\caption{在不同模型上进行成员推理攻击的准确率}
+	\label{fig:在不同模型上进行成员推理攻击的准确率}	
+\end{figure}
+
+我们分别在10k和2.5k个数据样本上进行攻击实验，图\ref{fig:在不同模型上进行成员推理攻击的准确率}中的(a)表示在10k数据样板上进行攻击实验，x轴表示对抗攻击的类别，蓝线（original model）表示在原始无隐私保护的模型上进行成员推理攻击的各个类别的攻击准确率，在不同类别上基本都可达到80\%～90\%的准确率。我们可以看到，对手对识别包含在训练集中的样本有很高的信心。当样本不在训练集中时，错误率相对较高。一般来说，F1分数非常高（0.86和0.89）。图\ref{fig:在不同模型上进行成员推理攻击的准确率}中的红线（ADP-SGD）显示了在添加了自适应差分隐私的模型上进行成员推理攻击的准确性。基准线是50\%（黑色虚线），这是对手的随机猜测准确性。在应用差分隐私的情况下，对手的推断准确率下降到50\%∼65\%，接近于随机猜测。这比原始模型的攻击准确率要低得多。而在2.5k的数据样本上进行攻击，我们的方案针对攻击实验能在两个类别上将准确率降低至50\%左右，证明了本地自适应差分隐私针对成员推理攻击的隐私保护效用。
 
 \section{本章总结}
+本章详细介绍了如何在深度学习模型的随机梯度下降算法中添加自适应的拉普拉斯噪声和自适应梯度的裁剪。我们设计了一个自适应噪声添加的方案，在神经网络前向传播算法中，根据梯度对于模型输出的贡献率注入不同程度的隐私预算的噪声。与传统的注入噪声的方法相比，我们在相同的隐私保护程度下最大限度地提高了模型的准确性，并且证明了算法能满足$\left(\epsilon_{c}+\epsilon_{l}\right)$差分隐私。然后，我们在MNIST和CIFAR-10数据集上分别进行实验，评估了方案的隐私性和准确性。
+
+然而，在客户端的本地数据集添加的噪声只能保证本地数据的匿名性，不能够防止外部攻击者针对通信信道的攻击。如果客户端在每次迭代中同时上传了大量的权重更新，中央云服务器仍然可以将它们链接在一起，推导出参数信息。而且，当参与一次迭代的客户端数量达到上千人时，会导致聚合任务升级成一个高维任务，隐私预算暴增。因此，下一章我们对联邦学习模型框架进行了改进，在现有的联邦学习模型上新增混洗器，实现联邦学习框架的隐私安全，提高整体联邦学习模型的精度。
+
 
 
