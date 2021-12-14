@@ -34,7 +34,7 @@
 \contentsline {subsubsection}{实验二（与前人的隐私保护方案进行对比实验）}{40}{figure.caption.18}%
 \contentsline {subsubsection}{实验三（针对攻击模型，分析该方案的隐私保护效用）}{41}{figure.caption.20}%
 \contentsline {section}{\numberline {3.5}本章总结}{43}{section.3.5}%
-\contentsline {chapter}{\numberline {第四章\hspace {.3em}}联邦学习的安全混洗模型}{45}{chapter.4}%
+\contentsline {chapter}{\numberline {第四章\hspace {.3em}}联邦学习的安全混洗框架}{45}{chapter.4}%
 \contentsline {section}{\numberline {4.1}引言}{45}{section.4.1}%
 \contentsline {section}{\numberline {4.2}模型设计}{46}{section.4.2}%
 \contentsline {subsection}{\numberline {4.2.1}模型概览}{47}{subsection.4.2.1}%
@@ -45,13 +45,13 @@
 \contentsline {subsection}{\numberline {4.3.2}模型收敛性分析}{54}{subsection.4.3.2}%
 \contentsline {section}{\numberline {4.4}实验评估}{55}{section.4.4}%
 \contentsline {subsection}{\numberline {4.4.1}实验准备}{55}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}实验设计}{55}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.2}实验设计}{56}{subsection.4.4.2}%
 \contentsline {subsection}{\numberline {4.4.3}结果分析}{57}{subsection.4.4.3}%
-\contentsline {section}{\numberline {4.5}本章总结}{59}{section.4.5}%
-\contentsline {chapter}{\numberline {第五章\hspace {.3em}}总结与展望}{60}{chapter.5}%
-\contentsline {section}{\numberline {5.1}论文总结}{60}{section.5.1}%
-\contentsline {section}{\numberline {5.2}论文展望}{61}{section.5.2}%
-\contentsline {chapter}{参考文献}{63}{section*.27}%
-\contentsline {chapter}{致谢}{72}{section*.29}%
-\contentsline {chapter}{发表论文和科研情况}{74}{section*.31}%
+\contentsline {section}{\numberline {4.5}本章总结}{60}{section.4.5}%
+\contentsline {chapter}{\numberline {第五章\hspace {.3em}}总结与展望}{61}{chapter.5}%
+\contentsline {section}{\numberline {5.1}论文总结}{61}{section.5.1}%
+\contentsline {section}{\numberline {5.2}论文展望}{62}{section.5.2}%
+\contentsline {chapter}{参考文献}{64}{section*.29}%
+\contentsline {chapter}{致谢}{73}{section*.31}%
+\contentsline {chapter}{发表论文和科研情况}{75}{section*.33}%
 \contentsfinish 

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.9.8)  8 DEC 2021 09:34
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.9.8)  14 DEC 2021 16:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1489,6 +1489,12 @@ LaTeX Warning: Label `eq:神经网络加噪3' multiply defined.
 
 LaTeX Warning: Label `tab1' multiply defined.
 
+
+LaTeX Warning: Label `tab1' multiply defined.
+
+
+LaTeX Warning: Label `tab1' multiply defined.
+
 )
 \openout1 = `checkMain.aux'.
 
@@ -2085,16 +2091,46 @@ Requested font "Heiti SC Medium/OT:language=dflt;" at 22.08249pt
 [1
 
 ]
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
+(Font)              scaled to size 5.0pt on input line 10.
+Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
+apping=tex-text;" at 5.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
+tine_R.otf
+Requested font "cmex7" at 5.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.
+tfm
+Requested font "lasy5" at 5.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/latex-fonts/lasy5.tfm
+Requested font "cmbx5" at 5.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
+Requested font "cmmib5" at 5.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib5
+.tfm
+Requested font "cmbsy5" at 5.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5
+.tfm
+LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
+(Font)              Font shape `U/lasy/m/n' tried instead on input line 10.
+Requested font "msam5" at 5.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.
+tfm
+Requested font "msbm5" at 5.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.
+tfm
+Requested font "rsfs5" at 5.0pt
+ -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/rsfs/rsfs5.tfm
+ [2]
 Requested font "Heiti SC Light/OT:language=dflt;" at 14.0pt
  -> /System/Library/Fonts/STHeiti Light.ttc
-) (./parts/B/B2-ABSTRACT-E.tex [2]
+) (./parts/B/B2-ABSTRACT-E.tex [3]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
 (Font)              scaled to size 18.06749pt on input line 3.
 Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
 mapping=tex-text;" at 18.06749pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
 tine_RB.otf
- [3
+ [4
 
 ]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/it' will be
@@ -2103,7 +2139,7 @@ Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
 mapping=tex-text;" at 12.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
 tine_RI.otf
-) [4] [5
+) [5] [6
 
 ]
 Requested font "Songti SC Bold/OT:language=dflt;" at 24.88pt
@@ -2111,24 +2147,24 @@ Requested font "Songti SC Bold/OT:language=dflt;" at 24.88pt
  (./checkMain.toc
 Requested font "Heiti SC Light/OT:language=dflt;" at 12.0pt
  -> /System/Library/Fonts/STHeiti Light.ttc
- [6
 
-]
-[7])
+[7
+
+] [8])
 \tf@toc=\write5
 \openout5 = `checkMain.toc'.
 
- [8] (./checkMain.lof)
+ [9] (./checkMain.lof)
 \tf@lof=\write6
 \openout6 = `checkMain.lof'.
 
- [9
+ [10
 
-] [10] (./checkMain.loa)
+] [11] (./checkMain.loa)
 \tf@loa=\write7
 \openout7 = `checkMain.loa'.
 
- [11
+ [12
 
 ]
 
@@ -2210,36 +2246,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [3]
-LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
-(Font)              scaled to size 5.0pt on input line 33.
-Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
-apping=tex-text;" at 5.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/opentype/public/libertine/LinLiber
-tine_R.otf
-Requested font "cmex7" at 5.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.
-tfm
-Requested font "lasy5" at 5.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/latex-fonts/lasy5.tfm
-Requested font "cmbx5" at 5.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
-Requested font "cmmib5" at 5.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib5
-.tfm
-Requested font "cmbsy5" at 5.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5
-.tfm
-LaTeX Font Info:    Font shape `U/lasy/b/n' in size <5> not available
-(Font)              Font shape `U/lasy/m/n' tried instead on input line 33.
-Requested font "msam5" at 5.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.
-tfm
-Requested font "msbm5" at 5.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.
-tfm
-Requested font "rsfs5" at 5.0pt
- -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/rsfs/rsfs5.tfm
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2755,9 +2761,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 [45
 
 ]
-File: fig2/C4/shuffle1.jpg Graphic file (type bmp)
-<fig2/C4/shuffle1.jpg>
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2767,6 +2770,9 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [46]
+File: fig2/C4/shuffle1.jpg Graphic file (type bmp)
+<fig2/C4/shuffle1.jpg>
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2794,8 +2800,8 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [49]
-File: fig2/C4/混洗器.png Graphic file (type bmp)
-<fig2/C4/混洗器.png>
+File: fig2/C4/拆分混洗.jpg Graphic file (type bmp)
+<fig2/C4/拆分混洗.jpg>
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -2815,7 +2821,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [51]
-LaTeX Font Info:    Trying to load font information for U+euf on input line 128
+LaTeX Font Info:    Trying to load font information for U+euf on input line 136
 .
  (/usr/local/texlive/2021/texmf-dist/tex/latex/amsfonts/ueuf.fd
 File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
@@ -2830,7 +2836,7 @@ Requested font "eufm7" at 6.0pt
  -> /usr/local/texlive/2021/texmf-dist/fonts/tfm/public/amsfonts/euler/eufm7.tf
 m
 
-Overfull \hbox (13.28091pt too wide) in paragraph at lines 148--149
+Overfull \hbox (13.28091pt too wide) in paragraph at lines 156--157
 []\TU/SongtiSCLight(0)/m/n/12 假 设 现 有 数 据 集：| $\OMS/cmsy/m/n/12 D[] \OT1/cmr/m/
 n/12 = [] [] [] \OMS/cmsy/m/n/12 2 \U/euf/m/n/12 S[]$\TU/SongtiSCLight(0)/m/n/1
 2 ，|  其 中 数 据 集 $\OMS/cmsy/m/n/12 D[] \OT1/cmr/m/n/12 = []$
@@ -2845,7 +2851,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [52]
-Overfull \hbox (6.88527pt too wide) detected at line 167
+Overfull \hbox (6.88527pt too wide) detected at line 175
 []
  []
 
@@ -2858,7 +2864,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [53]
-Overfull \hbox (5.63396pt too wide) in paragraph at lines 197--198
+Overfull \hbox (5.63396pt too wide) in paragraph at lines 205--206
 \TU/SongtiSCLight(0)/m/n/12 如 算 法[]\TU/LinLibertine(0)/m/n/12 4[]\TU/SongtiSCLi
 ght(0)/m/n/12 的 第 \TU/LinLibertine(0)/m/n/12 15 \TU/SongtiSCLight(0)/m/n/12 行 所
  示，|  中 央 服 务 器 进 行 聚 合 后 得 到 结 果：| $[][] \OMS/cmsy/m/n/12   [] [][] [][] []$\T
@@ -2866,7 +2872,7 @@ U/SongtiSCLight(0)/m/n/12 ，|
  []
 
 
-Overfull \hbox (11.9167pt too wide) in paragraph at lines 197--198
+Overfull \hbox (11.9167pt too wide) in paragraph at lines 205--206
 \TU/SongtiSCLight(0)/m/n/12 然 后 通 过 随 机 梯 度 下 降 算 法 更 新 全 局 模 型 参 数：| $\OML/cmm
 /m/it/12 ^^R[] \OMS/cmsy/m/n/12   [][] []$\TU/SongtiSCLight(0)/m/n/12 。|  其 中，|
  $[][] [] \OT1/cmr/m/n/12 =
@@ -2893,15 +2899,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [55]
-File: fig2/C5/SA-FL.png Graphic file (type bmp)
-<fig2/C5/SA-FL.png>
-
-Overfull \hbox (2.54797pt too wide) in paragraph at lines 243--244
+Overfull \hbox (11.34067pt too wide) in paragraph at lines 276--285
  [][] 
  []
 
-File: fig2/C5/SA-FL2.png Graphic file (type bmp)
-<fig2/C5/SA-FL2.png>
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2911,8 +2912,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [56]
-File: fig2/C5/SA-FL对比实验.png Graphic file (type bmp)
-<fig2/C5/SA-FL对比实验.png>
+File: fig2/C4/SA-FL1.png Graphic file (type bmp)
+<fig2/C4/SA-FL1.png>
+
+Overfull \hbox (2.54797pt too wide) in paragraph at lines 295--296
+ [][] 
+ []
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -2923,6 +2928,9 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
 [57]
+File: fig2/C4/SA-FL2.png Graphic file (type bmp)
+<fig2/C4/SA-FL2.png>
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2931,7 +2939,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[58]) (./parts/C/C1-CHAP6.tex
+[58]
+File: fig2/C4/SA-FL3.png Graphic file (type bmp)
+<fig2/C4/SA-FL3.png>
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 15.62503pt, for example:
@@ -2940,9 +2951,18 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[59]
+[59]) (./parts/C/C1-CHAP6.tex
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 15.62503pt, for example:
+(fancyhdr)                \setlength{\headheight}{15.62503pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
+
+[60]
 第五章
-[60
+[61
 
 ]
 
@@ -2953,22 +2973,22 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-3.62503pt}.
 
-[61]) [62] (./checkMain.bbl) [63
+[62]) [63] (./checkMain.bbl) [64
 
 
-] [64] [65] [66] [67] [68]
+] [65] [66] [67] [68] [69]
 Underfull \hbox (badness 1881) in paragraph at lines 315--316
 []\TU/LinLibertine(0)/m/n/12 Abadi M, Chu A, Goodfellow I, et al. Deep learning
  with differential pri-
  []
 
-[69]
+[70]
 Underfull \hbox (badness 1881) in paragraph at lines 322--323
 []\TU/LinLibertine(0)/m/n/12 Abadi M, Chu A, Goodfellow I, et al. Deep learning
  with differential pri-
  []
 
-[70] [71] (./parts/D/D2-ACHNOWLEDGEMENT.tex
+[71] [72] (./parts/D/D2-ACHNOWLEDGEMENT.tex
 Requested font "STFangsong/OT" at 11.99997pt
  -> /System/Library/AssetsV2/com_apple_MobileAsset_Font6/4c66b413a81d594dc2fc43
 0266c1629c30a5237b.asset/AssetData/STFANGSO.ttf
@@ -3021,13 +3041,13 @@ Package fontspec Info: Font family 'STFangsong(0)' created for font
 Requested font "STFangsong/OT:language=dflt;" at 14.4pt
  -> /System/Library/AssetsV2/com_apple_MobileAsset_Font6/4c66b413a81d594dc2fc43
 0266c1629c30a5237b.asset/AssetData/STFANGSO.ttf
-[72
+[73
 
 
-]) [73] (./parts/D/D3-MYACHIEVEMENTS.tex
+]) [74] (./parts/D/D3-MYACHIEVEMENTS.tex
 Requested font "Heiti SC Medium/OT:language=dflt;" at 14.4pt
  -> /System/Library/Fonts/STHeiti Medium.ttc
-) (./checkMain.ind) [74
+) (./checkMain.ind) [75
 
 
 ]
@@ -3040,15 +3060,15 @@ LaTeX Font Warning: Size substitutions with differences
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `checkMain.out' has not changed.
-(rerunfilecheck)             Checksum: 3F41DD5A6422C968F235C89FF8D27F05;5241.
+(rerunfilecheck)             Checksum: 0E57B49415C7A83AC54A68C62DA39131;5241.
  ) 
 Here is how much of TeX's memory you used:
- 31470 strings out of 476919
- 657764 string characters out of 5821841
- 896820 words of memory out of 5000000
- 50836 multiletter control sequences out of 15000+600000
+ 31486 strings out of 476919
+ 658481 string characters out of 5821841
+ 895835 words of memory out of 5000000
+ 50853 multiletter control sequences out of 15000+600000
  431339 words of font info for 251 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  101i,16n,124p,1178b,914s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on checkMain.pdf (88 pages).
+Output written on checkMain.pdf (90 pages).
