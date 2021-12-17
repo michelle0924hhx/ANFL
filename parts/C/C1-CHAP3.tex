@@ -1,4 +1,4 @@
-\chapter{本地自适应差分隐私保护方法}
+\chapter{本地自适应差分隐私SGD算法}
 
 \label{ch3}
 
@@ -10,7 +10,7 @@
 \arg \min _{\theta \in \mathcal{C}}\left(F(\theta):=\frac{1}{m} \sum_{i=1}^{m} F_{i}(\theta)\right)
 \end{equation}
 
-通过优化ERM函数间接优化模型参数，使模型的实际输出与预测值更加接近，模型的准确率越高。从隐私保护的角度讲，我们只要截断了从原始输入到输出，在其中加入一道隐私保护屏障，具体在哪一步截断则对应于不同的方法。差分隐私保护机器学习的方法具体有以下几种：
+通过优化ERM函数间接优化模型参数，使模型的实际输出与预测值更加接近，模型的准确率越高。从隐私保护的角度讲，我们只要截断了从原始输入到输出，在其中加入一道隐私保护屏障，具体在哪一步截断则对应于不同的方法。差分隐私保护联邦学习的方法具体有以下几种：
 \begin{itemize}
 	\item \textbf{输入扰动：} 输入扰动是在获取的训练数据上直接添加噪声，之后的模型训练和优化都是基于加躁后的训练数据\upcite{ref37}\upcite{ref38}\upcite{ref39}。
 	\item \textbf{输出扰动：} 输出扰动沿袭了拉普拉斯机制最简单的思路，即考虑函数输出的敏感度来添加噪声，那么在ERM公式中我们只需要考虑argmin函数输出的敏感度，基于这个敏感度来添加拉普拉斯噪声即可得到一个简单的满足差分隐私的ERM方法\upcite{ref36}。
@@ -18,15 +18,15 @@
 	\item \textbf{目标扰动：} 目标扰动是在模型的目标函数中添加一个随机量，以使得最终模型的输出满足随机性。
 \end{itemize}
 
-基于输入的扰动和输出的扰动基本可以视为一个黑匣子模型，简单直接。但是这种添加噪声的方式无法对训练过程中数据的相互依赖性和输出有效性作出有用的、紧密的描述。在输入数据中加入过多的噪声，可能会影响模型训练的收敛性。在输出参数中加入过于保守的噪声，也就是根据最坏的攻击情况去添加噪声，可能会影响模型的实用性。
+基于输入的扰动和输出的扰动基本可以视为一个黑匣子模型，这种添加噪声的方式虽然简单直接，但无法对训练过程中数据的相互依赖性和输出有效性作出有用的、紧密的描述。在输入数据中加入过多的噪声，可能会影响模型训练的收敛性。在输出参数中加入过于保守的噪声，也就是根据最坏的攻击情况去添加噪声，可能会影响模型的实用性。
 
 当前在深度学习模型中应用差分隐私的主流方案是在模型的梯度上添加噪声，方案的目标是在满足差分隐私的条件下，实现整体模型的最优可用性。Song等人\upcite{ref47}提出了一个$\left(\epsilon_{c}+\epsilon_{d}\right)$-差分隐私版本的随机梯度下降算法。在本地模型的每一次迭代过程中，对梯度添加高斯噪声，并通过差分隐私的组合性和隐私放大效果，得到完全隐私损失的上界。
 
-与SGD 相比，差分隐私随机梯度下降 (DP-SGD) 严重降低了训练模型的效用。 如图所示，当差分隐私隐私提供的隐私强度增加时，MNIST数据集上逻辑回归的训练和验证的损失率迅速增加。由DP-SGD训练的卷积神经网络(CNN)的测试精度比MNIST 上的非差分隐私网络低得多。Goodfellow\upcite{ref64}提出了$\ell_{2}$范式梯度裁剪的方式以限制函数敏感度，并设计了“Moments Accountant”（MA）来计算更准确的隐私预算估计。
+与SGD 相比，差分隐私随机梯度下降 (DP-SGD) 严重降低了训练模型的效用。 如图所示，当差分隐私隐私提供的隐私强度增加时，MNIST数据集上逻辑回归的训练和验证的损失率迅速增加。由DP-SGD训练的卷积神经网络(CNN)的测试精度比MNIST 上的非差分隐私网络低得多。Goodfellow\upcite{ref64}提出了$\ell_{2}$范式梯度裁剪的方式以限制函数敏感度，并设计了“Moments Accountant”（MA）来计算更准确的隐私预算估计，在预训练过程中，该方法与PCA相结合，形成了一个满足$\left(\epsilon_{c}+\epsilon_{d}\right)$-差分隐私的PCA。
 
-然而，在传统的基于差分隐私的联邦学习框架中，数据管理者倾向于给每个用户的数据以相同的隐私预算，同样的隐私预算忽略了用户之间的差异。有些用户希望有更好的隐私保护。而有些用户对某些数据的隐私不敏感。在这种情况下，由于联邦学习模型是分布式结构，从一个大数据库到许多小数据库，所以对于每个用户来说。他们只需要关心他们自己的隐私。他们可以设置不同的隐私预算方案，而不是传统的统一分配，然后在最坏的的情况下注入噪音。而基于梯度扰动的方法的问题在于它们的迭代性质会导致隐私预算的飙升。因此，当前的主要挑战是设计一种新型的满足差分隐私的扰动算法，既能保证模型的效用性，并且维持较高的计算效率。
+然而，在传统的基于差分隐私的联邦学习框架中，数据管理者倾向于给每个用户的数据以相同的隐私预算，同样的隐私预算忽略了用户之间的差异。有些用户希望有更好的隐私保护。而有些用户对某些数据的隐私不敏感。在这种情况下，由于联邦学习模型是分布式结构，从一个大数据库到许多小数据库，所以对于每个用户来说，他们只需要关心他们自己的隐私。他们可以设置不同的隐私预算方案，而不是传统的统一分配，然后在最坏的的情况下注入噪音，而基于梯度扰动的方法的问题在于它们的迭代性质会导致隐私预算的飙升。因此，当前的主要挑战是设计一种新型的满足差分隐私的扰动算法，使其在联邦学习中能按照用户隐私标准，给不同的用户分配不同的隐私预算，既能保证模型的效用性，并且维持较高的计算效率，在模型准确率方面接近非隐私的深度神经网络模型。
 
-本文采用一种更加复杂的方法来分析训练过程中训练数据对模型输出的贡献比率，然后根据每一层神经网络对模型输出的贡献率，在梯度上根据贡献比率添加对应的噪声量，在进行梯度下降之前，根据神经网络的层次对梯度进行自适应的裁剪，保证模型的收敛率。我们的方法不仅产生了在模型精度方面最接近非差分隐私的模型，而且还降低了隐私预算的成本。
+本文的创新点在于采用一种更加复杂的方法来分析训练过程中训练数据对模型输出的贡献比率。在预训练阶段，我们采用逐层关联传播算法在神经网络的前向传播和反向传播流程中分解模型输出，计算网络中每个神经元对模型输出的贡献率。基于每个神经元的贡献率，我们通过高斯机制生成一个噪音图元。然后根据每一层神经网络对模型输出的贡献率，在梯度上根据贡献比率添加对应的噪声量，避免了无法量化的噪声，从而提升了隐私保护的DNN模型的准确性。在进行梯度下降之前，根据神经网络的层次对梯度进行自适应的裁剪，保证模型的收敛率。我们的方法不仅产生了在模型精度方面最接近非差分隐私的模型，而且还降低了隐私预算的成本。
 
 \section{模型设计}
 
@@ -49,18 +49,20 @@
 重复步骤（1）-（4）直至全局模型收敛。
 \end{itemize}
 
-本文的模型主要针对本地设备的模型训练添加自适应的噪声和梯度裁剪算法，保证中央服务器接收到的满足$\epsilon$-差分隐私的权重，从而防止模型反演攻击、模型重建攻击、成员推理攻击等。
+本文的模型主要针对本地设备的模型训练添加自适应的噪声和梯度裁剪算法，保证中央服务器接收到的满足$\epsilon$-差分隐私的权重，从而减轻成员推理攻击所构成的隐私威胁。
 
 在本文中，我们认为中央参数服务器是半可信的（Honest but Curious, HbC），一个"诚实但好奇"的实体。也就是说，服务器将遵循与所有用户的协议。然而，通过利用通信信道访问用户梯度的便利，它也试图在训练过程中反推出关于客户端的额外的信息。出于这个原因，我们的提出的自适应加噪机制目的是保护发送到服务器的本地梯度不被推断出任何关于用户的本地训练样本信息，并且尽量维持原有模型的精度。为实现相同的效用保证，我们算法的梯度复杂度（即计算的随机梯度总数）为$O\left(n^{3 / 2}\right)$，比之前的最佳结果高出$\Theta\left(n^{1 / 2}\right)$。 之后我们在MNIST和FICAR-10数据集上进行实验，评估我们提出的方法，并与前人的四种差分隐私保护方案进行对比，发现我们的方法不仅产生了在模型精度方面最接近非差分隐私的模型，而且还降低了隐私预算。并且，我们针对添加本地自适应差分隐私方案的模型进行成员推理攻击，评估了该方案的隐私保护效应。
 
 总的来说，本章提出的隐私保护方案是基于本地客户端的本地数据维度，从以下两个方面展开研究：
 \begin{enumerate}
-\item [(1)] 通过在本地模型训练的梯度下降算法过程中针对不同层的贡献比自适应添加高斯噪声。
+\item [(1)] 通过在本地模型训练的梯度下降算法过程中针对不同神经元的贡献率添加对应比例的高斯噪声。
 \item [(2)] 根据训练轮数和层间贡献率对梯度进行自适应裁剪。
 \end{enumerate}
 
 \subsection{自适应噪声添加算法}
-在第二章我们详细介绍了联邦学习的流程和神经网络的结构，每个用户在本地设备在私有数据集上进行训练，得到本地模型的输出。本地训练的流程如图\ref{fig:神经网络的前向传播和反向传播流程图}所示，神经网络中前向传播算法的第一步在输入层。我们使用前馈神经网络接收输入的$x$运行前向传播算法，得到预测值，然后通过反向传播算法不断调整参数使与预测值和真实值之间的误差降低。Bach等人提出了针对神经网络的逐层关联传播算法\upcite{ref65}，它允许分解深度神经网络的预测值，我们利用该算法将神经网络的输出值按层进行分解，得到每层的属性值对于模型输出的贡献比，然后根据属性的贡献率，在梯度下降的过程中添加对应比的高斯噪声。
+在第二章我们详细介绍了联邦学习的流程和神经网络的结构，每个用户在本地设备在私有数据集上进行训练，得到本地模型的输出。本地训练的流程如图\ref{fig:神经网络的前向传播和反向传播流程图}所示，神经网络中前向传播算法的第一步在输入层。我们使用前馈神经网络接收输入的$x$运行前向传播算法，得到预测值，然后通过反向传播算法不断调整参数使与预测值和真实值之间的误差降低。
+
+Bach等人提出了针对神经网络的逐层关联传播算法\upcite{ref65}，这是一种用于计算特定图像区域对分类器输出的影响的技术。该技术被认为是非常有效的，可以逐个像素地分解图像的预测值\upcite{ref76}，并在深度神经网络中对各神经层进行循环重正化\upcite{ref77}。它允许分解深度神经网络的预测值，在我们的工作中我们利用该算法将神经网络的输出值按层进行分解，得到每层的属性值对于模型输出的贡献比，然后根据属性的贡献率，在梯度下降的过程中添加对应比例隐私预算的高斯噪声。
 
 \begin{figure}[!hbt]
 \centering
@@ -69,55 +71,48 @@
 	\label{fig:神经网络的前向传播和反向传播流程图}	
 \end{figure}
 
-在逐层关联传播算法中，根据神经网络的结构自后向前计算归因值，也称为相关性分数。对于卷积神经网络等网络结构，从输出层开始根据反向传播算法计算归因分数，输出层的归因分数通常作为输出层的预激活值，在反向传播过程中，每一层的所有神经元的归因分数总和是恒定。
+在逐层关联传播算法中，根据神经网络的结构自后向前计算归因值，也称为相关性分数，它假设一个分类器可以被分解成几个编译层。在卷积神经网络结构中，每个隐藏神经元的转化过程表示为$y=a(\mathbf{x} * \omega+b)$，其中$\mathbf{x}$代表输入向量，$y$是输出，$b$和$\omega$分别代表{}偏置项和权重矩阵。$a()$是一个激活函数，用于结合线性变换和非线性变换。在前向传播过程中，图像输入以像素的形式进入网络，然后与网络权重w相乘，再加上一个偏置b，并通过激活函数使其成为非线性计算，这个过程一直持续到输出层得到模型输出。
 
-在卷积神经网络结构中，每个隐藏神经元的转化过程表示为$y=a(\mathbf{x} * \omega+b)$，其中$\mathbf{x}$代表输入向量，$y$是输出，$b$和$\omega$分别代表{}偏置项和权重矩阵。$a()$是一个激活函数，用于结合线性变换和非线性变换。
+为了进一步说明，我们可以将网络输出表示为F(x)，其中F表示一个分类器，x是以像素形式存在的图像（$x_{1}$，$x_{2}$，$x_{3}$...，$x_{n}$）。网络的输出值F(x)以反向传播的方式从输出层反馈到隐藏层，逐层分解每个像素的归因分数，直到达到输入层，反向传播的过程就结束了。对于卷积神经网络等网络结构的前向传播算法，模型输出表示为$F_{\theta}$，输出层的神经元表示为$z$，逐层关联传播算法将 $F_{\theta}$作为归因分数和网络总归因分数$Cr_{z}$在反向传播算法中逐层分解计算各层神经元对应的归因分数，输出层的归因分数通常作为输出层的预激活值，在反向传播过程中，每一层的所有神经元的归因分数总和是恒定。
 
-由于神经网络的结构，上一层的输出是下一层的输入，由此我们可以得出，原始的训练数据只被第一个隐藏层的线性变换所利用。直白地说，为了得到一个具有隐私保护的学习模型，我们可以在第一个隐藏层的数据中注入噪声。正如Phan等人\upcite{ref36}提到的，对于线性变换有一种传统的方法，即向原始数据注入具有相同隐私预算的噪声，但是这容易导致隐私预算增加，并且使原始数据失真过多。因此，本文提出一种自适应噪声添加算法，针对每个梯度计算其贡献值，根据属性对于模型输出的贡献率添加对应比例的高斯噪声。
-
-令$C_{a_{i}}^{l_{k}}\left(x_{i}\right)$表示第$k$层的神经元 $a_{i}$，"$\leftarrow$"表示神经网络每一层之间的连接关系。"$l_{k} \leftarrow l_{k+1}$" 是指深度神经网络中第k层和第k+1层之间相邻层的连接关系。对于模型输出的贡献率，根据神经网络相邻层间的线形关系，那么神经元$a_{i}$的贡献率即为与之相邻的第$k+1$层的神经元的贡献率之和：
+接着，我们具体阐述如何计算神经元$a_{j}$的归因分数。箭头$(\rightarrow)$和$(\leftarrow)$分别代表第$l_{m}$层和第$l_{m+1}$层的前向连接和反向连接关系。在前向传播算法中，神经元$a_{i1}$接受上一层输入的像素值 $x_{1}$并计算$r_{a_{i1} \rightarrow a_{j}}^{(l_{m}, l_{m+1})}=\sigma\left(x_{1} * \omega+b\right)$，然后将计算结果传输给第$l_{m+1}$层的神经元$a_{j}$；同理，输出层$l_{m+1}$的神经元$a_{j}$接受来自上一层神经元$a_{i2}$的计算结果$r_{a_{i2} \rightarrow a_{j}}^{l_{m}, l_{m+1}}=\sigma\left(x_{2} * \omega+b\right)$，那么模型输出的结果为$r_{a_{j}}=r_{a_{i1} \rightarrow a_{j}}+r_{a_{i2} \rightarrow a_{j}}+b_{a_{j}}$。$C r_{a_{i}}^{l_{m}}\left(x_{i}\right)$表示第$m$层的神经元 $a_{i}$对于模型输出的归因分数。根据神经网络相邻层间的线形关系和反向传播算法，神经元$a_{i}$的归因分数$Cr_{a_{i}}^{l_{m}}\left(x_{i}\right)$即为与之相邻的第$m+1$层的所有神经元${a_{j}\in l_{m+1}}$的归因分数总和：
 $$
-C_{a_{i}}^{l_{k}}\left(x_{i}\right)=\sum_{a_{j} \in l_{k+1}} C_{a_{i} \leftarrow a_{j}}^{l_{k} \leftarrow l_{k+1}}\left(x_{i}\right)
+Cr_{a_{i}}^{l_{m}}\left(x_{i}\right)=\sum_{a_{j} \in l_{m+1}} Cr_{a_{i} \leftarrow a_{j}}^{l_{m} \leftarrow l_{m+1}}\left(x_{i}\right)
 $$
 
-当第k层为输出层时，我们有:
+根据层间关联传播算法，第m层和第m+1层的关联性表示为：
+$$
+R_{a_{i} \leftarrow a_{j}}^{(l_{m}, l_{m+1})}=\left\{\begin{array}{l}\frac{r_{a_{i}  \rightarrow a_{j} }}{r_{a_{j}}+\beta} \cdot C r_{a_{j}}^{l_{m} }, r_{a_{j}} \geq 0 \\ \frac{r_{a_{i} \rightarrow a_{j} }}{r_{a_{j} }-\beta} \cdot C r_{a_{j}}^{l_{m} }, r_{a_{j}}<0\end{array}\right.
+$$
+
+因为位于输出层的神经元$a_{j}$的贡献等于模型的输出，第m-1层的神经元$a_{j}$对于第m层的神经元的归因分数$Cr_{a_{i} \leftarrow a_{j}}^{l_{m-1} \leftarrow l_{m}}\left(x_{i}\right)$等于：
 \begin{equation}
-C_{a_{i}}^{l_{k}}\left(x_{i}\right)=f\left(x_{i}, \omega_{i}^{r}\right)
+Cr_{a_{i} \leftarrow a_{j}}^{l_{m-1} \leftarrow l_{m}}\left(x_{i}\right)=\left\{\begin{array}{cc}\frac{a_{i} w_{i, j}}{\sum_{a_{i} \in l_{m-1} a_{i} w_{i, j}}} Cr_{a_{j}}^{l_{m}}\left(x_{i}\right) & \sum_{a_{i} \in l_{m-1}} a_{i} w_{i, j} \neq 0 \\ \mu & \sum_{a_{i} \in l_{m-1}} a_{i} w_{i, j}=0\end{array}\right.
 \end{equation}
 
-根据矩阵层之间的线性相关性，神经元$a_{i}$在第k层的贡献$C_{a_{i}}^{l_{k}}\left(x_{i}\right)$等于连接到神经元$a_{i}$的相邻层的贡献之和：
-\begin{equation}\label{eq:层间传播1}
-C_{a_{i}}^{l_{k}}\left(x_{i}\right)=\sum_{a_{j} \in l_{k+1}} C_{a_{i} \leftarrow a_{j}}^{l_{k} \leftarrow l_{k+1}}\left(x_{i}\right)
-\end{equation}
-
-因此，位于输出层的神经元$a_{j}$的贡献等于模型的输出。第k-1层的神经元$a_{j}$对于第k层的神经元的贡献$C_{a_{i} \leftarrow a_{j}}^{l_{k-1} \leftarrow l_{k}}\left(x_{i}\right)$等于：
-\begin{equation}
-C_{a_{i} \leftarrow a_{j}}^{l_{k-1} \leftarrow l_{k}}\left(x_{i}\right)=\left\{\begin{array}{cc}\frac{a_{i} w_{i, j}}{\sum_{a_{i} \in l_{k-1} a_{i} w_{i, j}}} C_{a_{j}}^{l_{k}}\left(x_{i}\right) & \sum_{a_{i} \in l_{k-1}} a_{i} w_{i, j} \neq 0 \\ \mu & \sum_{a_{i} \in l_{k-1}} a_{i} w_{i, j}=0\end{array}\right.
-\end{equation}
-
-其中$\mu$是一个无限接近于零，但大于零的数字。从上述公式中，我们可以认为每一层的贡献是相等的，而且贡献是逐层传递的。根据以上公式的推导，我们能得到神经网络模型中每一层以及每个神经元的贡献值。那么模型的输出可以表示为层神经元贡献值的累加：
+其中$\mu$是一个无限接近于零，但大于零的数字。从上述公式中，我们可以认为每一层的贡献是相等的，而且贡献是逐层传递的。根据以上公式的推导，我们能得到神经网络模型中每一层以及每个神经元的贡献值。那么模型的输出可以表示为各层神经元贡献值的累加：
 $$
 \begin{aligned}
-\sum f\left(x_{i}, \omega_{i}^{r}\right) &=C_{a_{8}}^{l_{3}}\left(x_{i}\right)+C_{a_{9}}^{l_{3}}\left(x_{i}\right)\\
-&+C_{a_{4}}^{l_{2}}\left(x_{i}\right)+C_{a_{5}}^{l_{2}}\left(x_{i}\right)+C_{a_{6}}^{l_{2}}\left(x_{i}\right)+C_{a_{7}}^{l_{2}}\left(x_{i}\right)\\
-&+C_{a_{1}}^{l_{1}}\left(x_{i}\right)+C_{a_{2}}^{l_{1}}\left(x_{i}\right)+C_{a_{3}}^{l_{1}}\left(x_{i}\right)
+\sum f\left(x_{i}, \omega_{i}^{r}\right) &=Cr_{a_{8}}^{l_{3}}\left(x_{i}\right)+Cr_{a_{9}}^{l_{3}}\left(x_{i}\right)\\
+&+Cr_{a_{4}}^{l_{2}}\left(x_{i}\right)+Cr_{a_{5}}^{l_{2}}\left(x_{i}\right)+Cr_{a_{6}}^{l_{2}}\left(x_{i}\right)+Cr_{a_{7}}^{l_{2}}\left(x_{i}\right)\\
+&+Cr_{a_{1}}^{l_{1}}\left(x_{i}\right)+Cr_{a_{2}}^{l_{1}}\left(x_{i}\right)+Cr_{a_{3}}^{l_{1}}\left(x_{i}\right)
 \end{aligned}
 $$
 
-通过从数据元组中提取同一属性的贡献，我们可以计算出每个属性类对模型输出的平均贡献：
+通过从上述公式中提取同一属性的贡献，我们可以计算出每个属性类对模型输出的平均贡献：
 \begin{equation}\label{eq:属性添加自适应扰动}
-C_{j}\left(x_{i}\right)=\frac{1}{n} \sum_{i=1}^{n} C_{x_{i, j}}\left(x_{i}\right), j \in[1, u]
+Cr_{j}\left(x_{i}\right)=\frac{1}{n} \sum_{i=1}^{n} Cr_{x_{i, j}}\left(x_{i}\right), j \in[1, u]
 \end{equation}
 
-然后，我们引入了两个调整参数$f$和$p$。其中，$f$代表一个阈值，用于决定属性对模型结果输出的归因分数是高还是低，其值由联邦学习中的本地用户自己定义，即贡献超过阈值$f$的梯度对输出的贡献更大，我们向所有这些梯度注入自适应拉普拉斯噪声。当归隐分数低于阈值$f$时，对这些梯度进行概率选择。也就是说，我们抛弃概率为$1-p$的原始数据，并对一些概率为$p$的梯度注入自适应高斯噪声。该公式如下：
+然后，我们引入了两个调整参数$C$和$p$。其中，$C$代表贡献率阈值，用于决定梯度对模型结果输出的归因分数是高还是低，其值由联邦学习中的本地用户自己定义，即贡献超过阈值$C$的梯度对输出的贡献更大，我们向所有这些梯度注入自适应高斯噪声。当归因分数低于阈值$C$时，对这些梯度进行概率选择。也就是说，我们抛弃概率为$1-p$的原始数据，并对一些概率为$p$的梯度注入自适应高斯噪声。该公式如下：
 \begin{equation}\label{eq:神经网络加噪}
 \tilde{x}_{i, j}=\left\{\begin{array}{ll}
-\ddot{x}_{i, j} & \beta \geq f \\
-\bar{x}_{i, j} & \beta<f
+\ddot{x}_{i, j} & \alpha \geq C \\
+\bar{x}_{i, j} & \alpha<C
 \end{array}\right.
 \end{equation}
 
-其中$\beta$代表该层神经元的归因分数：$\beta=\frac{\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|}$，当$\beta<f$时，我们有：
+其中$\alpha$代表该层神经元的贡献率：$\alpha=\frac{\left|\ddot{Cr}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{Cr}_{j}\right|}$，根据贡献率阈值C将神经层分为两类。当$\alpha>C$时，根据贡献率对所有梯度添加对应的高斯噪声；当$\alpha<C$时，对属性进行概率选择：
 \begin{equation}\label{eq:神经网络加噪2}
 \bar{x}_{i, j}=\left\{\begin{array}{l}
 \ddot{x}_{i, j} \text { with probability } p \\
@@ -125,12 +120,14 @@ x_{i, j} \text { with probability } 1-p
 \end{array}\right.
 \end{equation}
 
-在此方案中，隐私预算$\epsilon_{l}$是根据各自的归因分数按比例分配给每个梯度：$\sigma$=$\sigma_{j}=\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \sigma_{l}$，自适应高斯噪声按以下方式注入梯度中:
+由于神经网络的结构，上一层的输出是下一层的输入，由此我们可以得出，原始的训练数据只被第一个隐藏层的线性变换所利用。直白地说，为了得到一个具有隐私保护的学习模型，我们可以在第一个隐藏层的数据中注入噪声。正如Phan等人\upcite{ref36}提到的，对于线性变换有一种传统的方法，即向原始数据注入具有相同隐私预算的噪声，但是这容易导致隐私预算增加，并且使原始数据失真过多。因此，本文提出一种自适应噪声添加算法，针对每个梯度计算其贡献值，根据属性对于模型输出的贡献率添加对应比例的高斯噪声。
+
+在此方案中，隐私预算$\epsilon_{l}$是根据各自的归因分数按比例分配给每个梯度：$\sigma$=$\sigma_{j}=\frac{u *\left|\ddot{Cr}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{Cr}_{j}\right|} * \sigma_{l}$，自适应高斯噪声按以下方式注入梯度中:
 \begin{equation}\label{eq:神经网络加噪3}
-x_{i, j}^{\prime}=x_{i, j}+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)
+\tilde{\mathbf{g}}_{t} \leftarrow \frac{1}{L} \sum_{i}\left(\overline{\mathbf{g}}_{t}\left(x_{i}\right)+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right)
 \end{equation}
 
-在不失一般性的情况下，调整因子$f$和$p$的值与系统的准确性和隐私水平有关。即$f$越小，$p$越大，代表越高的隐私保护水平，模型准确性越低，反之亦然。算法\ref{自适应高斯噪声算法}详细描述了自适应高斯噪声算法，我们将层间依赖算法于随机梯度下降算法相结合，关键的步骤包括：计算梯度以及归因分数，根据归因分数分配相应的隐私预算，在梯度上添加高斯噪声，最后进行梯度下降。\\
+在不失一般性的情况下，调整因子$C$和$p$的值与系统的准确性和隐私水平有关。即$C$越小，$p$越大，代表越高的隐私保护水平，模型准确性越低，反之亦然。算法\ref{自适应高斯噪声算法}详细描述了自适应高斯噪声算法，我们将自适应噪声添加算法与随机梯度下降算法相结合，关键的步骤包括：计算梯度及其归因分数，根据归因分数分配相应的隐私预算，在梯度上添加高斯噪声，最后进行梯度下降。\\
 
 \begin{algorithm}[!htb]
 	\caption{自适应高斯噪声算法}
@@ -141,10 +138,10 @@ x_{i, j}^{\prime}=x_{i, j}+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S
 		\STATE 初始化：模型权重$\theta_{0}$
 		\FOR{ $t \in[T]$}
 			\STATE 以概率$L / N$随机采样一批数据集$L_{t}$
+			\STATE 计算神经元对模型输出的贡献率：$\beta=\frac{\left|\ddot{Cr}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{Cr}_{j}\right|}$
 			\STATE 计算梯度：$\mathbf{g}_{t}\left(x_{i}\right) \leftarrow \nabla_{\theta_{t}} \mathcal{L}\left(\theta_{t}, x_{i}\right)$
-			\STATE 计算梯度的贡献率：$\beta=\frac{\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|}$
-			\STATE 根据贡献率分配相应的隐私预算：$\sigma==\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \sigma_{l}$
-			\STATE 添加高斯噪声：$\tilde{\mathbf{g}}_{t} \leftarrow \frac{1}{L} \sum_{i}\left(\overline{\mathbf{g}}_{t}\left(x_{i}\right)+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right)$
+			\STATE 根据贡献率分配相应的隐私预算：$\sigma==\frac{u *\left|\ddot{Cr}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{Cr}_{j}\right|} * \sigma_{l}$
+			\STATE 在梯度上添加高斯噪声：$\tilde{\mathbf{g}}_{t} \leftarrow \frac{1}{L} \sum_{i}\left(\overline{\mathbf{g}}_{t}\left(x_{i}\right)+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right)$
 			\STATE 梯度下降：$\theta_{t+1} \leftarrow \theta_{t}-\eta_{t} \tilde{\mathbf{g}}_{t}$
 		\ENDFOR
 		\STATE \textbf{输出:} $\theta_{t}$
@@ -152,7 +149,7 @@ x_{i, j}^{\prime}=x_{i, j}+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S
 \end{algorithm}
 
 \subsection{自适应梯度裁剪算法}
-在传统的差分隐私随机梯度下降算法中，提供隐私保护的常用技术是限制函数的敏感度并添加与敏感度界限成比例的高斯噪声。为此，我们需要在每一轮SGD上限制梯度的敏感性。而且，相关研究表明合适的梯度裁剪能加快模型的收敛速度。Abadi\upcite{ref65}等人提出通过梯度范数裁剪保证函数的敏感度有界。如果损失函数是可微的（如果不可微，则使用子梯度）和Lipschitz有界的，用Lipschitz 界限制梯度范数，并用它来推导出梯度的灵敏度。 如果损失函数导数作为输入的函数有界（例如，在逻辑回归的情况下，可以通过最大可能的输入范数来限制梯度范数），从而推导出梯度的灵敏度。如果损失函数不像深度学习应用中那样具有已知的Lipschitz界，则很难推导出梯度范数的先验界。
+在传统的差分隐私随机梯度下降算法中，提供隐私保护的常用技术是限制函数的敏感度并添加与敏感度界限成比例的高斯噪声。为此，我们需要在每一轮SGD上限制梯度的敏感性。而且，相关研究表明合适的梯度裁剪能加快模型的收敛速度，梯度裁剪的基本思想是限制函数敏感度的上下界。Abadi\upcite{ref65}等人提出通过梯度范数裁剪保证函数的敏感度有界。如果损失函数是可微的（如果不可微，则使用子梯度）和Lipschitz有界的，用Lipschitz 界限制梯度范数，并用它来推导出梯度的灵敏度。 如果损失函数导数作为输入的函数有界（例如，在逻辑回归的情况下，可以通过最大可能的输入范数来限制梯度范数），从而推导出梯度的灵敏度。如果损失函数不像深度学习应用中那样具有已知的Lipschitz界，则很难推导出梯度范数的先验界。
 
 在固定的梯度范数裁剪算法中，由于梯度的大小没有一个先验的界限,我们采用二范数的固定值对每个梯度进行裁剪。假设用户上传的梯度向量为$\tilde{\mathbf{g}}_{t}$，根据固定梯度范数进行裁剪后，梯度缩放为$\mathbf{g} / \max \left(1, \frac{\|\mathbf{g}\|_{2}}{C}\right)$, 其中 $C$是裁剪阈值。对于梯度的裁剪能保证梯度值小于裁剪阈值时，也就是当$\|\mathbf{g}\|_{2} \leq C$ ，$g$保持不变；当$\|\mathbf{g}\|_{2}>C$时, 它会按照裁剪比例缩小为 $C$。在每次训练迭代中，可以使用经验值来获得梯度范数的近似界限，并在损失函数近似界限处裁剪梯度。然而，经验值的可用性是一个强有力的假设，在没有经验值的情况下如何针对自适应添加的噪声裁剪梯度是一个难题。如果裁剪阈值$C$ 的值如果太小，那么裁剪后的噪声会较小，算法添加的噪声较小时可能会破坏梯度估计的无偏性；可是如果不对梯度进行裁剪，大量的噪声添加到每个梯度会导致模型的可用性大大降低。神经网络的架构、损失函数本身、数据的缩放都会影响裁剪范数的选择。
 
@@ -210,13 +207,13 @@ m^{t}=\beta_{1} m^{t-1}+\left(1-\beta_{1}\right) \tilde{g}^{t}
 \end{equation}
 其中$\beta_{1}$是指数移动平均线的衰减参数。
 
-\subsection{自适应差分隐私算法}
+\subsection{自适应差分隐私SGD算法}
 
 \begin{figure}[!hbt]
 \centering
 	\includegraphics[scale=0.3]{fig2/C3/自适应差分隐私流程图}%联邦学习的系统架构
-	\caption{自适应差分隐私流程图}
-	\label{fig:自适应差分隐私流程图}	
+	\caption{自适应差分隐私SGD算法流程图}
+	\label{fig:自适应差分隐私SGD算法流程图}	
 \end{figure}
 
 算法\ref{基于自适应差分隐私的随机梯度下降算法}详细描述了在本地客户端训练过程中，在随机梯度下降算法中添加自适应噪声使算法整体满足$(\epsilon, \delta)$-差分隐私，最小化目标函数$f(\theta)=\frac{1}{N} \sum_{k=1}^{N} f_{k}(\theta)$，并使用差分隐私组合定理分析整体的隐私预算。在随机梯度下降算法中，每一轮用户随机采样小批次的$B$个样本，对于样本集中的每条数据记录计算其梯度和其归因分数，根据梯度更新的方差和偏差选择合适$a_{t}$和$b_{t}$裁剪梯度。完成梯度裁剪后，对梯度添加同归因分数等比例的高斯噪声。之后计算批次大小$B$的样本集的平均加躁梯度，然后进行梯度下降，计算得到梯度更新的均值和标准差。之后不断重复采样迭代的进行梯度下降的训练，使目标函数最小，输出模型权重$\theta_{t}$。图\ref{fig:自适应差分隐私流程图}完整展示了本地设备进行模型训练的整个过程。
@@ -235,13 +232,14 @@ m^{t}=\beta_{1} m^{t-1}+\left(1-\beta_{1}\right) \tilde{g}^{t}
 			\ENDFOR
 			\STATE 随机采样：$S_{t} \leftarrow B$
 			\FOR{$k \in S_{t}$}
+				\STATE 以概率$L / N$随机采样一批数据集$L_{t}$
+				\STATE 计算属性对模型输出的贡献率：$\beta=\frac{\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|}$
 				\STATE 计算梯度：$\mathbf{g}_{t}\left(x_{i}\right) \leftarrow \nabla_{\theta_{t}} \mathcal{L}\left(\theta_{t}, x_{i}\right)$
-				\STATE 计算梯度的归因分数：$\beta=\frac{\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|}$
 				\STATE 梯度变换：$w_{i}^{t}=\frac{g_{i}^{t}-a_{i}^{t}}{b_{i}^{t}}$
 				\STATE 梯度裁剪： $\hat{w}^{t}=\operatorname{clip}\left(w^{t}, 1\right) \triangleq \frac{w^{t}}{\max \left(1,\left\|w^{t}\right\|_{2}\right)}$
 				\STATE 梯度复原： $\tilde{g}^{t}=b^{t} \tilde{w}^{t}+a^{t}$
 				\STATE 根据归因分数分配相应的隐私预算：$\sigma==\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \sigma_{l}$
-				\STATE 添加高斯噪声：$\tilde{\mathbf{g}}_{t} \leftarrow \frac{1}{L} \sum_{i}\left(\overline{\mathbf{g}}_{t}\left(x_{i}\right)+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right)$
+				\STATE 在梯度上添加高斯噪声：$\tilde{\mathbf{g}}_{t} \leftarrow \frac{1}{L} \sum_{i}\left(\overline{\mathbf{g}}_{t}\left(x_{i}\right)+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right)$
 			\ENDFOR
 			\STATE 计算加躁后的平均梯度：$\tilde{g}^{t}=\frac{1}{B} \sum_{k \in S_{t}} \tilde{g}^{t}(k)$
 			\STATE 梯度下降：$\theta^{t+1}=\theta^{t}-\eta^{t} \tilde{g}^{t}$
@@ -253,43 +251,47 @@ m^{t}=\beta_{1} m^{t-1}+\left(1-\beta_{1}\right) \tilde{g}^{t}
 
 在本章接下来的两节，我们将给出自适应差分隐私随机优化算法关于隐私保证和模型效用性的证明，并与前人的方案进行对比。
 
-\section{隐私性和收敛性证明}
+\section{隐私参数分析}
 
-\subsection{隐私性证明}
-自适应差分SGD算法在梯度下降过程中根据梯度的归因分数在梯度上添加高斯噪声，算法整体满足$\left(\epsilon_{c}+\epsilon_{l}\right)$差分隐私。证明如下：
+自适应差分隐私SGD算法在梯度下降过程中根据神经圆的归因分数在梯度上添加高斯噪声，算法整体满足$\left(\epsilon_{c}+\epsilon_{l}\right)$差分隐私。证明如下：
 
-假设现有相邻数据集$D$和$D^{\prime}$，两个数据集上的数据记录$x_{n}$和$x_{n}^{\prime}$不同，$C(D)$和$C(D^{\prime})$分别代表这两个数据集上所有属性值的归因分数之和：
+\begin{proof}
+假设现有相邻数据集$D$和$D^{\prime}$，两个数据集上的第n条数据记录$x_{n}$和$x_{n}^{\prime}$不同，在DNN模型上的输出分别为$F_{\theta}$和$F_{\theta}^{\prime}$，$C(D)$和$C(D^{\prime})$分别代表这两个数据集上所有属性值的归因分数之和：
 
 \begin{equation}
-C(D)=\left\{C_{j}\left(x_{i}\right)\right\}, j \in[1, u], \text {其中} C_{j}\left(x_{i}\right)=\frac{1}{n} \sum_{i=1}^{n} C_{x_{i, j}}\left(x_{i}\right), j \in[1, u], x_{i} \in D
+Cr(D)=\left\{Cr_{j}\left(x_{i}\right)\right\}, j \in[1, u], \text {其中} Cr_{j}\left(x_{i}\right)=\frac{1}{n} \sum_{i=1}^{n} Cr_{x_{i, j}}\left(x_{i}\right), j \in[1, u], x_{i} \in D
 \end{equation}
 
 \begin{equation}
-C\left(D^{\prime}\right)=\left\{C_{j}\left(x_{i}^{\prime}\right)\right\}, j \in[1, u], \text {其中} C_{j}\left(x_{i}^{\prime}\right)=\frac{1}{n} \sum_{i=1}^{n} C_{x_{i, j}^{\prime}}\left(x_{i}^{\prime}\right), j \in[1, u], x_{i}^{\prime} \in D^{\prime}
+Cr\left(D^{\prime}\right)=\left\{Cr_{j}\left(x_{i}^{\prime}\right)\right\}, j \in[1, u], \text {其中} Cr_{j}\left(x_{i}^{\prime}\right)=\frac{1}{n} \sum_{i=1}^{n} Cr_{x_{i, j}^{\prime}}\left(x_{i}^{\prime}\right), j \in[1, u], x_{i}^{\prime} \in D^{\prime}
 \end{equation}
 
-根据梯度的归因分数添加自适应的噪声，其中隐私预算与归因分数成正比：$\sigma$=$\sigma_{j}=\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \sigma_{l}$：
+数据集$D$和$D^{\prime}$的模型输出$F_{\theta}$和$F_{\theta}^{\prime}$差异由神经元组中的不同项$\left(\omega_{\mathrm{H}}^{I} \& \omega_{\mathrm{H}}^{\prime I}\right)$分化而成。假设我们在梯度上注入隐私预算为$\epsilon_{1}$的高斯噪声，产生一个响应r的概率小于或等于$e^{\epsilon}$，根据差分隐私的基本定义有：
+$$
+e^{-\epsilon} \leq \frac{\operatorname{Pr}\left[\left(\omega_{\mathrm{H}}^{I}+\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right) \in r\right]}{\operatorname{Pr}\left[\left(\omega_{\mathrm{H}}^{\prime I}+\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right) \in r\right]} \leq e^{\epsilon},
+$$
+
+其中，$\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)$表示
+
+根据神经元的归因分数在其梯度$\mathbf{g}_{t}\left(x_{i}\right) \leftarrow \nabla_{\theta_{t}} \mathcal{L}\left(\theta_{t}, x_{i}\right)$上添加自适应的噪声，其中隐私预算与归因分数成正比：$\sigma$=$\sigma_{j}=\frac{u *\left|\ddot{C}_{j}\right|}{\sum_{j=1}^{u}\left|\ddot{C}_{j}\right|} * \sigma_{l}$：
 \begin{equation}\label{eq:神经网络加噪3}
-x_{i, j}^{\prime}=x_{i, j}+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)
+\tilde{\mathbf{g}}_{t} \leftarrow \frac{1}{L} \sum_{i}\left(\overline{\mathbf{g}}_{t}\left(x_{i}\right)+\frac{1}{\left|D_{i}^{t}\right|}\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right)
 \end{equation}
 
-通过敏感度公式计算梯度归因分数的全局敏感度$GS_{c}$：
+通过敏感度公式计算梯度归因分数的$L_{2}$敏感度$S_{f}$：
 \begin{equation}\label{eq:贡献敏感度}
 \begin{aligned}
-G S_{c} &=\frac{1}{|D|} \sum_{j=1}^{u}\left\|\sum_{x_{i} \in D} C_{x_{i, j}}\left(x_{i}\right)-\sum_{x_{i}^{\prime} \in D^{\prime}} C_{x_{i, j}^{\prime}}\left(x_{i}^{\prime}\right)\right\|_{1} \\
-&=\frac{1}{|D|} \sum_{j=1}^{u}\left\|C_{x_{n, j}}\left(x_{n}\right)-C_{x_{n, j}^{\prime}}\left(x_{n}^{\prime}\right)\right\|_{1} \\
-& \leq \frac{2}{|D|} \max \sum_{j=1}^{u}\left\|C_{x_{i, j}}\left(x_{i}\right)\right\|_{1} \\
-& \leq \frac{2 u}{|D|}
+S_{f} &=\frac{1}{|D|} \sum_{j=1}^{u}\left\|\sum_{x_{i} \in D} C_{x_{i, j}}\left(x_{i}\right)-\sum_{x_{i}^{\prime} \in D^{\prime}} C_{x_{i, j}^{\prime}}\left(x_{i}^{\prime}\right)\right\|_{2} \\ &=\frac{1}{|D|} \sum_{j=1}^{u}\left\|C_{x_{n, j}}\left(x_{n}\right)-C_{x_{n, j}^{\prime}}\left(x_{n}^{\prime}\right)\right\|_{2} \\ & \leq \frac{2}{|D|} \max \sum_{j=1}^{u}\left\|C_{x_{i, j}}\left(x_{i}\right)\right\|_{2} \\ & \leq \frac{2 u}{|D|} 
 \end{aligned}
 \end{equation}
 
-其中，$u$和$|D|$分别表示属性和元组的数量，然后可以得到：
+其中，$u$和$|D|$分别表示神经元和元组的数量，然后可以得到：
 \begin{equation}\label{贡献数量和元组}
 \begin{aligned}
-\frac{\operatorname{Pr}(\ddot{C}(D))}{\operatorname{Pr}\left(\ddot{C}\left(D^{\prime}\right)\right)} &=\frac{\prod_{j=1}^{u} \exp \left(\frac{\epsilon_{c}\left\|\frac{1}{|D|} \sum_{x_{i} \in D} C_{j}\left(x_{i}\right)-\ddot{C}_{j}\left(x_{i}\right)\right\|_{1}}{G S_{c}}\right)}{\prod_{j=1}^{u} \exp \left(\frac{\epsilon_{c}\left\|\frac{1}{\left|D^{\prime}\right|} \sum_{x_{i}^{\prime} \in D^{\prime}} C_{j}\left(x_{i}^{\prime}\right)-\ddot{C}_{j}\left(x_{i}^{\prime}\right)\right\|_{1}}{G S_{c}}\right)} \\
-&=\prod_{j=1}^{u} \exp \left(\frac{\epsilon_{c}}{|D| G S_{c}}\left\|C_{j}\left(x_{n}\right)-C_{j}\left(x_{n}^{\prime}\right)\right\|_{1}\right) \\
-& \leq \prod_{j=1}^{u} \exp \left(\frac{\epsilon_{c}}{|D| G S_{c}} \max \left\|C_{j}\left(x_{n}\right)\right\|_{1}\right) \\
-&=\exp \left(\epsilon_{c} \frac{\max _{x_{i} \in D} \sum_{j=1}^{u}\left\|C_{j}\left(x_{n}\right)\right\|_{1}}{|D| G S_{c}}\right) \\
+\frac{\operatorname{Pr}(\ddot{Cr}(D))}{\operatorname{Pr}\left(\ddot{Cr}\left(D^{\prime}\right)\right)} &=\frac{\prod_{j=1}^{u} \exp \left(\frac{\epsilon_{c}\left\|\frac{1}{|D|} \sum_{x_{i} \in D} Cr_{j}\left(x_{i}\right)-\ddot{Cr}_{j}\left(x_{i}\right)\right\|_{2}}{S_{f}}\right)}{\prod_{j=1}^{u} \exp \left(\frac{\epsilon_{c}\left\|\frac{1}{\left|D^{\prime}\right|} \sum_{x_{i}^{\prime} \in D^{\prime}} Cr_{j}\left(x_{i}^{\prime}\right)-\ddot{Cr}_{j}\left(x_{i}^{\prime}\right)\right\|_{2}}{S_{f}}\right)} \\
+&=\prod_{j=1}^{u} \exp \left(\frac{\epsilon_{c}}{|D| S_{f}}\left\|C_{j}\left(x_{n}\right)-Cr_{j}\left(x_{n}^{\prime}\right)\right\|_{2}\right) \\
+& \leq \prod_{j=1}^{u} \exp \left(\frac{\epsilon_{c}}{|D| S_{f}} \max \left\|C_{j}\left(x_{n}\right)\right\|_{2}\right) \\
+&=\exp \left(\epsilon_{c} \frac{\max _{x_{i} \in D} \sum_{j=1}^{u}\left\|Cr_{j}\left(x_{n}\right)\right\|_{2}}{|D| S_{f}}\right) \\
 & \leq \exp \left(\epsilon_{c}\right)
 \end{aligned}
 \end{equation}
@@ -299,22 +301,22 @@ G S_{c} &=\frac{1}{|D|} \sum_{j=1}^{u}\left\|\sum_{x_{i} \in D} C_{x_{i, j}}\lef
 
 假设两个相邻的数据集$D_{i}^{t}$和$D_{i}^{t^{\prime}}$，其中数据记录$x_{n}$和$x_{n}^{\prime}$不同，$z\left(D_{i}^{t}\right)$和$z\left(D_{i}^{t^{\prime}}\right)$分别为两个数据集上训练采用的线性变换函数。
 
-一般来说，我们把偏置项视为第一类数据属性，即：$x_{i,0}=b_{i}$。线性转换可以改写为：$\ddot{\mathbf{z}}_{x \in D_{i}^{t}}(\omega)=\ddot{\mathbf{x}} * \omega$。线性变换函数的敏感度$G S_{l}$为：
+一般来说，我们把偏置项视为第一类数据属性，即：$x_{i,0}=b_{i}$。线性转换可以改写为：$\ddot{\mathbf{z}}_{x \in D_{i}^{t}}(\omega)=\ddot{\mathbf{x}} * \omega$。线性变换函数的敏感度$S_{f}$为：
 \begin{equation}
 \begin{aligned}
-G S_{l} &=\sum_{a_{i} \in l_{1}} \sum_{j=1}^{u}\left\|\sum_{x_{i} \in D_{i}^{t}} x_{i, j}-\sum_{x_{i}^{\prime} \in D_{i}^{t^{\prime}}} x_{i, j}^{\prime}\right\|_{1} \\
+S_{f} &=\sum_{a_{i} \in l_{1}} \sum_{j=1}^{u}\left\|\sum_{x_{i} \in D_{i}^{t}} x_{i, j}-\sum_{x_{i}^{\prime} \in D_{i}^{t^{\prime}}} x_{i, j}^{\prime}\right\|_{1} \\
 &=\sum_{a_{i} \in l_{1}} \sum_{j=1}^{u}\left\|x_{n, j}-x_{n, j}^{\prime}\right\|_{1} \\
 & \leq \sum_{a_{i} \in l_{1}} \sum_{j=1}^{u} \max _{x_{i} \in D_{i}^{t}}\left\|x_{n, j}\right\|_{1} \\
 & \leq \sum_{a_{i} \in l_{1}} u
 \end{aligned}
 \end{equation}
 
-其中，$a_{i} \in l_{1}$是指第一个隐藏层$l_{1}$中的神经元$a_{i}$，$u$是数据元组$x_{i} \in D_{i}^{t}$中的属性数。自适应加躁算法包括两个超参数：$f$和$p$，这两个超参数可以适时过滤多余的噪声，再通过超参数调整噪声大小和裁剪阈值后，整体加躁后的梯度的表达式如下:
+其中，$a_{i} \in l_{1}$是指第一个隐藏层$l_{1}$中的神经元$a_{i}$，$u$是数据元组$x_{i} \in D_{i}^{t}$中的属性数。自适应加躁算法包括两个超参数：$C$和$p$，这两个超参数可以适时过滤多余的噪声，再通过超参数调整噪声大小和裁剪阈值后，整体加躁后的梯度的表达式如下:
 \begin{equation}
 \begin{aligned}
-\tilde{x}_{i, j} &=[(1-f)+f * p] * \ddot{x}_{i, j}+f *(1-p) * x_{i, j} \\
-&=[(1-f)+f * p]\left[x_{i, j}+\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right]+[f *(1-p)] x_{i, j} \\
-&=x_{i, j}+[(1-f)+f * p]\left[\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right]
+\tilde{x}_{i, j} &=[(1-C)+C * p] * \ddot{x}_{i, j}+C *(1-p) * x_{i, j} \\
+&=[(1-C)+C * p]\left[x_{i, j}+\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right]+[C *(1-p)] x_{i, j} \\
+&=x_{i, j}+[(1-C)+C * p]\left[\mathcal{N}\left(0, S_{f}^{2} \cdot \sigma^{2}\right)\right]
 \end{aligned}
 \end{equation}
 然后我们可以得到：
@@ -330,8 +332,8 @@ G S_{l} &=\sum_{a_{i} \in l_{1}} \sum_{j=1}^{u}\left\|\sum_{x_{i} \in D_{i}^{t}}
 \end{equation}
 
 根据上述推倒证明可知，在联邦学习的神经网络中添加自适应噪声后，所上传的梯度是满足$\left(\epsilon_{c}+\epsilon_{l}\right)$-差分隐私的。在满足差分隐私的基础上，在下一节我们结合差分隐私的组合定理，计算累积的隐私预算。
+\end{proof}
 
-\subsection{隐私参数分析}
 本章所提出的自适应差分隐私保护方案是通过在随机梯度下降算法上添加自适应的高斯噪声，保护数据的隐私性。在上一节我们已经证明了此算法满足$\left(\epsilon_{c}+\epsilon_{l}\right)$差分隐私，那另外一个非常重要的问题就是评估在训练过程中添加噪声所累积的隐私预算成本。
 
 我们向梯度中添加高斯噪声以得到加躁后的数据，根据第二章所给出的高斯机制的定理可知，当隐私参数$\sigma=\sqrt{2 \log \frac{1.25}{\delta}} / \varepsilon$时，每一批次的输出都满足$(\varepsilon, \delta)$-差分隐私。考虑到训练批次是以概率$q=L / N$从数据集中随机采样的，根据隐私放大定理和差分隐私的强组合定理，隐私性由$(\varepsilon, \delta)$-差分隐私扩大到 $(q \varepsilon, q \delta)$-差分隐私。
