@@ -1,31 +1,32 @@
 \addvspace {10.0pt}
-\contentsline {figure}{\numberline {1.1}{\ignorespaces 联邦学习模型概况\relax }}{3}{figure.caption.7}%
-\contentsline {figure}{\numberline {1.2}{\ignorespaces 联邦学习中的隐私威胁\relax }}{5}{figure.caption.8}%
-\contentsline {figure}{\numberline {1.3}{\ignorespaces 联邦学习中的隐私保护技术\relax }}{7}{figure.caption.9}%
+\contentsline {figure}{\numberline {1.1}{\ignorespaces 联邦学习训练模型概览\relax }}{3}{figure.caption.7}%
+\contentsline {figure}{\numberline {1.2}{\ignorespaces 针对联邦学习的隐私攻击\relax }}{4}{figure.caption.8}%
 \addvspace {10.0pt}
-\contentsline {figure}{\numberline {2.1}{\ignorespaces 神经网络结构图\relax }}{13}{figure.caption.10}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces 联邦学习模型工作流程\relax }}{15}{figure.caption.11}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces 差分隐私的相邻数据集示意图\relax }}{16}{figure.caption.12}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces 神经网络结构图\relax }}{13}{figure.caption.9}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces 联邦学习模型工作流程\relax }}{16}{figure.caption.10}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces 差分隐私的相邻数据集示意图\relax }}{16}{figure.caption.11}%
 \addvspace {10.0pt}
-\contentsline {figure}{\numberline {3.1}{\ignorespaces 自适应差分隐私SGD算法流程图\relax }}{23}{figure.caption.13}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces 逐层关联传播算法：根据前向传播计算总归因分数\relax }}{26}{figure.caption.14}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces 逐层关联传播算法：根据反向传播计算各神经元的归因分数\relax }}{27}{figure.caption.15}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces MNIST手写数字数据集\relax }}{37}{figure.caption.16}%
-\contentsline {figure}{\numberline {3.5}{\ignorespaces 模型网络结构\relax }}{37}{figure.caption.17}%
-\contentsline {figure}{\numberline {3.6}{\ignorespaces 仿真联邦系统模型概览\relax }}{38}{figure.caption.18}%
-\contentsline {figure}{\numberline {3.7}{\ignorespaces 实现本地自适应差分隐私的伪代码片段\relax }}{39}{figure.caption.19}%
-\contentsline {figure}{\numberline {3.8}{\ignorespaces 在MNIST数据集上噪声大小，裁剪阈值和隐藏层数量这三个参数对于训练准确率的影响\relax }}{40}{figure.caption.21}%
-\contentsline {figure}{\numberline {3.9}{\ignorespaces 在MNIST数据集上不同隐私预算下训练的准确率\relax }}{42}{figure.caption.22}%
-\contentsline {figure}{\numberline {3.10}{\ignorespaces 不同隐私保护方案在MNIST数据集上训练的测试误差变化情况\relax }}{44}{figure.caption.24}%
-\contentsline {figure}{\numberline {3.11}{\ignorespaces 在不同模型上进行成员推理攻击的准确率\relax }}{46}{figure.caption.26}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces 自适应差分隐私SGD算法流程图\relax }}{25}{figure.caption.12}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces 逐层关联传播算法：根据前向传播计算总归因分数\relax }}{27}{figure.caption.13}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces 逐层关联传播算法：根据反向传播计算各神经元的归因分数\relax }}{28}{figure.caption.14}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces MNIST手写数字数据集\relax }}{37}{figure.caption.15}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces 模型网络结构\relax }}{37}{figure.caption.16}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces 仿真联邦系统模型概览\relax }}{38}{figure.caption.17}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces 实现本地自适应差分隐私的伪代码片段\relax }}{39}{figure.caption.18}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces 在MNIST数据集上噪声大小，裁剪阈值和隐藏层数量这三个参数对于训练准确率的影响\relax }}{40}{figure.caption.20}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces 在MNIST数据集上不同隐私预算下训练的准确率\relax }}{42}{figure.caption.21}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces 不同隐私保护方案在MNIST数据集上训练的测试误差变化情况\relax }}{44}{figure.caption.23}%
+\contentsline {figure}{\numberline {3.11}{\ignorespaces 成员推理攻击过程\relax }}{46}{figure.caption.25}%
+\contentsline {figure}{\numberline {3.12}{\ignorespaces 在不同模型上进行成员推理攻击的准确率\relax }}{47}{figure.caption.26}%
 \addvspace {10.0pt}
-\contentsline {figure}{\numberline {4.1}{\ignorespaces 基于安全混洗和Top-K梯度选择算法的联邦学习模型框架\relax }}{51}{figure.caption.27}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces top-K梯度选择算法流程图\relax }}{55}{figure.caption.28}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces 梯度元素的值及其效用评分\relax }}{55}{figure.caption.29}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces 联邦学习安全混洗模型中执行参数拆分混洗的混洗器\relax }}{58}{figure.caption.30}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces 安全混洗模型中本地客户端数量对联邦学习模型训练精度的影响\relax }}{66}{figure.caption.33}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces 安全混洗模型中客户端采样比对联邦学习模型训练精度的影响\relax }}{66}{figure.caption.34}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces 安全混洗模型中梯度选择比率对联邦学习模型训练精度的影响\relax }}{67}{figure.caption.35}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces 不同隐私保护方案在MNIST数据集上训练的模型分类准确率变化情况\relax }}{68}{figure.caption.37}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces 基于top-K安全混洗的联邦学习框架\relax }}{52}{figure.caption.27}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces top-K梯度选择算法流程图\relax }}{56}{figure.caption.28}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces 梯度元素的值及其效用评分\relax }}{56}{figure.caption.29}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces 安全混洗模型中本地客户端数量对联邦学习模型训练精度的影响\relax }}{67}{figure.caption.32}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces 安全混洗模型中客户端采样比对联邦学习模型训练精度的影响\relax }}{68}{figure.caption.33}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces 安全混洗模型中梯度选择比率对联邦学习模型训练精度的影响\relax }}{68}{figure.caption.34}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces 不同隐私保护方案在MNIST数据集上训练的模型分类准确率变化情况\relax }}{70}{figure.caption.36}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces 联邦学习下的GAN模型\relax }}{71}{figure.caption.37}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces 在MNIST数据集上对不同的隐私保护联邦学习算法下进行GAN攻击所生成的伪样本\relax }}{72}{figure.caption.38}%
 \addvspace {10.0pt}
 \contentsfinish 
